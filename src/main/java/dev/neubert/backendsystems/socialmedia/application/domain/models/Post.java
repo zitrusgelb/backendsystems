@@ -1,0 +1,60 @@
+package dev.neubert.backendsystems.socialmedia.application.domain.models;
+
+import java.time.LocalDateTime;
+
+public class Post extends AbstractModel {
+
+    private String content;
+    private LocalDateTime createdAt;
+    // private User user;
+    // private Tag tag;
+    private Post replyToId;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    /*public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
+*/
+    public Post getReplyToId() {
+        return replyToId;
+    }
+
+    public void setReplyToId(Post replyToId) {
+        this.replyToId = replyToId;
+    }
+}
