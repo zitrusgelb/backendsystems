@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.Serializable;
 
 public abstract class AbstractDataTransferObject implements DataTransferObject,Serializable, Cloneable {
-    private long id;
+    protected long id;
 
     public AbstractDataTransferObject() {
     }
