@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class AbstractModel implements Model {
-    private long id;
+    protected long id;
 
     public AbstractModel() {
     }
