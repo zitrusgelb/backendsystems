@@ -1,6 +1,9 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.models;
 
-public abstract class AbstractModel {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public abstract class AbstractModel implements Model {
     private long id;
 
     public AbstractModel() {
@@ -14,5 +17,13 @@ public abstract class AbstractModel {
         this.id = id;
     }
 
-
+    @Override
+    public String toString() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
