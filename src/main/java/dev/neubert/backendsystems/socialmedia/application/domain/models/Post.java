@@ -8,7 +8,7 @@ public class Post extends AbstractModel {
     private LocalDateTime createdAt;
     // private User user;
     // private Tag tag;
-    private Post replyToId;
+    private Post replyTo;
 
     public long getId() {
         return id;
@@ -50,11 +50,11 @@ public class Post extends AbstractModel {
         this.tag = tag;
     }
 */
-    public Post getReplyToId() {
-        return replyToId;
+    public Post getReplyTo() {
+        return replyTo;
     }
 
-    public void setReplyToId(Post replyToId) {
-        this.replyToId = replyToId;
+    public void setReplyTo(Post replyTo) {
+        this.replyTo = replyTo;
     }
 }
