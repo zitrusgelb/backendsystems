@@ -3,8 +3,6 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.models;
 import java.util.List;
 
 public class UserDto extends AbstractDataTransferObject {
-    private long id;
-
     private String username; // This is the CN from the THWS Auth
     private String displayName;
 
@@ -12,14 +10,6 @@ public class UserDto extends AbstractDataTransferObject {
     private List<LikeDto> likes;
 
     public UserDto() {}
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;
