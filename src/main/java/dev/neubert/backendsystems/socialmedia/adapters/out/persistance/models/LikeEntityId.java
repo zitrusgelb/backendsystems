@@ -5,10 +5,10 @@ import java.io.Serializable;
 public class LikeEntityId implements Serializable
 {
     private PostEntity post;
-   // private UserEntity user;
+    private UserEntity user;
 
-    public LikeEntityId(PostEntity post){
+    public LikeEntityId(PostEntity post, UserEntity user){
         this.post = post;
-        //this.user = user;
+        this.user = user;
     }
 }
