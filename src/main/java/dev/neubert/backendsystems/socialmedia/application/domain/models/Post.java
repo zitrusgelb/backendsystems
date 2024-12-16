@@ -6,7 +6,7 @@ public class Post extends AbstractModel {
 
     private String content;
     private LocalDateTime createdAt;
-    // private User user;
+    private User user;
     // private Tag tag;
     private Post replyTo;
 
@@ -34,22 +34,22 @@ public class Post extends AbstractModel {
         this.createdAt = createdAt;
     }
 
-    /*public User getUser() {
+    public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
+    /*
+        public Tag getTag() {
+            return tag;
+        }
 
-    public Tag getTag() {
-        return tag;
-    }
-
-    public void setTag(Tag tag) {
-        this.tag = tag;
-    }
-*/
+        public void setTag(Tag tag) {
+            this.tag = tag;
+        }
+    */
     public Post getReplyTo() {
         return replyTo;
     }

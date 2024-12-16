@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class PostDto extends AbstractDataTransferObject {
     private String content;
     private LocalDateTime createdAt;
-    // private UserDto user;
+    private UserDto user;
     // private TagDto tag;
     private PostDto replyTo;
 
@@ -25,7 +25,7 @@ public class PostDto extends AbstractDataTransferObject {
         this.createdAt = createdAt;
     }
 
-    /*public UserDto getUser() {
+    public UserDto getUser() {
         return user;
     }
 
@@ -33,7 +33,7 @@ public class PostDto extends AbstractDataTransferObject {
         this.user = user;
     }
 
-    public TagDto getTag() {
+    /*public TagDto getTag() {
         return tag;
     }
 

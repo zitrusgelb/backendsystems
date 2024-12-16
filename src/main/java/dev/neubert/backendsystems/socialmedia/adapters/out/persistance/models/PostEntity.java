@@ -12,11 +12,12 @@ public class PostEntity {
     @Column(nullable = false)
     private String content;
     private LocalDateTime createdAt = LocalDateTime.now();
-    /*
-        @ManyToOne
-        @JoinColumn(nullable = false)
-        private UserEntity user;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private UserEntity user;
+
+    /*
         @ManyToOne
         private TagEntity tag;
     */
@@ -47,15 +48,14 @@ public class PostEntity {
         this.createdAt = createdAt;
     }
 
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
     /*
-        public UserEntity getUser() {
-            return user;
-        }
-
-        public void setUser(UserEntity user) {
-            this.user = user;
-        }
-
         public TagEntity getTag() {
             return tag;
         }

@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 public class LikeDto extends AbstractDataTransferObject
 {
     private PostDto post;
-    // private UserDto user;
+    private UserDto user;
     private LocalDateTime timestamp;
 
-    public LikeDto(PostDto post, LocalDateTime timestamp)
+    public LikeDto(PostDto post, LocalDateTime timestamp, UserDto user)
     {
         this.post = post;
-       // this.user = user;
+        this.user = user;
 
         this.timestamp = timestamp;
     }
@@ -26,7 +26,7 @@ public class LikeDto extends AbstractDataTransferObject
         this.post = post;
     }
 
-   /* public UserDto getUser()
+    public UserDto getUser()
     {
         return user;
     }
@@ -34,7 +34,7 @@ public class LikeDto extends AbstractDataTransferObject
     public void setUser(UserDto user)
     {
         this.user=user;
-    }*/
+    }
 
     public LocalDateTime getTimestamp()
     {
