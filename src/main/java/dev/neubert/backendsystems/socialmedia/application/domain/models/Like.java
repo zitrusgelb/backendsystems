@@ -5,13 +5,13 @@ import java.time.LocalDateTime;
 public class Like extends AbstractModel
 {
     private Post post;
-   // private User user;
+    private User user;
     private LocalDateTime timestamp;
 
     public Like(Post post)
     {
         this.post = post;
-        //this.user = user;
+        this.user = user;
         timestamp = LocalDateTime.now();
     }
 
@@ -24,7 +24,7 @@ public class Like extends AbstractModel
     {
         this.post = post;
     }
-/*public User getUser()
+    public User getUser()
     {
         return user;
     }
@@ -33,7 +33,7 @@ public class Like extends AbstractModel
     {
         this.user=user;
     }
- */
+
 
     public LocalDateTime getTimestamp()
     {
