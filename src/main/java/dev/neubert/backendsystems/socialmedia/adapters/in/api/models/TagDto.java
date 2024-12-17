@@ -2,23 +2,14 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.models;
 
 import java.util.List;
 
-public class TagDto {
-    private int id;
+public class TagDto extends  AbstractDataTransferObject{
     private String name;
     private List<PostDto> posts;
 
-    public TagDto(String name, int id, List<PostDto> posts) {
+    public TagDto(String name, List<PostDto> posts) {
         this.name = name;
-        this.id = id;
+
         this.posts = posts;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
