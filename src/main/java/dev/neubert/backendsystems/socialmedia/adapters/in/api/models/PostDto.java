@@ -6,7 +6,7 @@ public class PostDto extends AbstractDataTransferObject {
     private String content;
     private LocalDateTime createdAt;
     private UserDto user;
-    // private TagDto tag;
+    private TagDto tag;
     private PostDto replyTo;
 
     public String getContent() {
@@ -33,13 +33,13 @@ public class PostDto extends AbstractDataTransferObject {
         this.user = user;
     }
 
-    /*public TagDto getTag() {
+    public TagDto getTag() {
         return tag;
     }
 
     public void setTag(TagDto tag) {
         this.tag = tag;
-    }*/
+    }
 
     public PostDto getReplyTo() {
         return replyTo;
@@ -48,7 +48,6 @@ public class PostDto extends AbstractDataTransferObject {
     public void setReplyTo(PostDto replyTo) {
         this.replyTo = replyTo;
     }
-
 
 }
 
