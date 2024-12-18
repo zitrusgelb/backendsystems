@@ -8,11 +8,11 @@ public class Like extends AbstractModel
     private User user;
     private LocalDateTime timestamp;
 
-    public Like(Post post)
+    public Like(Post post, User user, LocalDateTime timestamp)
     {
         this.post = post;
         this.user = user;
-        timestamp = LocalDateTime.now();
+        this.timestamp = timestamp;
     }
 
     public Post getPost()
@@ -24,6 +24,7 @@ public class Like extends AbstractModel
     {
         this.post = post;
     }
+
     public User getUser()
     {
         return user;
@@ -33,7 +34,6 @@ public class Like extends AbstractModel
     {
         this.user=user;
     }
-
 
     public LocalDateTime getTimestamp()
     {

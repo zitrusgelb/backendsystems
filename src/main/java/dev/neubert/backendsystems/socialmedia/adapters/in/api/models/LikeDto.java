@@ -12,7 +12,6 @@ public class LikeDto extends AbstractDataTransferObject
     {
         this.post = post;
         this.user = user;
-
         this.timestamp = timestamp;
     }
 
