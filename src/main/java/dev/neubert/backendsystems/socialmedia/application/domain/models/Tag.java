@@ -5,8 +5,10 @@ import java.util.List;
 public class Tag extends AbstractModel
 {
 
-    private final String name;
+    private String name;
     private List<Post> posts;
+
+    public Tag() {}
 
     public Tag(String name, List<Post> posts)
     {

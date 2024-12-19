@@ -10,6 +10,8 @@ public class User extends AbstractModel {
     private List<Post> posts;
     private List<Like> likes;
 
+    public User() {}
+
     public User(String username, String displayName) {
         this.username = username;
         this.displayName = displayName;
