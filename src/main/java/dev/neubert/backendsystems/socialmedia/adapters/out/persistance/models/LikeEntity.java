@@ -16,9 +16,9 @@ public class LikeEntity
     @Id
     private PostEntity post;
 
-    //@OneToOne
-   // @Id
-   // private UserEntity user;
+    @OneToOne
+    @Id
+    private UserEntity user;
 
     private LocalDateTime timestamp = LocalDateTime.now();
 
@@ -30,13 +30,13 @@ public class LikeEntity
         this.post = post;
     }
 
-    /*public UserEntity getUser() {
+    public UserEntity getUser() {
         return user;
     }
 
     public void setUser(UserEntity user) {
         this.user = user;
-    }*/
+    }
 
     public LocalDateTime getTimestamp() {
         return timestamp;
