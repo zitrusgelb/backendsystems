@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 public class UserEntity {
     @Id
-    private long internalId;
+    private long id;
 
     @Column(unique = true)
     private String username; // This is the CN from the THWS Auth
@@ -21,12 +21,12 @@ public class UserEntity {
 
     public UserEntity() {}
 
-    public long getInternalId() {
-        return internalId;
+    public long getId() {
+        return id;
     }
 
-    public void setInternalId(long internalId) {
-        this.internalId = internalId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getUsername() {
