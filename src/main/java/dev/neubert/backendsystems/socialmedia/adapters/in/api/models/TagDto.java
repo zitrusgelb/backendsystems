@@ -2,7 +2,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.models;
 
 import java.util.List;
 
-public class TagDto extends  AbstractDataTransferObject{
+public class TagDto extends AbstractDataTransferObject {
     private String name;
     private List<PostDto> posts;
 
