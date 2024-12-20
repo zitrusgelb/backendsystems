@@ -4,7 +4,8 @@ public class PostUserDto extends AbstractDataTransferObject {
     private String username;
     private String displayName;
 
-    public PostUserDto() {}
+    public PostUserDto() {
+    }
 
     public String getUsername() {
         return username;
