@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Tag extends AbstractModel {
 
-    private final String name;
+    private String name;
     private List<Post> posts;
 
     public Tag(String name, List<Post> posts) {
@@ -15,6 +15,8 @@ public class Tag extends AbstractModel {
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {this.name = name; }
 
     public List<Post> getPosts() {
         return posts;
