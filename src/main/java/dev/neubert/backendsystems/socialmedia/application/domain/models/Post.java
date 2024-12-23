@@ -2,8 +2,7 @@ package dev.neubert.backendsystems.socialmedia.application.domain.models;
 
 import java.time.LocalDateTime;
 
-public class Post extends AbstractModel
-{
+public class Post extends AbstractModel {
 
     private String content;
     private LocalDateTime createdAt;
@@ -11,63 +10,53 @@ public class Post extends AbstractModel
     private Tag tag;
     private Post replyTo;
 
-    public long getId()
-    {
+    public Post() {}
+
+    public long getId() {
         return id;
     }
 
-    public void setId(long id)
-    {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getContent()
-    {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(String content)
-    {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public LocalDateTime getCreatedAt()
-    {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt)
-    {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User user)
-    {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public Tag getTag()
-    {
+    public Tag getTag() {
         return tag;
     }
 
-    public void setTag(Tag tag)
-    {
+    public void setTag(Tag tag) {
         this.tag = tag;
     }
 
-    public Post getReplyTo()
-    {
+    public Post getReplyTo() {
         return replyTo;
     }
 
-    public void setReplyTo(Post replyTo)
-    {
+    public void setReplyTo(Post replyTo) {
         this.replyTo = replyTo;
     }
 }
