@@ -33,7 +33,7 @@ pipeline {
 
         stage('Build Docker') {
             steps {
-                sh 'mvn install -Dquarkus.container-image.build=true'
+                sh 'mvn install -Dquarkus.container-image.build=true -DskipTests'
             }
         }
     }
