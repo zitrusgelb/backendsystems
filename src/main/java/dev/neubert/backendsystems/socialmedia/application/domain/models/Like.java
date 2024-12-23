@@ -7,7 +7,10 @@ public class Like extends AbstractModel {
     private User user;
     private LocalDateTime timestamp;
 
-    public Like(Post post, User user, LocalDateTime timestamp) {
+    public Like() {}
+
+    public Like(Post post, User user, LocalDateTime timestamp)
+    {
         this.post = post;
         this.user = user;
         this.timestamp = timestamp;
