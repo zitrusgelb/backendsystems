@@ -30,38 +30,35 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
 
     @Override
     public NoContent createTag(Tag tag) {
-        final var entity = this.mapper.tagToTagEntity( tag );
-        this.entityManager.persist( entity );
+        final var entity = this.mapper.tagToTagEntity(tag);
+        this.entityManager.persist(entity);
         return new NoContent();
     }
 
     @Override
     public NoContent deleteTag(long id) {
-        final var entity = this.entityManager.find( Tag.class, id );
-        this.entityManager.remove( entity );
+        final var entity = this.entityManager.find(Tag.class, id);
+        this.entityManager.remove(entity);
         return new NoContent();
     }
 
     @Override
     public List<Tag> readAllTags(int limit, int offset) {
         List<Tag> returnValue = new ArrayList<>();
-        try
-        {
+        try {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<TagEntity> cq = cb.createQuery(TagEntity.class);
             Root<TagEntity> from = cq.from(TagEntity.class);
             cq.select(from);
             TypedQuery<TagEntity> query = entityManager.createQuery(cq);
-            final var requestedModel = query.setFirstResult(offset).setMaxResults(limit).getResultList();
-            if ( requestedModel != null )
-            {
+            final var requestedModel =
+                    query.setFirstResult(offset).setMaxResults(limit).getResultList();
+            if (requestedModel != null) {
                 for (TagEntity tag : requestedModel) {
                     returnValue.add(mapper.tagEntityToTag(tag));
                 }
             }
-        }
-        catch ( Exception e )
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -76,8 +73,8 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
 
     @Override
     public NoContent updateTag(Tag tag) {
-        final var entity = this.mapper.tagToTagEntity( tag );
-        this.entityManager.merge( entity );
+        final var entity = this.mapper.tagToTagEntity(tag);
+        this.entityManager.merge(entity);
         return new NoContent();
     }
 }

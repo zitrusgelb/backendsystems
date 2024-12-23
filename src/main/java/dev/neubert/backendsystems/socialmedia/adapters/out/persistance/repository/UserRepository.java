@@ -28,31 +28,27 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
     @Transactional
     @Override
     public NoContent createUser(User user) {
-        final var entity = this.mapper.userToUserEntity( user );
-        this.entityManager.persist( entity );
+        final var entity = this.mapper.userToUserEntity(user);
+        this.entityManager.persist(entity);
         return new NoContent();
     }
 
     @Override
     public List<User> getAllUsers(int limit) {
         List<User> returnValue = new ArrayList<>();
-        try
-        {
+        try {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
             Root<UserEntity> from = cq.from(UserEntity.class);
             cq.select(from);
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.setMaxResults(limit).getResultList();
-            if ( requestedModel != null )
-            {
+            if (requestedModel != null) {
                 for (UserEntity user : requestedModel) {
                     returnValue.add(mapper.userEntityToUser(user));
                 }
             }
-        }
-        catch ( Exception e )
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -63,16 +59,12 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
     @Override
     public User getUser(String username) {
         User returnValue = null;
-        try
-        {
+        try {
             final var requestedModel = this.entityManager.find(UserEntity.class, username);
-            if ( requestedModel != null )
-            {
+            if (requestedModel != null) {
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
-        }
-        catch ( Exception e )
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
