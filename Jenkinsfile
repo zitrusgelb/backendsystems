@@ -37,7 +37,6 @@ pipeline {
             step([
                 $class: "GitHubCommitStatusSetter",
                 reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/zitrusgelb/backendsystems"],
-                contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
                 errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
                 statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: "Build failed", , state: "FAILURE"]] ]
             ])
@@ -47,7 +46,6 @@ pipeline {
             step([
                   $class: "GitHubCommitStatusSetter",
                   reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/zitrusgelb/backendsystems"],
-                  contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
                   errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
                   statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: "Build complete", , state: "SUCCESS"]] ]
             ])
