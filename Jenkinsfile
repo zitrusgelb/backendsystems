@@ -10,6 +10,7 @@ pipeline {
         stage('Clone Git') {
             steps {
                 checkout scm
+                step([$class: 'GitHubSetCommitStatusBuilder'])
             }
         }
 
