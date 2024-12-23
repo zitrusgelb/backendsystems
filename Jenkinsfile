@@ -30,6 +30,12 @@ pipeline {
                 }
             }
         }
+
+        stage('Build Docker') {
+            steps {
+                sh 'mvn install -Dquarkus.container-image.build=true'
+            }
+        }
     }
 
     post {
