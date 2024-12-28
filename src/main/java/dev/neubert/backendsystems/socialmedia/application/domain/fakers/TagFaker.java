@@ -3,8 +3,6 @@ package dev.neubert.backendsystems.socialmedia.application.domain.fakers;
 
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 
-import java.util.Random;
-
 public class TagFaker extends AbstractFaker implements FakerMethods<Tag> {
     @Override
     public Tag createModel() {
