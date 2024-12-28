@@ -34,7 +34,7 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
     }
 
     @Override
-    public List<User> getAllUsers(int limit) {
+    public List<User> getAllUsers(int limit, int offset) {
         List<User> returnValue = new ArrayList<>();
         try {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -42,7 +42,8 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
             Root<UserEntity> from = cq.from(UserEntity.class);
             cq.select(from);
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
-            final var requestedModel = query.setMaxResults(limit).getResultList();
+            final var requestedModel =
+                    query.setFirstResult(offset).setMaxResults(limit).getResultList();
             if (requestedModel != null) {
                 for (UserEntity user : requestedModel) {
                     returnValue.add(mapper.userEntityToUser(user));
@@ -54,6 +55,11 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<User> getAllUsers(int limit) {
+        return getAllUsers(limit, 0);
     }
 
     @Override

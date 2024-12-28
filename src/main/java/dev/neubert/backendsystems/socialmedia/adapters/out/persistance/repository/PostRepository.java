@@ -41,7 +41,7 @@ public class PostRepository
     }
 
     @Override
-    public List<Post> readAllPosts(int limit) {
+    public List<Post> readAllPosts(int limit, int offset) {
         List<Post> returnValue = new ArrayList<>();
         try {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -49,7 +49,8 @@ public class PostRepository
             Root<PostEntity> from = cq.from(PostEntity.class);
             cq.select(from);
             TypedQuery<PostEntity> query = entityManager.createQuery(cq);
-            final var requestedModel = query.setMaxResults(limit).getResultList();
+            final var requestedModel =
+                    query.setFirstResult(offset).setMaxResults(limit).getResultList();
             if (requestedModel != null) {
                 for (PostEntity post : requestedModel) {
                     returnValue.add(mapper.postEntityToPost(post));
@@ -61,6 +62,11 @@ public class PostRepository
         }
 
         return returnValue;
+    }
+
+    @Override
+    public List<Post> readAllPosts(int limit) {
+        return readAllPosts(limit, 0);
     }
 
     @Override
