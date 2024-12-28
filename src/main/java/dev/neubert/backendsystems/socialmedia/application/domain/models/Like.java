@@ -2,8 +2,7 @@ package dev.neubert.backendsystems.socialmedia.application.domain.models;
 
 import java.time.LocalDateTime;
 
-public class Like extends AbstractModel
-{
+public class Like extends AbstractModel {
     private Post post;
     private User user;
     private LocalDateTime timestamp;
@@ -17,33 +16,27 @@ public class Like extends AbstractModel
         this.timestamp = timestamp;
     }
 
-    public Post getPost()
-    {
+    public Post getPost() {
         return post;
     }
 
-    public void setPost(Post post)
-    {
+    public void setPost(Post post) {
         this.post = post;
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User user)
-    {
-        this.user=user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public LocalDateTime getTimestamp()
-    {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp)
-    {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }
