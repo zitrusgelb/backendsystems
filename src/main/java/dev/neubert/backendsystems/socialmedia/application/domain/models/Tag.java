@@ -7,6 +7,9 @@ public class Tag extends AbstractModel {
     private String name;
     private List<Post> posts;
 
+
+    public Tag() {}
+
     public Tag(String name, List<Post> posts) {
         this.name = name;
         this.posts = posts;
