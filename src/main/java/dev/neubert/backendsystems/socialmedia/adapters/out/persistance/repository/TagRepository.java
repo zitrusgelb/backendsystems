@@ -1,15 +1,12 @@
 package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.PostEntity;
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.TagEntity;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
-import dev.neubert.backendsystems.socialmedia.application.port.out.CreateTagOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.DeleteTagOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.ReadAllTagsOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.UpdateTagOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.CreateTagOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.DeleteTagOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.ReadAllTagsOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.UpdateTagOut;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

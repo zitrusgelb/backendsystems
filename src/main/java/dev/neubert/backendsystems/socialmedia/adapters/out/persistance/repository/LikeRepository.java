@@ -2,16 +2,15 @@ package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.reposito
 
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.LikeEntity;
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.PostEntity;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.TagEntity;
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
-import dev.neubert.backendsystems.socialmedia.application.port.out.CreateLikeOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.DeleteLikeOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.ReadLikeByPostOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.ReadLikeByUserOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Like.CreateLikeOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Like.DeleteLikeOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Like.ReadLikeByPostOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Like.ReadLikeByUserOut;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

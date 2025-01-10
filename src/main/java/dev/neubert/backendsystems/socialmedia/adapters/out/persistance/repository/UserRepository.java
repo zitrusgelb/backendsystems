@@ -3,9 +3,9 @@ package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.reposito
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
-import dev.neubert.backendsystems.socialmedia.application.port.out.CreateUserOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.ReadAllUsersOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.ReadUserOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadAllUsersOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserOut;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
