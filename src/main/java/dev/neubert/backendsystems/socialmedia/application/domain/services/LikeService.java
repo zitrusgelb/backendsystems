@@ -12,34 +12,29 @@ import jakarta.inject.Inject;
 
 import java.util.List;
 
-public class LikeService implements CreateLikeIn, DeleteLikeIn, ReadLikeByPostIn, ReadLikeByUserIn
-{
+public class LikeService implements CreateLikeIn, DeleteLikeIn, ReadLikeByPostIn, ReadLikeByUserIn {
     @Inject
     private LikeRepository likeRepository;
 
     @Override
-    public Like create(Like like)
-    {
+    public Like create(Like like) {
         //return likeRepository.createLike(like);
         return null;
     }
 
     @Override
-    public boolean deleteLikeIn(Like like)
-    {
+    public boolean deleteLikeIn(Like like) {
         //return likeRepository.deleteLike(like.getId());
         return false;
     }
 
     @Override
-    public List<Like> readLikeByPost(Post post)
-    {
+    public List<Like> readLikeByPost(Post post) {
         return likeRepository.readLikeByPost(post);
     }
 
     @Override
-    public List<Like> readLikeByUser(User user)
-    {
+    public List<Like> readLikeByUser(User user) {
         return likeRepository.readLikeByUser(user);
     }
 }

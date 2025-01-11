@@ -17,8 +17,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LikeAdapter
-{
+public class LikeAdapter {
     @Inject
     CreateLikeIn createLikeIn;
 
@@ -35,24 +34,20 @@ public class LikeAdapter
     PostMapper postMapper = Mappers.getMapper(PostMapper.class);
     UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
-    public LikeDto createLike(LikeDto likeDto)
-    {
+    public LikeDto createLike(LikeDto likeDto) {
         return likeMapper.likeToLikeDto(createLikeIn.create(likeMapper.likeDtoToLike(likeDto)));
     }
 
-    public boolean deleteLike(LikeDto likeDto)
-    {
+    public boolean deleteLike(LikeDto likeDto) {
         return deleteLikeIn.deleteLikeIn(likeMapper.likeDtoToLike(likeDto));
     }
 
-    public List<LikeDto> getLikeByPost(PostDto postDto)
-    {
+    public List<LikeDto> getLikeByPost(PostDto postDto) {
         List<Like> likes = readLikeByPostIn.readLikeByPost(postMapper.postDtoToPost(postDto));
         return likes.stream().map(likeMapper::likeToLikeDto).collect(Collectors.toList());
     }
 
-    public List<LikeDto> getLikeByPost(UserDto userDto)
-    {
+    public List<LikeDto> getLikeByPost(UserDto userDto) {
         List<Like> likes = readLikeByUserIn.readLikeByUser(userMapper.userDtoToUser(userDto));
         return likes.stream().map(likeMapper::likeToLikeDto).collect(Collectors.toList());
     }
