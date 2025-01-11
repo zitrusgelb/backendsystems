@@ -5,7 +5,6 @@ import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 
 import java.util.List;
 
-public interface ReadLikeByUserIn
-{
+public interface ReadLikeByUserIn {
     List<Like> readLikeByUser(User user);
 }
