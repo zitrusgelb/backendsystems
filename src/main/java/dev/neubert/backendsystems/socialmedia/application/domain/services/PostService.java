@@ -38,7 +38,7 @@ public class PostService
     }
 
     @Override
-    public Post updatePost(Post post) {
+    public Post updatePost(long postId, Post post) {
         // return postRepository.updatePost(post);
         return null;
     }
