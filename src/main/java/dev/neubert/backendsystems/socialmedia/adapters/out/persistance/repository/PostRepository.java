@@ -4,6 +4,7 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Po
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Post.*;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -17,6 +18,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class PostRepository
         implements CreatePostOut, ReadPostOut, UpdatePostOut, DeletePostOut, ReadAllPostsOut {
     private final PostMapper mapper = Mappers.getMapper(PostMapper.class);
