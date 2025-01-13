@@ -33,7 +33,7 @@ public class PostService
     }
 
     @Override
-    public Post readPost(Post post) {
+    public Post getPostById(Post post) {
         return postRepository.getPostById(post.getId());
     }
 
