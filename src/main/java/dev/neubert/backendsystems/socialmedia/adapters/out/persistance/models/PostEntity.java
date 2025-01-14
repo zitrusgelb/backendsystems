@@ -14,11 +14,11 @@ public class PostEntity {
     private String content;
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private UserEntity user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private TagEntity tag;
 
     @ManyToOne(fetch = FetchType.LAZY)
