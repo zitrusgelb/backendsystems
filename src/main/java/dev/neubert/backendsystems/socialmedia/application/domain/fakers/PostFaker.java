@@ -14,17 +14,14 @@ public class PostFaker extends AbstractFaker implements FakerMethods<Post> {
         String content = faker.howIMetYourMother().quote();
         Date date = faker.date().past(365, java.util.concurrent.TimeUnit.DAYS);
         LocalDateTime createdAt = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        Tag tag = new Tag();
-        if (Math.random() < 0.5) {
-            tag = new TagFaker().createModel();
-        }
-        Optional<Tag> postTag = Optional.of(tag);
+        //Tag tag = new TagFaker().createModel();
         Post post = new Post();
 
         post.setContent(content);
         post.setCreatedAt(createdAt);
         post.setUser(new UserFaker().createModel());
         post.setTag(postTag.orElse(null));
+        post.setTag(null);
 
         return post;
     }
