@@ -1,14 +1,14 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.fakers;
 
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Optional;
 
+@ApplicationScoped
 public class PostFaker extends AbstractFaker implements FakerMethods<Post> {
     @Override
     public Post createModel() {
