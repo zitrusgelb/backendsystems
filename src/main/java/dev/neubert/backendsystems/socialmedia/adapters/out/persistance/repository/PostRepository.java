@@ -12,7 +12,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import org.jboss.resteasy.util.NoContent;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
