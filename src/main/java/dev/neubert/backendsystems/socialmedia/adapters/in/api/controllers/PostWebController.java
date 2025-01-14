@@ -2,6 +2,8 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.PostAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
+import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -12,12 +14,18 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import org.mapstruct.factory.Mappers;
 
 @Path("posts")
 public class PostWebController {
 
     @Inject
     PostAdapter postAdapter;
+
+    @Inject
+    PostFaker postFaker;
+
+    PostMapper postMapper = Mappers.getMapper(PostMapper.class);
 
     private UriInfo uriInfo;
     private HttpHeaders httpHeaders;
@@ -106,6 +114,13 @@ public class PostWebController {
         } else {
             return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();
         }
+    }
+
+    @POST
+    @Path("populate")
+    public Response populateDatabase() {
+        this.postAdapter.createPost(postMapper.postToPostDto(postFaker.createModel()));
+        return Response.status(HttpResponseStatus.CREATED.code()).build();
     }
 
 
