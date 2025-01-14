@@ -1,10 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 

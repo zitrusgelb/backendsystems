@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class PostEntity
-{
+public class PostEntity {
     @Id
     private long id;
 
@@ -24,63 +23,51 @@ public class PostEntity
     @ManyToOne(fetch = FetchType.LAZY)
     private PostEntity replyTo;
 
-    public long getId()
-    {
+    public long getId() {
         return id;
     }
 
-    public void setId(long id)
-    {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getContent()
-    {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(String content)
-    {
+    public void setContent(String content) {
         this.content = content;
     }
 
-    public LocalDateTime getCreatedAt()
-    {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt)
-    {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public UserEntity getUser()
-    {
+    public UserEntity getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user)
-    {
+    public void setUser(UserEntity user) {
         this.user = user;
     }
 
-    public TagEntity getTag()
-    {
+    public TagEntity getTag() {
         return tag;
     }
 
-    public void setTag(TagEntity tag)
-    {
+    public void setTag(TagEntity tag) {
         this.tag = tag;
     }
 
-    public PostEntity getReplyTo()
-    {
+    public PostEntity getReplyTo() {
         return replyTo;
     }
 
-    public void setReplyTo(PostEntity replyTo)
-    {
+    public void setReplyTo(PostEntity replyTo) {
         this.replyTo = replyTo;
     }
 }
