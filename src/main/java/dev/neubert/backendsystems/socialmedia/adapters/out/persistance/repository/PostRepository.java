@@ -28,16 +28,21 @@ public class PostRepository
 
     @Transactional
     @Override
-    public NoContent createPost(Post post) {
+    public Post createPost(Post post) {
         final var entity = this.mapper.postToPostEntity(post);
         this.entityManager.persist(entity);
-        return new NoContent();
+        return post;
     }
 
     @Override
-    public NoContent deletePost(long postId) {
-        this.entityManager.remove(this.entityManager.find(PostEntity.class, postId));
-        return new NoContent();
+    public boolean deletePost(long postId) {
+        try {
+            this.entityManager.remove(this.entityManager.find(PostEntity.class, postId));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     @Override
@@ -87,9 +92,9 @@ public class PostRepository
 
     @Transactional
     @Override
-    public NoContent updatePost(Post post) {
+    public Post updatePost(Post post) {
         final var entity = this.mapper.postToPostEntity(post);
         this.entityManager.merge(entity);
-        return new NoContent();
+        return post;
     }
 }

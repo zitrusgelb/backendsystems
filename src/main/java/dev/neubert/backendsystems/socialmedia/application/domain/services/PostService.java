@@ -17,14 +17,12 @@ public class PostService
 
     @Override
     public Post create(Post post) {
-        // return postRepository.createPost(post);
-        return null;
+        return postRepository.createPost(post);
     }
 
     @Override
     public boolean delete(Post post) {
-        // return postRepository.deletePost(post.getId());
-        return false;
+        return postRepository.deletePost(post.getId());
     }
 
     @Override
@@ -39,7 +37,6 @@ public class PostService
 
     @Override
     public Post updatePost(long postId, Post post) {
-        // return postRepository.updatePost(post);
-        return null;
+        return postRepository.updatePost(post);
     }
 }
