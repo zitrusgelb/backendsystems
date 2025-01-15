@@ -42,8 +42,8 @@ public class PostAdapter {
         return readAllPostsIn.readAllPosts();
     }
 
-    public PostDto getPostById(PostDto postDto) {
-        return postMapper.postToPostDto(readPostIn.getPostById(postMapper.postDtoToPost(postDto)));
+    public PostDto getPostById(long id) {
+        return postMapper.postToPostDto(readPostIn.getPostById(id));
     }
 
     public PostDto updatePost(long id,PostDto postDto){

@@ -62,9 +62,7 @@ public class PostWebController {
             @PathParam("id")
             long id
     ) {
-        PostDto postDto = new PostDto();
-        postDto.setId(id);
-        var requestedPost = this.postAdapter.getPostById(postDto);
+        var requestedPost = this.postAdapter.getPostById(id);
         return Response.ok(requestedPost).build();
     }
 
@@ -106,9 +104,7 @@ public class PostWebController {
             @PathParam("id")
             long id
     ) {
-        PostDto postDto = new PostDto();
-        postDto.setId(id);
-        var toBeDeleted = this.postAdapter.getPostById(postDto);
+        var toBeDeleted = this.postAdapter.getPostById(id);
         if (this.postAdapter.deletePost(toBeDeleted)) {
             return Response.status(HttpResponseStatus.NO_CONTENT.code()).build();
         } else {

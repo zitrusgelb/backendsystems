@@ -31,8 +31,8 @@ public class PostService
     }
 
     @Override
-    public Post getPostById(Post post) {
-        return postRepository.getPostById(post.getId());
+    public Post getPostById(long id) {
+        return postRepository.getPostById(id);
     }
 
     @Override
