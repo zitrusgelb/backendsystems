@@ -26,7 +26,6 @@ public class PostWebControllerTest {
     void createPost() {
         Post post = new PostFaker().createModel();
         post.setCreatedAt(LocalDateTime.now());
-        String postToString = post.toString();
         given().contentType("application/json")
                .body(post.toString())
                .when()

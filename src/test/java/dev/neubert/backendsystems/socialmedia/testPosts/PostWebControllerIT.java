@@ -31,7 +31,7 @@ public class PostWebControllerIT {
     }
 
     @Test
-    void createPost() throws JsonProcessingException {
+    void createPost() {
         Post post = new PostFaker().createModel();
         post.setCreatedAt(LocalDateTime.now());
         given().contentType("application/json")
