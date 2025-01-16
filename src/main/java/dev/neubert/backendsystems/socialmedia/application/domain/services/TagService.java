@@ -37,12 +37,10 @@ public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, Update
         return null; // Placeholder until the repository method is implemented
     }
 
-    @Override
-    public boolean deleteTagIn(Long id) { // Corrected method signature if required
+    public boolean deleteTag(Long id) { // Corrected method name to match the interface
         // Uncomment and implement the repository method
         // return tagRepository.deleteTag(id);
         return false; // Placeholder
-    }
 
     @Override
     public Optional<Tag> readTagById(Long id) {
