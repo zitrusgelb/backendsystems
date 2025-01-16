@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 public class PostDto extends AbstractDataTransferObject {
     private String content;
     private LocalDateTime createdAt;
-    private UserDto user;
-    private TagDto tag;
-    private PostDto replyTo;
+    private long userId;
+    private long tagId;
+    private long replyToId;
 
     public String getContent() {
         return content;
@@ -25,28 +25,28 @@ public class PostDto extends AbstractDataTransferObject {
         this.createdAt = createdAt;
     }
 
-    public UserDto getUser() {
-        return user;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUser(UserDto user) {
-        this.user = user;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public TagDto getTag() {
-        return tag;
+    public long getTagId() {
+        return tagId;
     }
 
-    public void setTag(TagDto tag) {
-        this.tag = tag;
+    public void setTagId(long tagId) {
+        this.tagId = tagId;
     }
 
-    public PostDto getReplyTo() {
-        return replyTo;
+    public long getReplyToId() {
+        return replyToId;
     }
 
-    public void setReplyTo(PostDto replyTo) {
-        this.replyTo = replyTo;
+    public void setReplyToId(long replyToId) {
+        this.replyToId = replyToId;
     }
 
 }
