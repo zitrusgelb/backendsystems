@@ -18,10 +18,11 @@ public class PostEntity {
     @JoinColumn(nullable = false)
     private UserEntity user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn
     private TagEntity tag;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private PostEntity replyTo;
 
     public long getId() {

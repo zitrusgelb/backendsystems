@@ -7,13 +7,12 @@ import java.time.LocalDateTime;
 
 @Entity
 @IdClass(LikeEntityId.class)
-public class LikeEntity
-{
-    @OneToOne
+public class LikeEntity {
+    @OneToOne(cascade = CascadeType.ALL)
     @Id
     private PostEntity post;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @Id
     private UserEntity user;
 
