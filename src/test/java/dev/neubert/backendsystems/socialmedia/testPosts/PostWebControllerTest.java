@@ -1,9 +1,12 @@
 package dev.neubert.backendsystems.socialmedia.testPosts;
 
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDateTime;
 
@@ -24,10 +27,13 @@ public class PostWebControllerTest {
 
     @Test
     void createPost() {
+        PostMapper postMapper = Mappers.getMapper(PostMapper.class);
         Post post = new PostFaker().createModel();
         post.setCreatedAt(LocalDateTime.now());
+        CreatePostDto createPostDto =
+                postMapper.postDtoToCreatePostDto(postMapper.postToPostDto(post));
         given().contentType("application/json")
-               .body(post.toString())
+               .body(createPostDto.toString())
                .when()
                .post("/posts")
                .then()
