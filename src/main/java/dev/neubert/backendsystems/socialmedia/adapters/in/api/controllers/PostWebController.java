@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.PostAdapter;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
@@ -71,7 +72,7 @@ public class PostWebController {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createPost(
             @Valid
-            PostDto model
+            CreatePostDto model
     ) {
         var result = this.postAdapter.createPost(model);
         return Response.status(HttpResponseStatus.CREATED.code())
@@ -115,7 +116,8 @@ public class PostWebController {
     @POST
     @Path("populate")
     public Response populateDatabase() {
-        this.postAdapter.createPost(postMapper.postToPostDto(postFaker.createModel()));
+        this.postAdapter.createPost(postMapper.postDtoToCreatePostDto(
+                postMapper.postToPostDto(postFaker.createModel())));
         return Response.status(HttpResponseStatus.CREATED.code()).build();
     }
 

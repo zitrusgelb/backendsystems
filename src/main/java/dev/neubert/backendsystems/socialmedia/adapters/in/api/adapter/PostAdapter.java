@@ -1,5 +1,6 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter;
 
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
@@ -30,8 +31,8 @@ public class PostAdapter {
     PostMapper postMapper = Mappers.getMapper(PostMapper.class);
 
 
-    public PostDto createPost(PostDto postDto) {
-        return postMapper.postToPostDto(createPostIn.create(postMapper.postDtoToPost(postDto)));
+    public PostDto createPost(CreatePostDto postDto) {
+        return postMapper.postToPostDto(createPostIn.create(postMapper.createPostDtoToPost(postDto)));
     }
 
     public boolean deletePost(PostDto postDto) {
