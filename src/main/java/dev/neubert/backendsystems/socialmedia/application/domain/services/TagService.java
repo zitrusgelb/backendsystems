@@ -17,26 +17,26 @@ public class TagService implements CreateTagIn, DeleteTagIn, ReadTagByIdIn, Read
     private TagRepository tagRepository;
 
     @Override
-    public Tag create(Tag tag) {
-        // Uncomment when repository method is implemented
+    public Tag createTag(Tag tag) { // Fixed method name to match the interface
+        // Uncomment and implement the repository method
         // return tagRepository.createTag(tag);
-        return null;
+        return null; // Placeholder until the repository method is implemented
     }
 
     @Override
-    public boolean deleteTagIn(Long id) {
-        // Uncomment when repository method is implemented
+    public boolean deleteTagIn(Long id) { // Corrected method signature if required
+        // Uncomment and implement the repository method
         // return tagRepository.deleteTag(id);
-        return false;
+        return false; // Placeholder
     }
 
     @Override
     public Optional<Tag> readTagById(Long id) {
-        return tagRepository.readTagById(id);
+        return tagRepository.readTagById(id); // Ensure the repository method is implemented
     }
 
     @Override
     public List<Tag> readAllTags() {
-        return tagRepository.readAllTags();
+        return tagRepository.readAllTags(); // Ensure the repository method is implemented
     }
 }
