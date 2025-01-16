@@ -4,9 +4,15 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repositor
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.*;
 import jakarta.enterprise.context.ApplicationScoped;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.CreateTagIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.DeleteTagIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.ReadTagByIdIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.ReadAllTagsIn;
+
 import jakarta.inject.Inject;
 
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, UpdateTagIn, DeleteTagIn {
@@ -25,18 +31,16 @@ public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, Update
         return tagRepository.deleteTag(tag.getId());
     }
 
-    @Override
     public List<Tag> readAllTags() {
         return tagRepository.readAllTags(100);
-    }
-
+}
     @Override
     public Tag getTagById(long id) {
         return tagRepository.findById(id);
     }
 
     @Override
-    public Tag update(Long id,Tag tag) {
+    public Tag updateTag(Long id,Tag tag) {
         tag.setId(id);
         return tagRepository.updateTag(tag);
     }
