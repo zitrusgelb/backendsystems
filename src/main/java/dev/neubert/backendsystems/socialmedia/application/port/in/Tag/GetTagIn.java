@@ -2,6 +2,9 @@ package dev.neubert.backendsystems.socialmedia.application.port.in.Tag;
 
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 
-public interface UpdateTagIn {
-    Tag updateTag(Long id, Tag tag);
+import java.util.List;
+
+public interface GetTagIn {
+    Tag getTagById(Long id);
+    List<Tag> getAllTags();
 }
