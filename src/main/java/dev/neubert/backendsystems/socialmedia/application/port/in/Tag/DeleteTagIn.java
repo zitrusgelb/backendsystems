@@ -3,5 +3,5 @@ package dev.neubert.backendsystems.socialmedia.application.port.in.Tag;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 
 public interface DeleteTagIn {
-    boolean deleteTag(Tag tag); // Ensure the return type matches
+    boolean deleteTag(Tag tag);
 }
