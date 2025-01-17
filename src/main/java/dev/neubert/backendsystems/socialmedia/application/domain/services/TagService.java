@@ -4,12 +4,12 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repositor
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.CreateTagIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.DeleteTagIn;
-import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.ReadTagByIdIn;
+//import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.ReadTagByIdIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.ReadAllTagsIn;
 
 import jakarta.inject.Inject;
 import java.util.List;
-import java.util.Optional;
+
 
 public class TagService implements CreateTagIn, DeleteTagIn, ReadAllTagsIn {
 
