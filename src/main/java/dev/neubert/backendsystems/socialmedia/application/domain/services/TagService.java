@@ -11,30 +11,37 @@ import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
-public class TagService implements CreateTagIn, DeleteTagIn, ReadTagByIdIn, ReadAllTagsIn {
+public class TagService implements CreateTagIn, DeleteTagIn, ReadAllTagsIn {
 
     @Inject
     private TagRepository tagRepository;
 
     @Override
-    public Tag createTag(Tag tag) { // Fixed method name to match the interface
-        // Uncomment and implement the repository method
-        // return tagRepository.createTag(tag);
-        return null; // Placeholder until the repository method is implemented
+    public Tag createTag(Tag tag) {
+//        if (tag == null || tag.getName() == null || tag.getName().isEmpty()) {
+//            throw new IllegalArgumentException("Tag or tag name must not be null or empty");
+//        }
+//        return tagRepository.create(tag);
+        return null;
     }
-
-    public boolean deleteTag(Long id) { // Corrected method name to match the interface
-        // Uncomment and implement the repository method
-        // return tagRepository.deleteTag(id);
-        return false; // Placeholder
 
     @Override
-    public Optional<Tag> readTagById(Long id) {
-        return tagRepository.readTagById(id); // Ensure the repository method is implemented
+    public boolean deleteTag(Long id) {
+//        if (id == null || id <= 0) {
+//            throw new IllegalArgumentException("Tag ID must be a positive number");
+//        }
+//        Optional<Tag> tag = tagRepository.findById(id);
+//        if (tag.isPresent()) {
+//            tagRepository.delete(tag.get());
+//            return true;
+//        }
+        return false;
     }
+
 
     @Override
     public List<Tag> readAllTags() {
-        return tagRepository.readAllTags(); // Ensure the repository method is implemented
+        return tagRepository.readAllTags(100);
+
     }
 }
