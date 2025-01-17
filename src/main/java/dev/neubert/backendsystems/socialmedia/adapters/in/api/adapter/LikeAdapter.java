@@ -47,7 +47,7 @@ public class LikeAdapter {
         return likes.stream().map(likeMapper::likeToLikeDto).collect(Collectors.toList());
     }
 
-    public List<LikeDto> getLikeByPost(UserDto userDto) {
+    public List<LikeDto> getLikeByUser(UserDto userDto) {
         List<Like> likes = readLikeByUserIn.readLikeByUser(userMapper.userDtoToUser(userDto));
         return likes.stream().map(likeMapper::likeToLikeDto).collect(Collectors.toList());
     }
