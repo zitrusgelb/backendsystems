@@ -17,7 +17,6 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import org.jboss.resteasy.util.NoContent;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
@@ -32,17 +31,25 @@ public class LikeRepository
 
 
     @Override
-    public NoContent createLike(Like like) {
-        final var entity = this.mapper.likeToLikeEntity(like);
-        this.entityManager.persist(entity);
-        return new NoContent();
+    public Like createLike(Like like) {
+        try {
+            final var entity = this.mapper.likeToLikeEntity(like);
+            this.entityManager.persist(entity);
+            return like;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
-    public NoContent deleteLike(long id) {
-        final var entity = this.entityManager.find(Like.class, id);
-        this.entityManager.remove(entity);
-        return new NoContent();
+    public boolean deleteLike(long id) {
+        try {
+            final var entity = this.entityManager.find(Like.class, id);
+            this.entityManager.remove(entity);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

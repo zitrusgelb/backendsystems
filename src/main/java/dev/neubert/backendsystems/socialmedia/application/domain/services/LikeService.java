@@ -18,14 +18,12 @@ public class LikeService implements CreateLikeIn, DeleteLikeIn, ReadLikeByPostIn
 
     @Override
     public Like create(Like like) {
-        //return likeRepository.createLike(like);
-        return null;
+        return likeRepository.createLike(like);
     }
 
     @Override
     public boolean deleteLikeIn(Like like) {
-        //return likeRepository.deleteLike(like.getId());
-        return false;
+        return likeRepository.deleteLike(like.getId());
     }
 
     @Override

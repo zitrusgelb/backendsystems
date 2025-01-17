@@ -7,8 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {PostMapper.class})
-public interface TagMapper
-{
+public interface TagMapper {
     TagMapper INSTANCE = Mappers.getMapper(TagMapper.class);
 
     TagDto tagToTagDto(Tag tag);
