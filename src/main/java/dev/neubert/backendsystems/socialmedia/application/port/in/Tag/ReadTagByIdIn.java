@@ -4,5 +4,5 @@ import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import java.util.List;
 
 public interface ReadTagByIdIn {
-    List<Tag> readTagsBy(String criteria);
+    List<Tag> readTagsById(String criteria);
 }
