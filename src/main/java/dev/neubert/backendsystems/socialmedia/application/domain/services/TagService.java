@@ -26,7 +26,7 @@ public class TagService implements CreateTagIn, DeleteTagIn, ReadAllTagsIn {
     }
 
     @Override
-    public boolean deleteTag(Long id) {
+    public boolean deleteTag(Tag tag) {
 //        if (id == null || id <= 0) {
 //            throw new IllegalArgumentException("Tag ID must be a positive number");
 //        }
