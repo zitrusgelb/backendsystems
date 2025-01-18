@@ -5,8 +5,6 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Po
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.CreateLikeOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.DeleteLikeOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.ReadLikeByPostOut;
@@ -53,11 +51,11 @@ public class LikeRepository
     }
 
     @Override
-    public List<Like> readLikeByPost(Post post) {
+    public List<Like> readLikeByPost(long postId) {
         List<Like> returnValue = new ArrayList<>();
 
         try {
-            var postEntity = this.entityManager.find(PostEntity.class, post.getId());
+            var postEntity = this.entityManager.find(PostEntity.class, postId);
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<LikeEntity> cq = cb.createQuery(LikeEntity.class);
             Root<LikeEntity> from = cq.from(LikeEntity.class);
@@ -79,11 +77,11 @@ public class LikeRepository
     }
 
     @Override
-    public List<Like> readLikeByUser(User user) {
+    public List<Like> readLikeByUser(long userId) {
         List<Like> returnValue = new ArrayList<>();
 
         try {
-            var userEntity = this.entityManager.find(UserEntity.class, user.getId());
+            var userEntity = this.entityManager.find(UserEntity.class, userId);
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<LikeEntity> cq = cb.createQuery(LikeEntity.class);
             Root<LikeEntity> from = cq.from(LikeEntity.class);

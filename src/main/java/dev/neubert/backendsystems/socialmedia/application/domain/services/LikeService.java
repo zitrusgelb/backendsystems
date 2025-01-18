@@ -2,8 +2,6 @@ package dev.neubert.backendsystems.socialmedia.application.domain.services;
 
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.LikeRepository;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.CreateLikeIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.DeleteLikeIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByPostIn;
@@ -27,12 +25,12 @@ public class LikeService implements CreateLikeIn, DeleteLikeIn, ReadLikeByPostIn
     }
 
     @Override
-    public List<Like> readLikeByPost(Post post) {
-        return likeRepository.readLikeByPost(post);
+    public List<Like> readLikeByPost(long postId) {
+        return likeRepository.readLikeByPost(postId);
     }
 
     @Override
-    public List<Like> readLikeByUser(User user) {
-        return likeRepository.readLikeByUser(user);
+    public List<Like> readLikeByUser(long userId) {
+        return likeRepository.readLikeByUser(userId);
     }
 }
