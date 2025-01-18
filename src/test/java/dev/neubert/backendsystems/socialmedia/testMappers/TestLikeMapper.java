@@ -1,4 +1,4 @@
-package dev.neubert.backendsystems.socialmedia.testMapper;
+package dev.neubert.backendsystems.socialmedia.testMappers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
