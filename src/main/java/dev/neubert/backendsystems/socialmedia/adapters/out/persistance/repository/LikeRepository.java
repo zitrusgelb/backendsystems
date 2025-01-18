@@ -40,9 +40,9 @@ public class LikeRepository
     }
 
     @Override
-    public boolean deleteLike(long id) {
+    public boolean deleteLike(Like like) {
         try {
-            final var entity = this.entityManager.find(Like.class, id);
+            final var entity = this.entityManager.find(Like.class, like);
             this.entityManager.remove(entity);
             return true;
         } catch (Exception e) {
