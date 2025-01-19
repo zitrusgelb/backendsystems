@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(uses = {UserMapper.class, TagMapper.class})
 public interface PostMapper {
     PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
@@ -32,4 +34,6 @@ public interface PostMapper {
     Post createPostDtoToPost(CreatePostDto createPostDto);
 
     CreatePostDto postDtoToCreatePostDto(PostDto postDto);
+
+    List<PostDto> postListToPostDtoList(List<Post> posts);
 }
