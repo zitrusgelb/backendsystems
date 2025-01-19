@@ -17,6 +17,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.mapstruct.factory.Mappers;
 
+import java.util.stream.Collectors;
+
 @Path("posts")
 public class PostWebController {
 
@@ -47,10 +49,17 @@ public class PostWebController {
             @QueryParam("size")
             long size
     ) {
-        var requestedPosts = this.postAdapter.readAllPosts();
+        var allPosts = this.postAdapter.readAllPosts();
+
+        var filteredPosts =
+                allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
+
+        var paginatedPosts =
+                filteredPosts.stream().skip(offset).limit(size).collect(Collectors.toList());
+
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", requestedPosts.size())
-                       .entity(requestedPosts)
+                       .header("X-Total-Count", paginatedPosts.size())
+                       .entity(paginatedPosts)
                        .build();
     }
 
