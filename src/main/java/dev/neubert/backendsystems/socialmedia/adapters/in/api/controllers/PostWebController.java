@@ -11,10 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.UriInfo;
+import jakarta.ws.rs.core.*;
 import org.mapstruct.factory.Mappers;
 
 @Path("posts")
@@ -30,6 +27,7 @@ public class PostWebController {
 
     private UriInfo uriInfo;
     private HttpHeaders httpHeaders;
+    private CacheControl cacheControl;
 
 
     @GET
@@ -48,8 +46,10 @@ public class PostWebController {
             long size
     ) {
         var requestedPosts = this.postAdapter.readAllPosts();
+        setCacheControlFiveMinutes();
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", requestedPosts.size())
+                       .cacheControl(this.cacheControl)
                        .entity(requestedPosts)
                        .build();
     }
@@ -63,8 +63,12 @@ public class PostWebController {
             @PathParam("id")
             long id
     ) {
+        setCacheControlFiveMinutes();
         var requestedPost = this.postAdapter.getPostById(id);
         return Response.ok(requestedPost).build();
+        return Response.ok(requestedPost)
+                       .cacheControl(this.cacheControl)
+                       .build();
     }
 
 
@@ -74,9 +78,11 @@ public class PostWebController {
             @Valid
             CreatePostDto model
     ) {
+        setCacheControlFiveMinutes();
         var result = this.postAdapter.createPost(model);
         return Response.status(HttpResponseStatus.CREATED.code())
                        .header("Location", createLocationHeader(result))
+                       .cacheControl(this.cacheControl)
                        .build();
     }
 
@@ -91,9 +97,11 @@ public class PostWebController {
             @Valid
             PostDto model
     ) {
+        setCacheControlFiveMinutes();
         var result = this.postAdapter.updatePost(id, model);
         return Response.status(HttpResponseStatus.NO_CONTENT.code())
                        .header("Location", createLocationHeader(result))
+                       .cacheControl(this.cacheControl)
                        .build();
     }
 
@@ -117,13 +125,22 @@ public class PostWebController {
     @Path("populate")
     public Response populateDatabase() {
         this.postAdapter.createPost(postMapper.postDtoToCreatePostDto(
+        setCacheControlFiveMinutes();
                 postMapper.postToPostDto(postFaker.createModel())));
         return Response.status(HttpResponseStatus.CREATED.code()).build();
+        return Response.status(HttpResponseStatus.CREATED.code())
+                       .cacheControl(this.cacheControl)
+                       .build();
     }
 
 
     private String createLocationHeader(PostDto model) {
         return uriInfo.getRequestUriBuilder().path(Long.toString(model.getId())).build().toString();
+    }
+
+    private void setCacheControlFiveMinutes() {
+        this.cacheControl = new CacheControl();
+        this.cacheControl.setMaxAge(300);
     }
 
 }
