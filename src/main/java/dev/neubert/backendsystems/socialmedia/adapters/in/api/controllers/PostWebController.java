@@ -45,12 +45,10 @@ public class PostWebController {
             @QueryParam("size")
             long size
     ) {
-        var requestedPosts = this.postAdapter.readAllPosts();
+        var result = this.postAdapter.readAllPosts();
         setCacheControlFiveMinutes();
-        return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", requestedPosts.size())
-                       .cacheControl(this.cacheControl)
-                       .entity(requestedPosts)
+        return Response.status(HttpResponseStatus.OK.code()).header("X-Total-Count", result.size())
+                       .cacheControl(this.cacheControl).entity(result)
                        .build();
     }
 
@@ -65,8 +63,10 @@ public class PostWebController {
     ) {
         setCacheControlFiveMinutes();
         var requestedPost = this.postAdapter.getPostById(id);
-        return Response.ok(requestedPost).build();
-        return Response.ok(requestedPost)
+        if (requestedPost == null) {
+            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+        }
+        return Response.ok(requestedPost).tag(Long.toString(requestedPost.hashCode()))
                        .cacheControl(this.cacheControl)
                        .build();
     }
@@ -82,6 +82,7 @@ public class PostWebController {
         var result = this.postAdapter.createPost(model);
         return Response.status(HttpResponseStatus.CREATED.code())
                        .header("Location", createLocationHeader(result))
+                       .tag(Long.toString(result.hashCode()))
                        .cacheControl(this.cacheControl)
                        .build();
     }
@@ -101,6 +102,7 @@ public class PostWebController {
         var result = this.postAdapter.updatePost(id, model);
         return Response.status(HttpResponseStatus.NO_CONTENT.code())
                        .header("Location", createLocationHeader(result))
+                       .tag(Long.toString(result.hashCode()))
                        .cacheControl(this.cacheControl)
                        .build();
     }
@@ -124,11 +126,12 @@ public class PostWebController {
     @POST
     @Path("populate")
     public Response populateDatabase() {
-        this.postAdapter.createPost(postMapper.postDtoToCreatePostDto(
         setCacheControlFiveMinutes();
+        var result = this.postAdapter.createPost(postMapper.postDtoToCreatePostDto(
                 postMapper.postToPostDto(postFaker.createModel())));
-        return Response.status(HttpResponseStatus.CREATED.code()).build();
         return Response.status(HttpResponseStatus.CREATED.code())
+                       .header("Location", createLocationHeader(result))
+                       .tag(Long.toString(result.hashCode()))
                        .cacheControl(this.cacheControl)
                        .build();
     }
