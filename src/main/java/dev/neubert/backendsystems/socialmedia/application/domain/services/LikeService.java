@@ -6,10 +6,12 @@ import dev.neubert.backendsystems.socialmedia.application.port.in.Like.CreateLik
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.DeleteLikeIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByPostIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import java.util.List;
 
+@ApplicationScoped
 public class LikeService implements CreateLikeIn, DeleteLikeIn, ReadLikeByPostIn, ReadLikeByUserIn {
     @Inject
     private LikeRepository likeRepository;

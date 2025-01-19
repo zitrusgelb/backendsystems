@@ -7,12 +7,14 @@ import dev.neubert.backendsystems.socialmedia.application.port.in.Like.CreateLik
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.DeleteLikeIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByPostIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ApplicationScoped
 public class LikeAdapter {
     @Inject
     CreateLikeIn createLikeIn;

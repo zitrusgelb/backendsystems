@@ -9,6 +9,7 @@ import dev.neubert.backendsystems.socialmedia.application.port.out.Like.CreateLi
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.DeleteLikeOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.ReadLikeByPostOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.ReadLikeByUserOut;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -20,6 +21,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class LikeRepository
         implements CreateLikeOut, ReadLikeByPostOut, ReadLikeByUserOut, DeleteLikeOut {
     private final LikeMapper mapper = Mappers.getMapper(LikeMapper.class);
