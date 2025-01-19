@@ -7,12 +7,14 @@ import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFake
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;
+import jakarta.validation.Valid;test: checks empty body
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.mapstruct.factory.Mappers;
+
+import java.util.stream.Collectors;
 
 @Path("posts")
 public class PostWebController {
@@ -45,10 +47,19 @@ public class PostWebController {
             @QueryParam("size")
             long size
     ) {
-        var result = this.postAdapter.readAllPosts();
+
         setCacheControlFiveMinutes();
-        return Response.status(HttpResponseStatus.OK.code()).header("X-Total-Count", result.size())
-                       .cacheControl(this.cacheControl).entity(result)
+        var allPosts = this.postAdapter.readAllPosts();
+        var filteredPosts =
+                allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
+
+        var result =
+                filteredPosts.stream().skip(offset).limit(size).collect(Collectors.toList());
+
+        return Response.status(HttpResponseStatus.OK.code())
+                       .header("X-Total-Count", result.size())
+                       .cacheControl(this.cacheControl).
+                       .entity(result)
                        .build();
     }
 

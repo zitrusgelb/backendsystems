@@ -3,7 +3,6 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Post.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -39,8 +38,8 @@ public class PostAdapter {
         return deletePostIn.delete(postMapper.postDtoToPost(postDto));
     }
 
-    public List<Post> readAllPosts() {
-        return readAllPostsIn.readAllPosts();
+    public List<PostDto> readAllPosts() {
+        return postMapper.postListToPostDtoList(readAllPostsIn.readAllPosts());
     }
 
     public PostDto getPostById(long id) {
