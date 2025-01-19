@@ -99,6 +99,9 @@ public class PostWebController {
             PostDto model
     ) {
         setCacheControlFiveMinutes();
+        if (this.postAdapter.getPostById(id) == null) {
+            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+        }
         var result = this.postAdapter.updatePost(id, model);
         return Response.status(HttpResponseStatus.NO_CONTENT.code())
                        .header("Location", createLocationHeader(result))
@@ -116,6 +119,9 @@ public class PostWebController {
             long id
     ) {
         var toBeDeleted = this.postAdapter.getPostById(id);
+        if (toBeDeleted == null) {
+            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+        }
         if (this.postAdapter.deletePost(toBeDeleted)) {
             return Response.status(HttpResponseStatus.NO_CONTENT.code()).build();
         } else {
