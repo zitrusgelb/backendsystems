@@ -11,6 +11,7 @@ import org.mapstruct.factory.Mappers;
 import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 public class PostWebControllerTest {
@@ -21,8 +22,7 @@ public class PostWebControllerTest {
                .get("/posts")
                .then()
                .statusCode(200)
-               .header("X-Total-Count", "0")
-               .header("content-length", "2");
+               .header("X-Total-Count", "0").header("content-length", "2").body(is("[]"));
     }
 
     @Test

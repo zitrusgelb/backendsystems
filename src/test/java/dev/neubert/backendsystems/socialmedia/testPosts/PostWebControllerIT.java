@@ -1,6 +1,5 @@
 package dev.neubert.backendsystems.socialmedia.testPosts;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusIntegrationTest
 public class PostWebControllerIT {
@@ -27,7 +27,8 @@ public class PostWebControllerIT {
                .then()
                .statusCode(200)
                .header("X-Total-Count", "0")
-               .header("content-length", "2");
+               .header("content-length", "2")
+               .body(is("[]"));
     }
 
     @Test
@@ -40,7 +41,8 @@ public class PostWebControllerIT {
                .post("/posts")
                .then()
                .statusCode(201)
-               .header("Location", "http://localhost:8080/posts/1");
+               .header("Location", "http://localhost:8080/posts/1")
+               .body(is("[]"));
     }
 
 }
