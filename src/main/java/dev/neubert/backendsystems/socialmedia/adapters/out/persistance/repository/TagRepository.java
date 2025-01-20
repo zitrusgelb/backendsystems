@@ -7,7 +7,6 @@ import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.CreateTag
 import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.DeleteTagOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.ReadAllTagsOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.UpdateTagOut;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -15,20 +14,16 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.jboss.resteasy.util.NoContent;
-
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@ApplicationScoped
 public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut {
+    private final TagMapper mapper = Mappers.getMapper(TagMapper.class);
 
     @Inject
-    TagMapper mapper;
-
-    @Inject
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public Tag createTag(Tag tag) {
@@ -67,24 +62,27 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
 
         return returnValue;
     }
+    public Tag findById(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID must be a positive number");
+        }
+        Tag tag = tagStorage.get(id);
+        if (tag == null) {
+            throw new IllegalArgumentException("Tag with ID " + id + " not found");
+        }
+        return tag;
+    }
+
 
     @Override
     public List<Tag> readAllTags(int limit) {
         return readAllTags(limit, 0);
     }
 
-    public Tag findById(long id) {
-        TagEntity entity = entityManager.find(TagEntity.class, id);
-        if (entity != null) {
-            return mapper.tagEntityToTag(entity);
-        }
-        return null;
-    }
-
     @Override
-    public Tag updateTag(Tag tag) {
+    public Tag updateTag(long id, Tag tag) {
         final var entity = this.mapper.tagToTagEntity(tag);
-        entityManager.merge(entity);
+        this.entityManager.merge(entity);
         return tag;
     }
 }
