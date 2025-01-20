@@ -26,17 +26,17 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
     private EntityManager entityManager;
 
     @Override
-    public NoContent createTag(Tag tag) {
+    public Tag createTag(Tag tag) {
         final var entity = this.mapper.tagToTagEntity(tag);
         this.entityManager.persist(entity);
-        return new NoContent();
+        return tag;
     }
 
     @Override
-    public NoContent deleteTag(long id) {
+    public boolean deleteTag(long id) {
         final var entity = this.entityManager.find(Tag.class, id);
         this.entityManager.remove(entity);
-        return new NoContent();
+        return true;
     }
 
     @Override
@@ -62,6 +62,17 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
 
         return returnValue;
     }
+    public Tag findById(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID must be a positive number");
+        }
+        Tag tag = tagStorage.get(id);
+        if (tag == null) {
+            throw new IllegalArgumentException("Tag with ID " + id + " not found");
+        }
+        return tag;
+    }
+
 
     @Override
     public List<Tag> readAllTags(int limit) {
@@ -69,9 +80,9 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
     }
 
     @Override
-    public NoContent updateTag(Tag tag) {
+    public Tag updateTag(long id, Tag tag) {
         final var entity = this.mapper.tagToTagEntity(tag);
         this.entityManager.merge(entity);
-        return new NoContent();
+        return tag;
     }
 }

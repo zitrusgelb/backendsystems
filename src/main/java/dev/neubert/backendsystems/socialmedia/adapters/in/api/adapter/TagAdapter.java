@@ -51,4 +51,8 @@ public class TagAdapter {
         Tag updatedTag = updateTagIn.updateTag(tagDto.getId(), tagMapper.tagDtoToTag(tagDto));
         return tagMapper.tagToTagDto(updatedTag);
     }
+    public TagDto getTagById(long id) {
+        Tag tag = ReadTagByIdIn.read(id);
+        return tagMapper.tagToTagDto(tag);
+    }
 }
