@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.TagDto;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.TagRepository;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.CreateTagIn;
@@ -52,7 +53,7 @@ public class TagAdapter {
         return tagMapper.tagToTagDto(updatedTag);
     }
     public TagDto getTagById(long id) {
-        Tag tag = ReadTagByIdIn.read(id);
+        Tag tag = new readTagByIdIn.readTagById(id);
         return tagMapper.tagToTagDto(tag);
     }
 }
