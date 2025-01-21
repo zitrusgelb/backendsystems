@@ -14,14 +14,8 @@ import java.util.List;
 public interface PostMapper {
     PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
 
-    @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "tagId", source = "tag.id")
-    @Mapping(target = "replyToId", source = "replyTo.id")
     PostDto postToPostDto(Post post);
 
-    @Mapping(target = "user.id", source = "userId")
-    @Mapping(target = "tag.id", source = "tagId")
-    @Mapping(target = "replyTo.id", source = "replyToId")
     Post postDtoToPost(PostDto postDto);
 
     PostEntity postToPostEntity(Post post);
