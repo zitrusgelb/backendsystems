@@ -6,6 +6,7 @@ import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadAllUsersOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserOut;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -13,12 +14,12 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import org.jboss.resteasy.util.NoContent;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserOut {
     private UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
@@ -27,10 +28,10 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
 
     @Transactional
     @Override
-    public NoContent createUser(User user) {
+    public User createUser(User user) {
         final var entity = this.mapper.userToUserEntity(user);
         this.entityManager.persist(entity);
-        return new NoContent();
+        return mapper.userEntityToUser(entity);
     }
 
     @Override

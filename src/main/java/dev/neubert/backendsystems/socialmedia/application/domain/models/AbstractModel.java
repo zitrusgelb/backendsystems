@@ -2,6 +2,7 @@ package dev.neubert.backendsystems.socialmedia.application.domain.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.neubert.backendsystems.socialmedia.config.JacksonConfig;
 
 public abstract class AbstractModel implements Model {
     protected long id;
@@ -19,7 +20,8 @@ public abstract class AbstractModel implements Model {
 
     @Override
     public String toString() {
-        ObjectMapper objectMapper = new ObjectMapper();
+        JacksonConfig config = new JacksonConfig();
+        ObjectMapper objectMapper = config.objectMapper();
         try {
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
