@@ -71,7 +71,7 @@ public class TagService implements CreateTagIn, DeleteTagIn, ReadAllTagsIn, Read
         Tag existingTag = tagRepository.findById(id);
         if (existingTag != null) {
             existingTag.setName(updatedTag.getName());
-            return tagRepository.updateTag(id, updatedTag);
+            return tagRepository.updateTag(updatedTag);
         } else {
             throw new IllegalArgumentException("Tag with ID " + id + " not found");
         }
