@@ -1,10 +1,12 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
@@ -17,6 +19,9 @@ public class UserWebController {
 
     @Inject
     UserAdapter userAdapter;
+
+    @Inject
+    LikeAdapter likeAdapter;
 
     @Inject
     UserFaker userFaker;
@@ -48,6 +53,20 @@ public class UserWebController {
     ) {
         var user = userAdapter.getUserByName(username);
         return Response.ok(user).build();
+    }
+
+    @Path("{username}/likes")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getLikesByUser(
+            @Valid
+            long userId
+    ) {
+        var likes = likeAdapter.getLikeByUser(userId);
+        return Response.status(HttpResponseStatus.OK.code())
+                       .header("X-Total-Count", likes.size())
+                       .entity(likes)
+                       .build();
     }
 
     @POST
