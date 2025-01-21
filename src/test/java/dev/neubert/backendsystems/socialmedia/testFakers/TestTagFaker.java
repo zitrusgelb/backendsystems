@@ -1,23 +1,22 @@
 package dev.neubert.backendsystems.socialmedia.testFakers;
 
-import dev.neubert.backendsystems.socialmedia.application.domain.fakers.*;
+import dev.neubert.backendsystems.socialmedia.application.domain.fakers.TagFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
-import org.junit.jupiter.api.BeforeEach;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@QuarkusTest
 public class TestTagFaker {
 
-    private TagFaker tagFaker;
-
-    @BeforeEach
-    void setup(){
-        tagFaker = new TagFaker();
-    }
+    @Inject
+    TagFaker tagFaker;
 
     @Test
-    void testOneTag(){
-        Tag tag = tagFaker.createModel();
+    void testOneTag() {
+        var tag = tagFaker.createModel();
         assertNotNull(tag.getName());
     }
 
