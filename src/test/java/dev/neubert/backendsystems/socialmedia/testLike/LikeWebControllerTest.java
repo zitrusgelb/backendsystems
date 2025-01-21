@@ -1,8 +1,6 @@
 package dev.neubert.backendsystems.socialmedia.testLike;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapter;
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.UserDto;
-import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -13,16 +11,13 @@ import org.mapstruct.factory.Mappers;
 public class LikeWebControllerTest {
 
     UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-    UserFaker userFaker = new UserFaker();
     LikeAdapter likeAdapter = new LikeAdapter();
 
     @Test
-    public void testCreateLike() {
-        UserDto userDto = userMapper.userToUserDto(userFaker.createModel());
+    public void testCreateLikeNonExistingLike() {
         RestAssured.given()
                    .pathParam("id", 1)
                    .contentType("application/json")
-                   .body(userDto)
                    .when()
                    .post("/posts/{id}/likes")
                    .then()
@@ -30,16 +25,60 @@ public class LikeWebControllerTest {
     }
 
     @Test
-    public void testDeleteLike() {
-        UserDto userDto = userMapper.userToUserDto(userFaker.createModel());
+    public void testCreateLikeExistingLike() {
 
+    }
+
+    @Test
+    public void testDeleteLikeNonExistingLike() {
         RestAssured.given()
                    .pathParam("id", 1)
                    .contentType("application/json")
-                   .body(userDto)
                    .when()
                    .delete("/posts/{id}/likes")
                    .then()
                    .statusCode(204);
     }
+
+    @Test
+    public void testDeleteLikeExistingLike() {
+
+    }
+
+    @Test
+    public void testGetLikesByUserNonExistentUser() {
+        RestAssured.given()
+                   .pathParam("username", "test")
+                   .contentType("application/json")
+                   .when()
+                   .post("/user/{username}/likes")
+                   .then()
+                   .statusCode(201);
+    }
+
+    @Test
+    public void testGetLikesByUserNonExistingLikes() {
+
+    }
+
+    @Test
+    public void testGetLikesByUser() {
+
+    }
+
+    @Test
+    public void testGetLikesByPostNonExistentPost() {
+
+    }
+
+    @Test
+    public void testGetLikesByPostNonExistingLikes() {
+
+    }
+
+    @Test
+    public void testGetLikesByPost() {
+
+    }
+
 }
