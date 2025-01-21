@@ -1,4 +1,4 @@
-package dev.neubert.backendsystems.socialmedia.testWebControllers.LikeWebController;
+package dev.neubert.backendsystems.socialmedia.testLike;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapter;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
