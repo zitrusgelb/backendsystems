@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dev.neubert</groupId>
     <artifactId>backendsystems-project</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
 
     <properties>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
@@ -16,10 +16,11 @@
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
         <quarkus.platform.version>3.17.4</quarkus.platform.version>
         <junit-jupiter-api.version>5.11.4</junit-jupiter-api.version>
-        <org.mapsruct.version>1.6.3</org.mapsruct.version>
-        <skipITs>true</skipITs>
+        <org.mapstruct.version>1.6.3</org.mapstruct.version>
+        <maven-failsafe.version>2.22.2</maven-failsafe.version>
         <surefire-plugin.version>3.5.0</surefire-plugin.version>
         <javafaker.version>1.0.2</javafaker.version>
+        <skipITs>false</skipITs>
     </properties>
 
     <dependencyManagement>
@@ -41,15 +42,30 @@
             <version>${javafaker.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.18.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit-jupiter-api.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.18.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jdk8</artifactId>
+            <version>2.18.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>${org.mapsruct.version}</version>
+            <version>${org.mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -122,7 +138,7 @@
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapsruct.version}</version>
+                            <version>${org.mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -140,7 +156,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${surefire-plugin.version}</version>
+                <version>${maven-failsafe.version}</version>
                 <executions>
                     <execution>
                         <goals>

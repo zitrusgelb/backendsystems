@@ -2,6 +2,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.neubert.backendsystems.socialmedia.config.JacksonConfig;
 
 import java.io.Serializable;
 
@@ -21,7 +22,8 @@ public abstract class AbstractDataTransferObject implements DataTransferObject,S
 
     @Override
     public String toString() {
-        ObjectMapper objectMapper = new ObjectMapper();
+        JacksonConfig config = new JacksonConfig();
+        ObjectMapper objectMapper = config.objectMapper();
         try {
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
