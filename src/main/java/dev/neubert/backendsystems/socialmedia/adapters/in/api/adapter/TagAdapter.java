@@ -53,7 +53,8 @@ public class TagAdapter {
         return tagMapper.tagToTagDto(updatedTag);
     }
     public TagDto getTagById(long id) {
-        Tag tag = new readTagByIdIn.readTagById(id);
+        Tag tag = readTagByIdIn.readTagById(id);
         return tagMapper.tagToTagDto(tag);
     }
+
 }
