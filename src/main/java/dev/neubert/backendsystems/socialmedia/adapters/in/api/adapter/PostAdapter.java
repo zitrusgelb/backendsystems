@@ -31,7 +31,8 @@ public class PostAdapter {
 
 
     public PostDto createPost(CreatePostDto postDto) {
-        return postMapper.postToPostDto(createPostIn.create(postMapper.createPostDtoToPost(postDto)));
+        return postMapper.postToPostDto(
+                createPostIn.create(postMapper.createPostDtoToPost(postDto)));
     }
 
     public boolean deletePost(PostDto postDto) {
@@ -46,8 +47,9 @@ public class PostAdapter {
         return postMapper.postToPostDto(readPostIn.getPostById(id));
     }
 
-    public PostDto updatePost(long id,PostDto postDto){
-        return postMapper.postToPostDto(updatePostIn.updatePost(id, postMapper.postDtoToPost(postDto)));
+    public PostDto updatePost(long id, PostDto postDto) {
+        return postMapper.postToPostDto(
+                updatePostIn.updatePost(id, postMapper.postDtoToPost(postDto)));
     }
 
 
