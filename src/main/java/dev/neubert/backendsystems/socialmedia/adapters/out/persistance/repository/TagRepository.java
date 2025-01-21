@@ -73,6 +73,13 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
         return readAllTags(limit, 0);
     }
 
+    public Tag findById(long id) {
+        TagEntity entity = entityManager.find(TagEntity.class, id);
+        if (entity != null) {
+            return mapper.tagEntityToTag(entity);
+        }
+        return null;
+    }
 
     @Override
     public Tag updateTag(Tag tag) {
