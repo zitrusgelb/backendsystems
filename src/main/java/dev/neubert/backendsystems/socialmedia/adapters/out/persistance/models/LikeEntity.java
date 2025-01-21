@@ -1,22 +1,18 @@
 package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @IdClass(LikeEntityId.class)
-public class LikeEntity
-{
-    @OneToOne
+public class LikeEntity {
+    @OneToOne(cascade = CascadeType.ALL)
     @Id
     private PostEntity post;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @Id
     private UserEntity user;
 
