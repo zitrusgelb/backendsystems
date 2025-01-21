@@ -4,6 +4,7 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Po
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Post.*;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -11,12 +12,12 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import org.jboss.resteasy.util.NoContent;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ApplicationScoped
 public class PostRepository
         implements CreatePostOut, ReadPostOut, UpdatePostOut, DeletePostOut, ReadAllPostsOut {
     private final PostMapper mapper = Mappers.getMapper(PostMapper.class);
@@ -26,16 +27,21 @@ public class PostRepository
 
     @Transactional
     @Override
-    public NoContent createPost(Post post) {
+    public Post createPost(Post post) {
         final var entity = this.mapper.postToPostEntity(post);
         this.entityManager.persist(entity);
-        return new NoContent();
+        return post;
     }
 
     @Override
-    public NoContent deletePost(long postId) {
-        this.entityManager.remove(this.entityManager.find(PostEntity.class, postId));
-        return new NoContent();
+    public boolean deletePost(long postId) {
+        try {
+            this.entityManager.remove(this.entityManager.find(PostEntity.class, postId));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     @Override
@@ -85,9 +91,9 @@ public class PostRepository
 
     @Transactional
     @Override
-    public NoContent updatePost(Post post) {
+    public Post updatePost(Post post) {
         final var entity = this.mapper.postToPostEntity(post);
         this.entityManager.merge(entity);
-        return new NoContent();
+        return post;
     }
 }

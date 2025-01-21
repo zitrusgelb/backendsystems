@@ -8,6 +8,7 @@ import java.util.List;
 public class TagEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(nullable = false, unique = true)

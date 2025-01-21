@@ -57,12 +57,9 @@ public class TestLikeMapper {
         assertEquals(post.getContent(), likeDto.getPost().getContent());
         assertEquals(post.getCreatedAt(), likeDto.getPost().getCreatedAt());
         //post.user
-        assertEquals(post.getUser().getId(), likeDto.getPost().getUser().getId());
-        assertEquals(post.getUser().getUsername(), likeDto.getPost().getUser().getUsername());
-        assertEquals(post.getUser().getDisplayName(), likeDto.getPost().getUser().getDisplayName());
+        assertEquals(post.getUser().getId(), likeDto.getPost().getUserId());
         //post.tag
-        assertEquals(post.getTag().getId(), likeDto.getPost().getTag().getId());
-        assertEquals(post.getTag().getName(), likeDto.getPost().getTag().getName());
+        assertEquals(post.getTag().getId(), likeDto.getPost().getTagId());
         //like
         assertEquals(like.getTimestamp(), likeDto.getTimestamp());
     }
@@ -81,8 +78,8 @@ public class TestLikeMapper {
         postDto.setId(3);
         postDto.setContent("Test content");
         postDto.setCreatedAt(LocalDateTime.now());
-        postDto.setUser(userDto);
-        postDto.setTag(tagDto);
+        postDto.setUserId(userDto.getId());
+        postDto.setTagId(tagDto.getId());
 
         LikeDto likeDto = new LikeDto(postDto, userDto, LocalDateTime.now());
 
@@ -97,12 +94,9 @@ public class TestLikeMapper {
         assertEquals(postDto.getContent(), like.getPost().getContent());
         assertEquals(postDto.getCreatedAt(), like.getPost().getCreatedAt());
         //post.user
-        assertEquals(postDto.getUser().getId(), like.getPost().getUser().getId());
-        assertEquals(postDto.getUser().getUsername(), like.getPost().getUser().getUsername());
-        assertEquals(postDto.getUser().getDisplayName(), like.getPost().getUser().getDisplayName());
+        assertEquals(postDto.getUserId(), like.getPost().getUser().getId());
         //post.tag
-        assertEquals(postDto.getTag().getId(), like.getPost().getTag().getId());
-        assertEquals(postDto.getTag().getName(), like.getPost().getTag().getName());
+        assertEquals(postDto.getTagId(), like.getPost().getTag().getId());
         //like
         assertEquals(likeDto.getTimestamp(), like.getTimestamp());
     }
