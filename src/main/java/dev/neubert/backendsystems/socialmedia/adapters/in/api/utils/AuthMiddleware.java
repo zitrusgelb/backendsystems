@@ -51,16 +51,18 @@ public class AuthMiddleware implements ContainerRequestFilter {
         try {
             var tokenValid = checkToken(authHeader);
 
-            if (!tokenValid) {
+            if (tokenValid == 0) {
                 requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             }
+
+            requestContext.getHeaders().add("X-User-Id", String.valueOf(tokenValid));
         } catch (InterruptedException e) {
             requestContext.abortWith(
                     Response.status(Response.Status.INTERNAL_SERVER_ERROR).build());
         }
     }
 
-    private boolean checkToken(String token) throws IOException, InterruptedException {
+    private long checkToken(String token) throws IOException, InterruptedException {
         var request = HttpRequest.newBuilder();
         request.uri(uri);
         request.setHeader("Authorization", token);
@@ -68,7 +70,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
         var result = httpClient.send(request.build(), HttpResponse.BodyHandlers.ofString());
 
         if (result.statusCode() != 200) {
-            return false;
+            return 0;
         }
 
         var body = objectMapper.readValue(result.body(), new TypeReference<THWSUserResponse>() {});
@@ -79,7 +81,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
         var existingUser = userAdapter.getUserByName(userName);
 
         if (existingUser != null) {
-            return true;
+            return existingUser.getId();
         }
 
         var newUser = new User();
@@ -88,7 +90,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
 
         userAdapter.createUser(userMapper.userToUserDto(newUser));
 
-        return true;
+        return newUser.getId();
     }
 }
 
