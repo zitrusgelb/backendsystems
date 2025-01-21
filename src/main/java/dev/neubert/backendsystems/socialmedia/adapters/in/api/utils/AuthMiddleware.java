@@ -88,9 +88,9 @@ public class AuthMiddleware implements ContainerRequestFilter {
         newUser.setUsername(userName);
         newUser.setDisplayName(displayName);
 
-        userAdapter.createUser(userMapper.userToUserDto(newUser));
+        var createdUser = userAdapter.createUser(userMapper.userToUserDto(newUser));
 
-        return newUser.getId();
+        return createdUser.getId();
     }
 }
 
