@@ -6,7 +6,6 @@ import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.UserDto;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -37,13 +36,13 @@ public class LikerWebController {
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createLike(
-            @Valid
-            UserDto userDto,
+            @HeaderParam("X-User-Id")
+            long userId,
             @PathParam("id")
             long postId
     ) {
 
-        likeAdapter.createLike(getLikeDto(postId, userDto));
+        likeAdapter.createLike(getLikeDto(postId, userId));
         return Response.status(HttpResponseStatus.CREATED.code()).build();
     }
 
@@ -51,19 +50,21 @@ public class LikerWebController {
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response deleteLike(
-            @Valid
-            UserDto userDto,
+            @HeaderParam("X-User-Id")
+            long userId,
             @PathParam("id")
             long postId
     ) {
-        likeAdapter.deleteLike(getLikeDto(postId, userDto));
+        likeAdapter.deleteLike(getLikeDto(postId, userId));
         return Response.status(HttpResponseStatus.NO_CONTENT.code()).build();
     }
 
 
-    private LikeDto getLikeDto(long postId, UserDto userDto) {
+    private LikeDto getLikeDto(long postId, long userId) {
         PostDto postDto = new PostDto();
         postDto.setId(postId);
+        UserDto userDto = new UserDto();
+        userDto.setId(userId);
         return new LikeDto(postDto, userDto, LocalDateTime.now());
     }
 }

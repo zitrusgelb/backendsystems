@@ -6,7 +6,6 @@ import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFake
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
@@ -59,7 +58,7 @@ public class UserWebController {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLikesByUser(
-            @Valid
+            @HeaderParam("X-User-Id")
             long userId
     ) {
         var likes = likeAdapter.getLikeByUser(userId);
