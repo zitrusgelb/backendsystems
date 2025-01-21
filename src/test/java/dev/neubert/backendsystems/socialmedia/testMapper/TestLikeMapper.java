@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@QuarkusTest
 public class TestLikeMapper {
 
     private LikeMapper likeMapper;
