@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 public class UserWebControllerTest {
@@ -16,6 +17,7 @@ public class UserWebControllerTest {
                .then()
                .statusCode(200)
                .header("X-Total-Count", "0")
-               .header("content-length", "2");
+               .header("content-length", "2")
+               .body(is("[]"));
     }
 }

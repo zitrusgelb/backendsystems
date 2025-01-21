@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusIntegrationTest
 public class UserWebControllerIT {
@@ -23,6 +24,7 @@ public class UserWebControllerIT {
                .then()
                .statusCode(200)
                .header("X-Total-Count", "0")
-               .header("content-length", "2");
+               .header("content-length", "2")
+               .body(is("[]"));
     }
 }
