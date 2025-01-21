@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 @QuarkusIntegrationTest
-public class LikeWebControllerIt {
+public class LikeWebControllerIT {
 
     LikeAdapter likeAdapter = new LikeAdapter();
 
