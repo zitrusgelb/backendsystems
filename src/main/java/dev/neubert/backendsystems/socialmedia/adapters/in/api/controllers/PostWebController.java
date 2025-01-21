@@ -7,7 +7,7 @@ import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFake
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;test: checks empty body
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
@@ -53,12 +53,11 @@ public class PostWebController {
         var filteredPosts =
                 allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
 
-        var result =
-                filteredPosts.stream().skip(offset).limit(size).collect(Collectors.toList());
+        var result = filteredPosts.stream().skip(offset).limit(size).collect(Collectors.toList());
 
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", result.size())
-                       .cacheControl(this.cacheControl).
+                       .cacheControl(this.cacheControl)
                        .entity(result)
                        .build();
     }
@@ -77,7 +76,8 @@ public class PostWebController {
         if (requestedPost == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
-        return Response.ok(requestedPost).tag(Long.toString(requestedPost.hashCode()))
+        return Response.ok(requestedPost)
+                       .tag(Long.toString(requestedPost.hashCode()))
                        .cacheControl(this.cacheControl)
                        .build();
     }
