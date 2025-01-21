@@ -7,7 +7,7 @@ import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFake
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
-import jakarta.validation.Valid;test: checks empty body
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
