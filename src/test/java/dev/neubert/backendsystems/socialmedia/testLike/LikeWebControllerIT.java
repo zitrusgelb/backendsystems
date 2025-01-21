@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 
 @QuarkusIntegrationTest
 public class LikeWebControllerIT {
@@ -25,7 +26,8 @@ public class LikeWebControllerIT {
                .then()
                .statusCode(200)
                .header("X-Total-Count", "0")
-               .header("content-length", "2");
+               .header("content-length", "2")
+               .body(is("[]"));
     }
 
 }
