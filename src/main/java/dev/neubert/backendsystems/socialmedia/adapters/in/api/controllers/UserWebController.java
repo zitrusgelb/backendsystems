@@ -51,6 +51,9 @@ public class UserWebController {
             String username
     ) {
         var user = userAdapter.getUserByName(username);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
         return Response.ok(user).build();
     }
 
