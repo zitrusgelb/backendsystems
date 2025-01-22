@@ -1,22 +1,21 @@
 package dev.neubert.backendsystems.socialmedia.testFakers;
 
-import dev.neubert.backendsystems.socialmedia.application.domain.fakers.*;
+import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
-import org.junit.jupiter.api.BeforeEach;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@QuarkusTest
 public class TestPostFaker {
 
-    private PostFaker postFaker;
-
-    @BeforeEach
-    void setup(){
-        postFaker = new PostFaker();
-    }
+    @Inject
+    PostFaker postFaker;
 
     @Test
-    void testOnePost(){
+    void testOnePost() {
         Post post = postFaker.createModel();
         assertNotNull(post.getUser());
         assertNotNull(post.getCreatedAt());

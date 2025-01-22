@@ -5,6 +5,7 @@ import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFake
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -15,6 +16,9 @@ import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 public class PostWebControllerTest {
+
+    @Inject
+    PostFaker postFaker;
 
     @Test
     void getAllPostsNoPostsExisting() {
@@ -28,7 +32,7 @@ public class PostWebControllerTest {
     @Test
     void createPost() {
         PostMapper postMapper = Mappers.getMapper(PostMapper.class);
-        Post post = new PostFaker().createModel();
+        var post = postFaker.createModel();
         post.setCreatedAt(LocalDateTime.now());
         CreatePostDto createPostDto =
                 postMapper.postDtoToCreatePostDto(postMapper.postToPostDto(post));
