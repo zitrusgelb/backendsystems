@@ -67,7 +67,13 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
     public User getUser(String username) {
         User returnValue = null;
         try {
-            final var requestedModel = this.entityManager.find(UserEntity.class, username);
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
+            Root<UserEntity> from = cq.from(UserEntity.class);
+            cq.select(from);
+            cq.where(cb.equal(from.get("username"), username));
+            TypedQuery<UserEntity> query = entityManager.createQuery(cq);
+            final var requestedModel = query.getSingleResult();
             if (requestedModel != null) {
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
