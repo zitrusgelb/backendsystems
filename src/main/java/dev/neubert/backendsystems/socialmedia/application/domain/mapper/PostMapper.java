@@ -6,11 +6,13 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Po
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(uses = {UserMapper.class, TagMapper.class})
+@Mapper(uses = {UserMapper.class, TagMapper.class},
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface PostMapper {
     PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
 
@@ -22,11 +24,14 @@ public interface PostMapper {
 
     Post postEntityToPost(PostEntity postEntity);
 
-    @Mapping(target = "user.id", source = "userId")
+    @Mapping(target = "user.username", source = "username")
     @Mapping(target = "tag.id", source = "tagId")
     @Mapping(target = "replyTo.id", source = "replyToId")
     Post createPostDtoToPost(CreatePostDto createPostDto);
 
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "tagId", source = "tag.id")
+    @Mapping(target = "replyToId", source = "replyTo.id")
     CreatePostDto postDtoToCreatePostDto(PostDto postDto);
 
     List<PostDto> postListToPostDtoList(List<Post> posts);
