@@ -23,7 +23,7 @@ public class PostRepository
     private final PostMapper mapper = Mappers.getMapper(PostMapper.class);
 
     @Inject
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
     @Transactional
     @Override
@@ -33,6 +33,7 @@ public class PostRepository
         return post;
     }
 
+    @Transactional
     @Override
     public boolean deletePost(long postId) {
         try {
