@@ -27,8 +27,12 @@ public class PostWebController {
 
     PostMapper postMapper = Mappers.getMapper(PostMapper.class);
 
+    @Context
     private UriInfo uriInfo;
+
+    @Context
     private HttpHeaders httpHeaders;
+
     private CacheControl cacheControl;
 
 
