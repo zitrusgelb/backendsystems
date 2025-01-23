@@ -144,13 +144,9 @@ public class PostWebController {
     @Path("populate")
     public Response populateDatabase() {
         setCacheControlFiveMinutes();
-        var result = this.postAdapter.createPost(postMapper.postDtoToCreatePostDto(
-                postMapper.postToPostDto(postFaker.createModel())));
-        return Response.status(HttpResponseStatus.CREATED.code())
-                       .header("Location", createLocationHeader(result))
-                       .tag(Long.toString(result.hashCode()))
-                       .cacheControl(this.cacheControl)
-                       .build();
+        var result = postFaker.createModel();
+        postAdapter.createPost(postMapper.postDtoToCreatePostDto(postMapper.postToPostDto(result)));
+        return Response.status(HttpResponseStatus.CREATED.code()).build();
     }
 
 

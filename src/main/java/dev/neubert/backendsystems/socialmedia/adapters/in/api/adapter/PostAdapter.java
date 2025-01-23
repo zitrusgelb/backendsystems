@@ -3,12 +3,14 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
+import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Post.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class PostAdapter {
@@ -40,7 +42,8 @@ public class PostAdapter {
     }
 
     public List<PostDto> readAllPosts() {
-        return postMapper.postListToPostDtoList(readAllPostsIn.readAllPosts());
+        List<Post> posts = readAllPostsIn.readAllPosts();
+        return posts.stream().map(postMapper::postToPostDto).collect(Collectors.toList());
     }
 
     public PostDto getPostById(long id) {
