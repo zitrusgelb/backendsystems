@@ -7,8 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {LikeMapper.class, PostMapper.class})
-public interface UserMapper
-{
+public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     UserDto userToUserDto(User user);

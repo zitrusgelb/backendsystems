@@ -8,8 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {PostMapper.class, UserMapper.class})
-public interface LikeMapper
-{
+public interface LikeMapper {
     LikeMapper INSTANCE = Mappers.getMapper(LikeMapper.class);
 
     @Mapping(target = "id", ignore = true)
