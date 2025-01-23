@@ -5,8 +5,6 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Po
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.CreateLikeOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.DeleteLikeOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.ReadLikeByPostOut;
@@ -18,7 +16,6 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import org.jboss.resteasy.util.NoContent;
 import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
@@ -34,25 +31,33 @@ public class LikeRepository
 
 
     @Override
-    public NoContent createLike(Like like) {
-        final var entity = this.mapper.likeToLikeEntity(like);
-        this.entityManager.persist(entity);
-        return new NoContent();
+    public Like createLike(Like like) {
+        try {
+            final var entity = this.mapper.likeToLikeEntity(like);
+            this.entityManager.persist(entity);
+            return like;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
-    public NoContent deleteLike(long id) {
-        final var entity = this.entityManager.find(Like.class, id);
-        this.entityManager.remove(entity);
-        return new NoContent();
+    public boolean deleteLike(Like like) {
+        try {
+            final var entity = this.entityManager.find(Like.class, like);
+            this.entityManager.remove(entity);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
-    public List<Like> readLikeByPost(Post post) {
+    public List<Like> readLikeByPost(long postId) {
         List<Like> returnValue = new ArrayList<>();
 
         try {
-            var postEntity = this.entityManager.find(PostEntity.class, post.getId());
+            var postEntity = this.entityManager.find(PostEntity.class, postId);
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<LikeEntity> cq = cb.createQuery(LikeEntity.class);
             Root<LikeEntity> from = cq.from(LikeEntity.class);
@@ -74,11 +79,11 @@ public class LikeRepository
     }
 
     @Override
-    public List<Like> readLikeByUser(User user) {
+    public List<Like> readLikeByUser(long userId) {
         List<Like> returnValue = new ArrayList<>();
 
         try {
-            var userEntity = this.entityManager.find(UserEntity.class, user.getId());
+            var userEntity = this.entityManager.find(UserEntity.class, userId);
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<LikeEntity> cq = cb.createQuery(LikeEntity.class);
             Root<LikeEntity> from = cq.from(LikeEntity.class);

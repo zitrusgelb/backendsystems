@@ -1,5 +1,6 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
@@ -17,6 +18,9 @@ public class UserWebController {
 
     @Inject
     UserAdapter userAdapter;
+
+    @Inject
+    LikeAdapter likeAdapter;
 
     @Inject
     UserFaker userFaker;
@@ -51,6 +55,20 @@ public class UserWebController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(user).build();
+    }
+
+    @Path("{username}/likes")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getLikesByUser(
+            @HeaderParam("X-User-Id")
+            long userId
+    ) {
+        var likes = likeAdapter.getLikeByUser(userId);
+        return Response.status(HttpResponseStatus.OK.code())
+                       .header("X-Total-Count", likes.size())
+                       .entity(likes)
+                       .build();
     }
 
     @POST

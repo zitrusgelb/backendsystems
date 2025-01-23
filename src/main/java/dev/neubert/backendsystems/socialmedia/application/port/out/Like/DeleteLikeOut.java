@@ -1,7 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.application.port.out.Like;
 
-import org.jboss.resteasy.util.NoContent;
+import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 
 public interface DeleteLikeOut {
-    NoContent deleteLike(long id);
+    boolean deleteLike(Like like);
 }
