@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class CreatePostDto implements DataTransferObject, Serializable, Cloneable {
     private String content;
     private LocalDateTime createdAt;
-    private long userId;
+    private String username;
     private long tagId;
     private long replyToId;
 
@@ -30,12 +30,12 @@ public class CreatePostDto implements DataTransferObject, Serializable, Cloneabl
         this.createdAt = createdAt;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public long getTagId() {

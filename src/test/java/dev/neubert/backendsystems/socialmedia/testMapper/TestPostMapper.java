@@ -10,7 +10,6 @@ import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapp
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@QuarkusTest
+
 public class TestPostMapper {
     private PostMapper postMapper;
 
@@ -50,10 +49,14 @@ public class TestPostMapper {
         assertEquals(post.getId(), postDto.getId());
         assertEquals(post.getContent(), postDto.getContent());
         assertEquals(post.getCreatedAt(), postDto.getCreatedAt());
+        assertNull(postDto.getReplyTo());
         //post.user
-        assertEquals(post.getUser().getId(), postDto.getUserId());
+        assertEquals(post.getUser().getId(), postDto.getUser().getId());
+        assertEquals(post.getUser().getUsername(), postDto.getUser().getUsername());
+        assertEquals(post.getUser().getDisplayName(), postDto.getUser().getDisplayName());
         //post.tag
-        assertEquals(post.getTag().getId(), postDto.getTagId());
+        assertEquals(post.getTag().getId(), postDto.getTag().getId());
+        assertEquals(post.getTag().getName(), postDto.getTag().getName());
     }
 
     @Test
@@ -70,18 +73,23 @@ public class TestPostMapper {
         postDto.setId(3);
         postDto.setContent("Test content");
         postDto.setCreatedAt(LocalDateTime.now());
-        postDto.setUserId(userDto.getId());
-        postDto.setTagId(tagDto.getId());
+        postDto.setUser(userDto);
+        postDto.setTag(tagDto);
+        postDto.setReplyTo(null);
 
         Post post = postMapper.postDtoToPost(postDto);
         //post
         assertEquals(postDto.getId(), post.getId());
         assertEquals(postDto.getContent(), post.getContent());
         assertEquals(postDto.getCreatedAt(), post.getCreatedAt());
+        assertNull(post.getReplyTo());
         //post.user
-        assertEquals(postDto.getUserId(), post.getUser().getId());
+        assertEquals(postDto.getUser().getId(), post.getUser().getId());
+        assertEquals(postDto.getUser().getUsername(), post.getUser().getUsername());
+        assertEquals(postDto.getUser().getDisplayName(), post.getUser().getDisplayName());
         //post.tag
-        assertEquals(postDto.getTagId(), post.getTag().getId());
+        assertEquals(postDto.getTag().getId(), post.getTag().getId());
+        assertEquals(postDto.getTag().getName(), post.getTag().getName());
     }
 
     @Test

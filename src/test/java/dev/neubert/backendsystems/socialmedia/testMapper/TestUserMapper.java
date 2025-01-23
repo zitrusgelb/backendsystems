@@ -11,7 +11,6 @@ import org.mapstruct.factory.Mappers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@QuarkusTest
 public class TestUserMapper {
     private UserMapper userMapper;
 
