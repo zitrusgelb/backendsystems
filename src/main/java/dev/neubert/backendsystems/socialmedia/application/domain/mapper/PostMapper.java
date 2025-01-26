@@ -20,6 +20,7 @@ public interface PostMapper {
 
     Post postEntityToPost(PostEntity postEntity);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "user.username", source = "username")
     @Mapping(target = "tag.id", source = "tagId")
     @Mapping(target = "replyTo.id", source = "replyToId")
