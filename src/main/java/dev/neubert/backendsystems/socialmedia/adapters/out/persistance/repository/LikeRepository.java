@@ -16,7 +16,6 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,9 @@ import java.util.List;
 @ApplicationScoped
 public class LikeRepository
         implements CreateLikeOut, ReadLikeByPostOut, ReadLikeByUserOut, DeleteLikeOut {
-    private final LikeMapper mapper = Mappers.getMapper(LikeMapper.class);
+
+    @Inject
+    LikeMapper mapper;
 
     @Inject
     EntityManager entityManager;

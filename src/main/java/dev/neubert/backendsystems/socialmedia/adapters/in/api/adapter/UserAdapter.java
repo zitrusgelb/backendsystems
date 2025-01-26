@@ -8,7 +8,6 @@ import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserB
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserIn;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,8 @@ public class UserAdapter {
     @Inject
     ReadUserByIdIn readUserByIdIn;
 
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    @Inject
+    UserMapper userMapper;
 
     public UserDto createUser(UserDto userDto) {
         var user = userMapper.userDtoToUser(userDto);

@@ -9,7 +9,6 @@ import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeB
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +27,8 @@ public class LikeAdapter {
     @Inject
     ReadLikeByUserIn readLikeByUserIn;
 
-    LikeMapper likeMapper = Mappers.getMapper(LikeMapper.class);
+    @Inject
+    LikeMapper likeMapper;
 
     public LikeDto createLike(LikeDto likeDto) {
         return likeMapper.likeToLikeDto(createLikeIn.create(likeMapper.likeDtoToLike(likeDto)));

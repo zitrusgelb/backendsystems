@@ -15,7 +15,6 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,9 @@ import java.util.List;
 @ApplicationScoped
 public class UserRepository
         implements CreateUserOut, ReadAllUsersOut, ReadUserOut, ReadUserByIdOut {
-    UserMapper mapper = Mappers.getMapper(UserMapper.class);
+
+    @Inject
+    UserMapper mapper;
 
     @Inject
     EntityManager entityManager;

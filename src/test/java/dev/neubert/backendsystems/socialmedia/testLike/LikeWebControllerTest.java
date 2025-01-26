@@ -14,7 +14,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
@@ -37,8 +36,11 @@ public class LikeWebControllerTest {
     @Inject
     LikeFaker likeFaker;
 
-    PostMapper postMapper = Mappers.getMapper(PostMapper.class);
-    LikeMapper likeMapper = Mappers.getMapper(LikeMapper.class);
+    @Inject
+    PostMapper postMapper;
+
+    @Inject
+    LikeMapper likeMapper;
 
     @Test
     public void testCreateLikeNonExistingLike() {

@@ -11,7 +11,6 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.mapstruct.factory.Mappers;
 
 @Path("users")
 public class UserWebController {
@@ -25,7 +24,8 @@ public class UserWebController {
     @Inject
     UserFaker userFaker;
 
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    @Inject
+    UserMapper userMapper;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})

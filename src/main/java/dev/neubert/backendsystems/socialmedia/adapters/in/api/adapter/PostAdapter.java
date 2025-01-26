@@ -7,7 +7,6 @@ import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Post.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +28,8 @@ public class PostAdapter {
     @Inject
     UpdatePostIn updatePostIn;
 
-    PostMapper postMapper = Mappers.getMapper(PostMapper.class);
+    @Inject
+    PostMapper postMapper;
 
 
     public PostDto createPost(CreatePostDto postDto) {

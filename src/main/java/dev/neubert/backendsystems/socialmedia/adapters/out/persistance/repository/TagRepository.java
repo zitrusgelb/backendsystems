@@ -15,14 +15,15 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.jboss.resteasy.util.NoContent;
-import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
 public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut {
-    private final TagMapper mapper = Mappers.getMapper(TagMapper.class);
+
+    @Inject
+    TagMapper mapper;
 
     @Inject
     EntityManager entityManager;
