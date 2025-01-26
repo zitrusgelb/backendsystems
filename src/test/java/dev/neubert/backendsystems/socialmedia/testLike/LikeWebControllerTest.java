@@ -4,13 +4,10 @@ import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapte
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.PostAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.LikeRepository;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.LikeFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
-import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import io.quarkus.test.junit.QuarkusTest;
@@ -40,13 +37,6 @@ public class LikeWebControllerTest {
     @Inject
     LikeFaker likeFaker;
 
-    @Inject
-    UserFaker userFaker;
-
-    @Inject
-    LikeRepository likeRepository;
-
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
     PostMapper postMapper = Mappers.getMapper(PostMapper.class);
     LikeMapper likeMapper = Mappers.getMapper(LikeMapper.class);
 
