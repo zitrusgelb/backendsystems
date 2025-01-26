@@ -53,7 +53,10 @@ public class LikerWebController {
         List<LikeDto> list = likeAdapter.getLikeByPost(postId);
         boolean exists = false;
         for (LikeDto like : list) {
-            if (like.getUser().getId() == userId) exists = true;
+            if (like.getUser().getId() == userId) {
+                exists = true;
+                break;
+            }
         }
         if (exists) {
             return Response.status(HttpResponseStatus.CONFLICT.code()).build();

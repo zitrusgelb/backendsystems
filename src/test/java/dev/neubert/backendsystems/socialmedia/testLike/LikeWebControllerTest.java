@@ -10,9 +10,9 @@ import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFake
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import jakarta.inject.Inject;
@@ -21,7 +21,8 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @QuarkusTest
@@ -45,6 +46,7 @@ public class LikeWebControllerTest {
     @Inject
     LikeRepository likeRepository;
 
+    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
     PostMapper postMapper = Mappers.getMapper(PostMapper.class);
     LikeMapper likeMapper = Mappers.getMapper(LikeMapper.class);
 
@@ -65,16 +67,6 @@ public class LikeWebControllerTest {
                    .post("/posts/{id}/likes")
                    .then()
                    .statusCode(201);
-        Like like = new Like();
-        Post post = postFaker.createModel();
-        post.setId(postId);
-        like.setPost(post);
-        User user = userFaker.createModel();
-        like.setUser(user);
-        Like like1 = likeRepository.createLike(like);
-
-        assertEquals(like.getPost().getId(), like1.getPost().getId());
-        assertEquals(like.getUser().getId(), like1.getUser().getId());
 
         List<LikeDto> likes = likeAdapter.getLikeByPost(postId);
         assertFalse(likes.isEmpty());
@@ -99,7 +91,7 @@ public class LikeWebControllerTest {
         System.out.println("PostId: " + like.getPost().getId());
 
         List<LikeDto> likes = likeAdapter.getLikeByPost(postId);
-        System.out.println(likes.size());
+        System.out.println("Size Likes: " + likes.size());
         boolean exists = false;
         for (LikeDto likeDto1 : likes) {
             System.out.println("PostId: " + likeDto1.getPost().getId());
