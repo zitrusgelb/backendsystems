@@ -60,10 +60,12 @@ public class LikerWebController {
         }
         if (exists) {
             return Response.status(HttpResponseStatus.CONFLICT.code()).build();
-        } else {
-            likeAdapter.createLike(getLikeDto(postId, userId));
-            return Response.status(HttpResponseStatus.CREATED.code()).build();
         }
+        LikeDto returnValue = likeAdapter.createLike(getLikeDto(postId, userId));
+        if (returnValue == null) {
+            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+        }
+        return Response.status(HttpResponseStatus.CREATED.code()).entity(returnValue).build();
     }
 
     @DELETE
