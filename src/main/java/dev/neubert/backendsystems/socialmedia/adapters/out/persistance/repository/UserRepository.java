@@ -23,10 +23,10 @@ import java.util.List;
 @ApplicationScoped
 public class UserRepository
         implements CreateUserOut, ReadAllUsersOut, ReadUserOut, ReadUserByIdOut {
-    private UserMapper mapper = Mappers.getMapper(UserMapper.class);
+    UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     @Inject
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
     @Transactional
     @Override

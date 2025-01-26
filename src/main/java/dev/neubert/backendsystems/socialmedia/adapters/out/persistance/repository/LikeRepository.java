@@ -27,7 +27,7 @@ public class LikeRepository
     private final LikeMapper mapper = Mappers.getMapper(LikeMapper.class);
 
     @Inject
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
 
     @Override

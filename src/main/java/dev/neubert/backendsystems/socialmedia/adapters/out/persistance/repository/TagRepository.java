@@ -25,7 +25,7 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
     private final TagMapper mapper = Mappers.getMapper(TagMapper.class);
 
     @Inject
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
     @Override
     public NoContent createTag(Tag tag) {
