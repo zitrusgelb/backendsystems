@@ -1,6 +1,8 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapter;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.PostAdapter;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.UserDto;
@@ -17,6 +19,12 @@ public class LikerWebController {
 
     @Inject
     LikeAdapter likeAdapter;
+
+    @Inject
+    PostAdapter postAdapter;
+
+    @Inject
+    UserAdapter userAdapter;
 
     @GET
     @Path("{id}/likes")
@@ -61,10 +69,8 @@ public class LikerWebController {
 
 
     private LikeDto getLikeDto(long postId, long userId) {
-        PostDto postDto = new PostDto();
-        postDto.setId(postId);
-        UserDto userDto = new UserDto();
-        userDto.setId(userId);
+        PostDto postDto = postAdapter.getPostById(postId);
+        UserDto userDto = userAdapter.getUserById(userId);
         return new LikeDto(postDto, userDto, LocalDateTime.now());
     }
 }
