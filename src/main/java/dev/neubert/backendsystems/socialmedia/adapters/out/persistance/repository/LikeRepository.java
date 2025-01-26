@@ -35,7 +35,7 @@ public class LikeRepository
         try {
             final var entity = this.mapper.likeToLikeEntity(like);
             this.entityManager.persist(entity);
-            return like;
+            return entityManager.find(Like.class, like.getId());
         } catch (Exception e) {
             return null;
         }

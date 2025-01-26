@@ -13,6 +13,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Path("posts")
 public class LikerWebController {
@@ -49,9 +50,17 @@ public class LikerWebController {
             @PathParam("id")
             long postId
     ) {
-
-        likeAdapter.createLike(getLikeDto(postId, userId));
-        return Response.status(HttpResponseStatus.CREATED.code()).build();
+        List<LikeDto> list = likeAdapter.getLikeByPost(postId);
+        boolean exists = false;
+        for (LikeDto like : list) {
+            if (like.getUser().getId() == userId) exists = true;
+        }
+        if (exists) {
+            return Response.status(HttpResponseStatus.CONFLICT.code()).build();
+        } else {
+            likeAdapter.createLike(getLikeDto(postId, userId));
+            return Response.status(HttpResponseStatus.CREATED.code()).build();
+        }
     }
 
     @DELETE
