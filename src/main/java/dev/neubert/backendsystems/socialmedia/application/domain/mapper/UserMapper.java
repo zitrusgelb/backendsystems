@@ -6,7 +6,7 @@ import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {LikeMapper.class, PostMapper.class})
+@Mapper(componentModel = "cdi", uses = {LikeMapper.class, PostMapper.class})
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 

@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {UserMapper.class, TagMapper.class})
+@Mapper(componentModel = "cdi", uses = {UserMapper.class, TagMapper.class})
 public interface PostMapper {
     PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
 
