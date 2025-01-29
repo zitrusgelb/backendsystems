@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Path("posts")
 public class LikerWebController {
@@ -27,20 +26,6 @@ public class LikerWebController {
     @Inject
     UserAdapter userAdapter;
 
-    @GET
-    @Path("{id}/likes")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getLikesByPost(
-            @PathParam("id")
-            long id
-    ) {
-        var likes = likeAdapter.getLikeByPost(id);
-        return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", likes.size())
-                       .entity(likes)
-                       .build();
-    }
-
     @POST
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -50,17 +35,6 @@ public class LikerWebController {
             @PathParam("id")
             long postId
     ) {
-        List<LikeDto> list = likeAdapter.getLikeByPost(postId);
-        boolean exists = false;
-        for (LikeDto like : list) {
-            if (like.getUser().getId() == userId) {
-                exists = true;
-                break;
-            }
-        }
-        if (exists) {
-            return Response.status(HttpResponseStatus.CONFLICT.code()).build();
-        }
         LikeDto returnValue = likeAdapter.createLike(getLikeDto(postId, userId));
         if (returnValue == null) {
             return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();
@@ -81,6 +55,19 @@ public class LikerWebController {
         return Response.status(HttpResponseStatus.NO_CONTENT.code()).build();
     }
 
+    @GET
+    @Path("{id}/likes")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getLikesByPost(
+            @PathParam("id")
+            long id
+    ) {
+        var likes = likeAdapter.getLikeByPost(id);
+        return Response.status(HttpResponseStatus.OK.code())
+                       .header("X-Total-Count", likes.size())
+                       .entity(likes)
+                       .build();
+    }
 
     private LikeDto getLikeDto(long postId, long userId) {
         PostDto postDto = postAdapter.getPostById(postId);
