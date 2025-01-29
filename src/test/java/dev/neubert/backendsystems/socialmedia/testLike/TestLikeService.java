@@ -62,13 +62,13 @@ public class TestLikeService {
     @Test
     public void testReadLikesByPost() {
         Post post1 = postFaker.createModel();
-        Post post2 = postFaker.createModel();
         post1 = postService.create(post1);
+        Post post2 = postFaker.createModel();
         post2 = postService.create(post2);
 
         User user1 = userFaker.createModel();
-        User user2 = userFaker.createModel();
         user1 = userService.createUser(user1);
+        User user2 = userFaker.createModel();
         user2 = userService.createUser(user2);
 
         Like like1 = new Like(post1, user1, LocalDateTime.now());
@@ -88,13 +88,13 @@ public class TestLikeService {
     @Test
     public void testReadLikesByUser() {
         Post post1 = postFaker.createModel();
-        Post post2 = postFaker.createModel();
         post1 = postService.create(post1);
+        Post post2 = postFaker.createModel();
         post2 = postService.create(post2);
 
         User user1 = userFaker.createModel();
-        User user2 = userFaker.createModel();
         user1 = userService.createUser(user1);
+        User user2 = userFaker.createModel();
         user2 = userService.createUser(user2);
 
         Like like1 = new Like(post1, user1, LocalDateTime.now());
