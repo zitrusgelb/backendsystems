@@ -57,13 +57,17 @@ public class UserWebController {
         return Response.ok(user).build();
     }
 
-    @Path("{username}/likes")
     @GET
+    @Path("{username}/likes")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLikesByUser(
             @HeaderParam("X-User-Id")
             long userId
     ) {
+        if (userAdapter.getUserById(userId) == null) {
+            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+        }
+
         var likes = likeAdapter.getLikeByUser(userId);
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", likes.size())
