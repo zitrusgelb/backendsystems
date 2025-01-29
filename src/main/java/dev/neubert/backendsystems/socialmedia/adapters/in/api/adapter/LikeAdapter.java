@@ -35,7 +35,7 @@ public class LikeAdapter {
     }
 
     public boolean deleteLike(LikeDto likeDto) {
-        return deleteLikeIn.deleteLikeIn(likeMapper.likeDtoToLike(likeDto));
+        return deleteLikeIn.deleteLike(likeMapper.likeDtoToLike(likeDto));
     }
 
     public List<LikeDto> getLikeByPost(long postId) {

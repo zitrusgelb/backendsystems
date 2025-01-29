@@ -16,13 +16,15 @@ public class LikeService implements CreateLikeIn, DeleteLikeIn, ReadLikeByPostIn
     @Inject
     private LikeRepository likeRepository;
 
+    //TODO: user und Post suchen und hinzugfügen
+
     @Override
     public Like create(Like like) {
         return likeRepository.createLike(like);
     }
 
     @Override
-    public boolean deleteLikeIn(Like like) {
+    public boolean deleteLike(Like like) {
         return likeRepository.deleteLike(like);
     }
 
