@@ -27,8 +27,12 @@ public class PostWebController {
     @Inject
     PostMapper postMapper;
 
+    @Context
     private UriInfo uriInfo;
+
+    @Context
     private HttpHeaders httpHeaders;
+
     private CacheControl cacheControl;
 
 

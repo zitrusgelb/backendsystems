@@ -12,6 +12,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
+import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @ApplicationScoped
 public class PostRepository
         implements CreatePostOut, ReadPostOut, UpdatePostOut, DeletePostOut, ReadAllPostsOut {
+    private final PostMapper mapper = Mappers.getMapper(PostMapper.class);
 
     @Inject
     PostMapper mapper;
@@ -35,6 +37,7 @@ public class PostRepository
         return mapper.postEntityToPost(persisted);
     }
 
+    @Transactional
     @Override
     public boolean deletePost(long postId) {
         try {
