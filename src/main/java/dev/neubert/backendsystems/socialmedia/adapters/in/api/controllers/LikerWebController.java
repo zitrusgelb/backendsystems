@@ -63,7 +63,7 @@ public class LikerWebController {
         }
         LikeDto returnValue = likeAdapter.createLike(getLikeDto(postId, userId));
         if (returnValue == null) {
-            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+            return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();
         }
         return Response.status(HttpResponseStatus.CREATED.code()).entity(returnValue).build();
     }

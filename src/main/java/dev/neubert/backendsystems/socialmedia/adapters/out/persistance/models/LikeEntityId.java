@@ -18,8 +18,16 @@ public class LikeEntityId implements Serializable {
         return post;
     }
 
+    public void setPost(PostEntity post) {
+        this.post = post;
+    }
+
     public UserEntity getUser() {
         return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     @Override
