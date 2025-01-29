@@ -72,20 +72,42 @@ public class TestLikeService {
         user2 = userService.createUser(user2);
 
         Like like1 = new Like(post1, user1, LocalDateTime.now());
-        // Like like2 = new Like(post1, user2, LocalDateTime.now());
-        //TODO:check why one post cant have 2 likes and one user cant give 2 likes
-
-        // Like like3 = new Like(post2, user1, LocalDateTime.now());
+        Like like2 = new Like(post1, user2, LocalDateTime.now());
+        Like like3 = new Like(post2, user1, LocalDateTime.now());
 
         likeService.create(like1);
-        // likeService.create(like2);
-        // likeService.create(like3);
+        likeService.create(like2);
+        likeService.create(like3);
         List<Like> likes = likeService.readLikeByPost(post1.getId());
-        assertEquals(1, likes.size());
+
+        assertEquals(2, likes.size());
+        assertEquals(like1, likes.get(0));
+        assertEquals(like2, likes.get(1));
     }
 
     @Test
     public void testReadLikesByUser() {
+        Post post1 = postFaker.createModel();
+        Post post2 = postFaker.createModel();
+        post1 = postService.create(post1);
+        post2 = postService.create(post2);
 
+        User user1 = userFaker.createModel();
+        User user2 = userFaker.createModel();
+        user1 = userService.createUser(user1);
+        user2 = userService.createUser(user2);
+
+        Like like1 = new Like(post1, user1, LocalDateTime.now());
+        Like like2 = new Like(post1, user2, LocalDateTime.now());
+        Like like3 = new Like(post2, user1, LocalDateTime.now());
+
+        likeService.create(like1);
+        likeService.create(like2);
+        likeService.create(like3);
+
+        List<Like> likes = likeService.readLikeByUser(user1.getId());
+        assertEquals(2, likes.size());
+        assertEquals(like1, likes.get(0));
+        assertEquals(like3, likes.get(1));
     }
 }
