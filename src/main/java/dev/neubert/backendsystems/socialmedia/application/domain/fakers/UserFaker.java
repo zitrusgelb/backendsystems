@@ -14,7 +14,7 @@ public class UserFaker extends AbstractFaker implements FakerMethods<User> {
     public User createModel() {
         String username = faker.pokemon().name();
         if (userRepository.getUser(username) != null) {
-            username = username + "_";
+            username = username + faker.pokemon().name();
         }
 
         String displayName = faker.artist().name();
