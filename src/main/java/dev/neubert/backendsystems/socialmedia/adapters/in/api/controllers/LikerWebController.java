@@ -62,6 +62,9 @@ public class LikerWebController {
             @PathParam("id")
             long id
     ) {
+        if (postAdapter.getPostById(id) == null) {
+            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+        }
         var likes = likeAdapter.getLikeByPost(id);
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", likes.size())
