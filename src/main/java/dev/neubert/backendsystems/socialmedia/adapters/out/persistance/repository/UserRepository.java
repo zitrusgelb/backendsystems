@@ -10,6 +10,7 @@ import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUser
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -80,6 +81,8 @@ public class UserRepository
             if (requestedModel != null) {
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
+        } catch (NoResultException e) {
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
