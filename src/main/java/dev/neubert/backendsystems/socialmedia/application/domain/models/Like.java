@@ -47,11 +47,8 @@ public class Like extends AbstractModel {
         Like like = (Like) o;
         if (like.getPost().getId() != post.getId()) return false;
         if (like.getUser().getId() != user.getId()) return false;
-        if (like.getTimestamp() != null
-                ? !like.getTimestamp().equals(timestamp)
-                : timestamp != null) {
-            return false;
-        }
-        return true;
+        return like.getTimestamp() != null
+                ? like.getTimestamp().equals(timestamp)
+                : timestamp == null;
     }
 }
