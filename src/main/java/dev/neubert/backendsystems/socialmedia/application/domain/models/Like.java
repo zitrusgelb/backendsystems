@@ -9,7 +9,7 @@ public class Like extends AbstractModel {
 
     public Like() {
     }
-    
+
     public Like(Post post, User user, LocalDateTime timestamp) {
         this.post = post;
         this.user = user;
@@ -38,5 +38,20 @@ public class Like extends AbstractModel {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Like like = (Like) o;
+        if (like.getPost().getId() != post.getId()) return false;
+        if (like.getUser().getId() != user.getId()) return false;
+        if (like.getTimestamp() != null
+                ? !like.getTimestamp().equals(timestamp)
+                : timestamp != null) {
+            return false;
+        }
+        return true;
     }
 }
