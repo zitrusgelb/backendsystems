@@ -15,6 +15,9 @@ import io.restassured.RestAssured;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 @QuarkusTest
 public class LikeWebControllerTest {
@@ -54,6 +57,8 @@ public class LikeWebControllerTest {
                    .post("/posts/{id}/likes")
                    .then()
                    .statusCode(201);
+
+        // TODO: add header for X-User-Id
     }
 
     @Test
@@ -70,9 +75,9 @@ public class LikeWebControllerTest {
         like.getPost().setId(postId);
         LikeDto likeDto = likeMapper.likeToLikeDto(like);
         LikeDto returnValue = likeAdapter.createLike(likeDto);
-        // assertTrue(returnValue != null);
-        //assertEquals(like.getPost().getId(), returnValue.getPost().getId());
-        // assertEquals(like.getUser().getId(), returnValue.getUser().getId());
+        assertTrue(returnValue != null);
+        assertEquals(like.getPost().getId(), returnValue.getPost().getId());
+        assertEquals(like.getUser().getId(), returnValue.getUser().getId());
 
         RestAssured.given()
                    .pathParam("id", postId)
