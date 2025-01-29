@@ -90,7 +90,7 @@ public class LikeRepository
                                  .collect(Collectors.toList());
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            return null;
+            return List.of();
         }
     }
 
@@ -111,7 +111,7 @@ public class LikeRepository
                                  .collect(Collectors.toList());
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            return null;
+            return List.of();
         }
     }
 }
