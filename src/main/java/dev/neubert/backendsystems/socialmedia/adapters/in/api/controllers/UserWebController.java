@@ -62,9 +62,14 @@ public class UserWebController {
     @Produces({MediaType.APPLICATION_JSON})
     public Response getLikesByUser(
             @HeaderParam("X-User-Id")
-            long userId
+            long userId,
+            @PathParam("username")
+            String username
     ) {
         if (userAdapter.getUserById(userId) == null) {
+            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+        }
+        if (userAdapter.getUserById(userId).getUsername().equals(username)) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
 
