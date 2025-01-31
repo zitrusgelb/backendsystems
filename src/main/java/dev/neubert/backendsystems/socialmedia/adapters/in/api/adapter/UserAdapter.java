@@ -21,6 +21,9 @@ public class UserAdapter {
     @Inject
     ReadUserIn readUserIn;
 
+    @Inject
+    ReadUserByIdIn readUserByIdIn;
+
     UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     public UserDto createUser(UserDto userDto) {
@@ -38,6 +41,11 @@ public class UserAdapter {
 
     public UserDto getUserByName(String username) {
         var user = readUserIn.getUser(username);
+        return userMapper.userToUserDto(user);
+    }
+
+    public UserDto getUserById(int userId) {
+        var user = readUserByIdIn.getUserById(userId);
         return userMapper.userToUserDto(user);
     }
 }

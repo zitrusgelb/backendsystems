@@ -3,8 +3,10 @@ package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.reposito
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadAllUsersOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserByIdOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserOut;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -20,7 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserOut {
+public class UserRepository
+        implements CreateUserOut, ReadAllUsersOut, ReadUserOut, ReadUserByIdOut {
     private UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     @Inject
@@ -74,6 +77,22 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
             cq.where(cb.equal(from.get("username"), username));
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.getSingleResult();
+            if (requestedModel != null) {
+                returnValue = mapper.userEntityToUser(requestedModel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public User getUserById(int userId) {
+        User returnValue = null;
+        try {
+            final var requestedModel = this.entityManager.find(UserEntity.class, userId);
             if (requestedModel != null) {
                 returnValue = mapper.userEntityToUser(requestedModel);
             }

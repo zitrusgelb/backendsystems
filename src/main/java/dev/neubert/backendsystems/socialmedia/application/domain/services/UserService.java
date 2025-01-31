@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 import java.util.List;
 
 @ApplicationScoped
-public class UserService implements CreateUserIn, ReadAllUsersIn, ReadUserIn {
+public class UserService implements CreateUserIn, ReadAllUsersIn, ReadUserIn, ReadUserByIdIn {
 
     @Inject
     UserRepository userRepository;
@@ -32,5 +32,10 @@ public class UserService implements CreateUserIn, ReadAllUsersIn, ReadUserIn {
     @Override
     public User getUser(String username) {
         return userRepository.getUser(username);
+    }
+
+    @Override
+    public User getUserById(int userId) {
+        return userRepository.getUserById(userId);
     }
 }

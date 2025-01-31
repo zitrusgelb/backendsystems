@@ -2,6 +2,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -69,6 +70,19 @@ public class UserWebController {
                        .header("X-Total-Count", likes.size())
                        .entity(likes)
                        .build();
+    }
+
+    @Path("me")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    @AuthorizationBinding
+    public Response getMe(
+            @HeaderParam("X-User-Id")
+            String userId
+    ) {
+        var user = userAdapter.getUserById(Integer.parseInt(userId));
+
+        return Response.ok(user).build();
     }
 
     @POST
