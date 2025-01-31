@@ -13,7 +13,7 @@ public class UserFaker extends AbstractFaker implements FakerMethods<User> {
     @Override
     public User createModel() {
         String username = faker.pokemon().name();
-        if (userRepository.getUser(username) != null) {
+        while (userRepository.getUser(username) != null) {
             username = username + faker.pokemon().name();
         }
 
