@@ -69,10 +69,9 @@ public class UserWebController {
         if (userAdapter.getUserById(userId) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
-        if (userAdapter.getUserById(userId).getUsername().equals(username)) {
+        if (userAdapter.getUserById(userId).getUsername() == username) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
-
         var likes = likeAdapter.getLikeByUser(userId);
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", likes.size())

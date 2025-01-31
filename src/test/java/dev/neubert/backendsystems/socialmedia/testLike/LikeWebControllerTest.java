@@ -41,13 +41,12 @@ public class LikeWebControllerTest {
     LikeFaker likeFaker;
 
     @Test
-    public void testCreateLike() {
+    public void testCreateLikeValid() {
         Post post = postFaker.createModel();
         post = postService.create(post);
 
         User user = userFaker.createModel();
         user = userService.createUser(user);
-
 
         RestAssured.given()
                    .pathParam("id", post.getId())
@@ -59,6 +58,36 @@ public class LikeWebControllerTest {
                    .statusCode(201)
                    .body("post.id", equalTo((int) (post.getId())))
                    .body("user.id", equalTo((int) (user.getId())));
+    }
+
+    @Test
+    public void testCreateLikeInvalidPostId() {
+        User user = userFaker.createModel();
+        user = userService.createUser(user);
+
+        RestAssured.given()
+                   .pathParam("id", Integer.MIN_VALUE)
+                   .contentType("application/json")
+                   .header("X-User-Id", user.getId())
+                   .when()
+                   .post("/posts/{id}/likes")
+                   .then()
+                   .statusCode(400);
+    }
+
+    @Test
+    public void testCreateLikeInvalidUserId() {
+        Post post = postFaker.createModel();
+        post = postService.create(post);
+
+        RestAssured.given()
+                   .pathParam("id", post.getId())
+                   .contentType("application/json")
+                   .header("X-User-Id", Integer.MAX_VALUE)
+                   .when()
+                   .post("/posts/{id}/likes")
+                   .then()
+                   .statusCode(400);
     }
 
     @Test
