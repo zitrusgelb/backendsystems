@@ -8,7 +8,6 @@ import io.restassured.RestAssured;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +19,9 @@ public class PostWebControllerIT {
 
     @Inject
     PostFaker postFaker;
+
+    @Inject
+    PostMapper postMapper;
 
     @BeforeAll
     public static void setup() {
@@ -39,16 +41,17 @@ public class PostWebControllerIT {
 
     @Test
     void createPost() {
-        PostMapper postMapper = Mappers.getMapper(PostMapper.class);
         var post = postFaker.createModel();
         post.setCreatedAt(LocalDateTime.now());
         CreatePostDto createPostDto =
                 postMapper.postDtoToCreatePostDto(postMapper.postToPostDto(post));
-        given().contentType("application/json").body(createPostDto.toString())
+        given().contentType("application/json")
+               .body(createPostDto.toString())
                .when()
                .post("/posts")
                .then()
-               .statusCode(201).header("Location", "http://localhost:8080/posts/1");
+               .statusCode(201)
+               .header("Location", "http://localhost:8080/posts/1");
     }
 
 }

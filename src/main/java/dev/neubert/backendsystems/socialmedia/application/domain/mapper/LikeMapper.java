@@ -5,11 +5,9 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Li
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {PostMapper.class, UserMapper.class})
+@Mapper(componentModel = "cdi", uses = {PostMapper.class, UserMapper.class})
 public interface LikeMapper {
-    LikeMapper INSTANCE = Mappers.getMapper(LikeMapper.class);
 
     @Mapping(target = "id", ignore = true)
     LikeDto likeToLikeDto(Like like);

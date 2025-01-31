@@ -29,12 +29,13 @@ public class PostService
             var user = userRepository.getUser(post.getUser().getUsername());
             post.setUser(user);
         }
-        if (post.getTag().getName() != null && !post.getTag().getName().isEmpty()) {
+        if (post.getTag() != null && post.getTag().getName() != null &&
+            !post.getTag().getName().isEmpty()) {
             post.setTag(post.getTag()); // TODO: use tagRepository as soon as it is implemented
         } else {
             post.setTag(null);
         }
-        if (post.getReplyTo().getId() != 0) {
+        if (post.getReplyTo() != null && post.getReplyTo().getId() != 0) {
             post.setReplyTo(postRepository.getPostById(post.getReplyTo().getId()));
         } else {
             post.setReplyTo(null);

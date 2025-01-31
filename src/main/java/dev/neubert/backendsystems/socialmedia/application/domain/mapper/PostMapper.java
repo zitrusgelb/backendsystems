@@ -6,11 +6,9 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Po
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {UserMapper.class, TagMapper.class})
+@Mapper(componentModel = "cdi", uses = {UserMapper.class, TagMapper.class})
 public interface PostMapper {
-    PostMapper INSTANCE = Mappers.getMapper(PostMapper.class);
 
     PostDto postToPostDto(Post post);
 
@@ -20,6 +18,7 @@ public interface PostMapper {
 
     Post postEntityToPost(PostEntity postEntity);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "user.username", source = "username")
     @Mapping(target = "tag.id", source = "tagId")
     @Mapping(target = "replyTo.id", source = "replyToId")

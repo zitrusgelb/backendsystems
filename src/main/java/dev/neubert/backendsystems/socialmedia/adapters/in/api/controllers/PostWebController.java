@@ -12,7 +12,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.stream.Collectors;
 
@@ -25,7 +24,8 @@ public class PostWebController {
     @Inject
     PostFaker postFaker;
 
-    PostMapper postMapper = Mappers.getMapper(PostMapper.class);
+    @Inject
+    PostMapper postMapper;
 
     @Context
     private UriInfo uriInfo;
