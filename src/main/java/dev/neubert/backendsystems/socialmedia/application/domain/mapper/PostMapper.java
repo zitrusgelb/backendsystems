@@ -7,7 +7,7 @@ import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "cdi", uses = {UserMapper.class, TagMapper.class})
+@Mapper(componentModel = "jakarta-cdi", uses = {UserMapper.class, TagMapper.class})
 public interface PostMapper {
 
     PostDto postToPostDto(Post post);
