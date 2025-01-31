@@ -35,7 +35,11 @@ public class LikerWebController {
             @PathParam("id")
             long postId
     ) {
+        if (postAdapter.getPostById(postId) == null || userAdapter.getUserById(userId) == null) {
+            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+        }
         LikeDto returnValue = likeAdapter.createLike(getLikeDto(postId, userId));
+
         if (returnValue == null) {
             return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();
         }
