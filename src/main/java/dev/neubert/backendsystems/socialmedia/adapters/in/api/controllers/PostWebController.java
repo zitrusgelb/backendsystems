@@ -2,6 +2,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Post.*;
@@ -98,7 +99,7 @@ public class PostWebController {
                        .build();
     }
 
-
+    @AuthorizationBinding
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createPost(
@@ -114,7 +115,7 @@ public class PostWebController {
                        .build();
     }
 
-
+    @AuthorizationBinding
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -137,7 +138,7 @@ public class PostWebController {
                        .build();
     }
 
-
+    @AuthorizationBinding
     @DELETE
     @Path("{id}")
     public Response deletePost(
