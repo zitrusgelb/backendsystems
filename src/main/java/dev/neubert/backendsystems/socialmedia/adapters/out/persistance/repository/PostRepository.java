@@ -31,8 +31,7 @@ public class PostRepository
     public Post createPost(Post post) {
         final var entity = this.mapper.postToPostEntity(post);
         this.entityManager.persist(entity);
-        final var persisted = entityManager.find(PostEntity.class, entity.getId());
-        return mapper.postEntityToPost(persisted);
+        return mapper.postEntityToPost(entityManager.find(PostEntity.class, entity.getId()));
     }
 
     @Transactional
