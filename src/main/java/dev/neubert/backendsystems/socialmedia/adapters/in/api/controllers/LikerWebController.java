@@ -1,11 +1,12 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapter;
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.PostAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.UserDto;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Post.ReadPostIn;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -21,7 +22,10 @@ public class LikerWebController {
     LikeAdapter likeAdapter;
 
     @Inject
-    PostAdapter postAdapter;
+    ReadPostIn readPostIn;
+
+    @Inject
+    PostMapper postMapper;
 
     @Inject
     UserAdapter userAdapter;
@@ -35,7 +39,7 @@ public class LikerWebController {
             @PathParam("id")
             long postId
     ) {
-        if (postAdapter.getPostById(postId) == null || userAdapter.getUserById(userId) == null) {
+        if (readPostIn.getPostById(postId) == null || userAdapter.getUserById(userId) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         LikeDto returnValue = likeAdapter.createLike(getLikeDto(postId, userId));
@@ -66,7 +70,7 @@ public class LikerWebController {
             @PathParam("id")
             long id
     ) {
-        if (postAdapter.getPostById(id) == null) {
+        if (readPostIn.getPostById(id) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         var likes = likeAdapter.getLikeByPost(id);
@@ -77,7 +81,7 @@ public class LikerWebController {
     }
 
     private LikeDto getLikeDto(long postId, long userId) {
-        PostDto postDto = postAdapter.getPostById(postId);
+        PostDto postDto = postMapper.postToPostDto(readPostIn.getPostById(postId));
         UserDto userDto = userAdapter.getUserById(userId);
         return new LikeDto(postDto, userDto, LocalDateTime.now());
     }

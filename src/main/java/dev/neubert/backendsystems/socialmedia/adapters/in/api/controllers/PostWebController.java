@@ -1,10 +1,10 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.PostAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Post.*;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -19,7 +19,19 @@ import java.util.stream.Collectors;
 public class PostWebController {
 
     @Inject
-    PostAdapter postAdapter;
+    CreatePostIn createPostIn;
+
+    @Inject
+    DeletePostIn deletePostIn;
+
+    @Inject
+    ReadAllPostsIn readAllPostsIn;
+
+    @Inject
+    ReadPostIn readPostIn;
+
+    @Inject
+    UpdatePostIn updatePostIn;
 
     @Inject
     PostFaker postFaker;
@@ -53,7 +65,7 @@ public class PostWebController {
     ) {
 
         setCacheControlFiveMinutes();
-        var allPosts = this.postAdapter.readAllPosts();
+        var allPosts = this.readAllPostsIn.readAllPosts();
         var filteredPosts =
                 allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
 
@@ -76,7 +88,7 @@ public class PostWebController {
             long id
     ) {
         setCacheControlFiveMinutes();
-        var requestedPost = this.postAdapter.getPostById(id);
+        var requestedPost = this.readPostIn.getPostById(id);
         if (requestedPost == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
@@ -94,9 +106,9 @@ public class PostWebController {
             CreatePostDto model
     ) {
         setCacheControlFiveMinutes();
-        var result = this.postAdapter.createPost(model);
+        var result = this.createPostIn.create(postMapper.createPostDtoToPost(model));
         return Response.status(HttpResponseStatus.CREATED.code())
-                       .header("Location", createLocationHeader(result))
+                       .header("Location", createLocationHeader(postMapper.postToPostDto(result)))
                        .tag(Long.toString(result.hashCode()))
                        .cacheControl(this.cacheControl)
                        .build();
@@ -114,12 +126,12 @@ public class PostWebController {
             PostDto model
     ) {
         setCacheControlFiveMinutes();
-        if (this.postAdapter.getPostById(id) == null) {
+        if (this.readPostIn.getPostById(id) == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
-        var result = this.postAdapter.updatePost(id, model);
+        var result = this.updatePostIn.updatePost(id, postMapper.postDtoToPost(model));
         return Response.status(HttpResponseStatus.NO_CONTENT.code())
-                       .header("Location", createLocationHeader(result))
+                       .header("Location", createLocationHeader(postMapper.postToPostDto(result)))
                        .tag(Long.toString(result.hashCode()))
                        .cacheControl(this.cacheControl)
                        .build();
@@ -133,11 +145,11 @@ public class PostWebController {
             @PathParam("id")
             long id
     ) {
-        var toBeDeleted = this.postAdapter.getPostById(id);
+        var toBeDeleted = this.readPostIn.getPostById(id);
         if (toBeDeleted == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
-        if (this.postAdapter.deletePost(toBeDeleted)) {
+        if (this.deletePostIn.delete(toBeDeleted)) {
             return Response.status(HttpResponseStatus.NO_CONTENT.code()).build();
         } else {
             return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();
@@ -149,7 +161,7 @@ public class PostWebController {
     public Response populateDatabase() {
         setCacheControlFiveMinutes();
         var result = postFaker.createModel();
-        postAdapter.createPost(postMapper.postDtoToCreatePostDto(postMapper.postToPostDto(result)));
+        createPostIn.create(result);
         return Response.status(HttpResponseStatus.CREATED.code()).build();
     }
 
