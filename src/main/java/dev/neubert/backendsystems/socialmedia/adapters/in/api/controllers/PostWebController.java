@@ -6,6 +6,7 @@ import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Authorizatio
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Post.*;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
@@ -40,11 +41,11 @@ public class PostWebController {
     @Inject
     PostMapper postMapper;
 
-    @Context
-    private UriInfo uriInfo;
+    @Inject
+    ReadUserByIdIn readUserByIdIn;
 
     @Context
-    private HttpHeaders httpHeaders;
+    private UriInfo uriInfo;
 
     private CacheControl cacheControl;
 
@@ -64,12 +65,10 @@ public class PostWebController {
             @QueryParam("size")
             long size
     ) {
-
         setCacheControlFiveMinutes();
         var allPosts = this.readAllPostsIn.readAllPosts();
         var filteredPosts =
                 allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
-
         var result = filteredPosts.stream().skip(offset).limit(size).collect(Collectors.toList());
 
         return Response.status(HttpResponseStatus.OK.code())
@@ -78,7 +77,6 @@ public class PostWebController {
                        .entity(result)
                        .build();
     }
-
 
     @Path("{id}")
     @GET
@@ -103,10 +101,13 @@ public class PostWebController {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createPost(
+            @HeaderParam("X-User-Id")
+            String userId,
             @Valid
             CreatePostDto model
     ) {
         setCacheControlFiveMinutes();
+        model.setUsername(getUsernameFromHeader(userId));
         var result = this.createPostIn.create(postMapper.createPostDtoToPost(model));
         return Response.status(HttpResponseStatus.CREATED.code())
                        .header("Location", createLocationHeader(postMapper.postToPostDto(result)))
@@ -120,6 +121,8 @@ public class PostWebController {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response updatePost(
+            @HeaderParam("X-User-Id")
+            String userId,
             @Positive
             @PathParam("id")
             long id,
@@ -127,8 +130,11 @@ public class PostWebController {
             PostDto model
     ) {
         setCacheControlFiveMinutes();
-        if (this.readPostIn.getPostById(id) == null) {
+        var toBeUpdated = readPostIn.getPostById(id);
+        if (toBeUpdated == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+        } else if (!getUsernameFromHeader(userId).equals(toBeUpdated.getUser().getUsername())) {
+            return Response.status(HttpResponseStatus.UNAUTHORIZED.code()).build();
         }
         var result = this.updatePostIn.updatePost(id, postMapper.postDtoToPost(model));
         return Response.status(HttpResponseStatus.NO_CONTENT.code())
@@ -142,6 +148,8 @@ public class PostWebController {
     @DELETE
     @Path("{id}")
     public Response deletePost(
+            @HeaderParam("X-User-Id")
+            String userId,
             @Positive
             @PathParam("id")
             long id
@@ -149,8 +157,9 @@ public class PostWebController {
         var toBeDeleted = this.readPostIn.getPostById(id);
         if (toBeDeleted == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
-        }
-        if (this.deletePostIn.delete(toBeDeleted)) {
+        } else if (!getUsernameFromHeader(userId).equals(toBeDeleted.getUser().getUsername())) {
+            return Response.status(HttpResponseStatus.UNAUTHORIZED.code()).build();
+        } else if (this.deletePostIn.delete(toBeDeleted)) {
             return Response.status(HttpResponseStatus.NO_CONTENT.code()).build();
         } else {
             return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();
@@ -166,7 +175,6 @@ public class PostWebController {
         return Response.status(HttpResponseStatus.CREATED.code()).build();
     }
 
-
     private String createLocationHeader(PostDto model) {
         return uriInfo.getRequestUriBuilder().path(Long.toString(model.getId())).build().toString();
     }
@@ -176,4 +184,8 @@ public class PostWebController {
         this.cacheControl.setMaxAge(300);
     }
 
+    private String getUsernameFromHeader(String userId) {
+        var user = readUserByIdIn.getUserById(Long.parseLong(userId));
+        return user.getUsername();
+    }
 }
