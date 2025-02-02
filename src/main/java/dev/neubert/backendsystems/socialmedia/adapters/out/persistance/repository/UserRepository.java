@@ -71,7 +71,7 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
             CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
             Root<UserEntity> from = cq.from(UserEntity.class);
             cq.select(from);
-            cq.where(cb.equal(from.get("username"), username));
+            cq.where(cb.equal(cb.upper(from.get("username")), username.toUpperCase()));
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.getSingleResult();
             if (requestedModel != null) {
