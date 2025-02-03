@@ -49,8 +49,7 @@ public class LikerWebController {
             @PathParam("id")
             long postId
     ) {
-        if (readPostIn.getPostById(postId) == null ||
-            readLikeByPostIn.readLikeByPost(userId) == null) {
+        if (readPostIn.getPostById(postId) == null || readUserByIdIn.getUserById(userId) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         LikeDto returnValue =

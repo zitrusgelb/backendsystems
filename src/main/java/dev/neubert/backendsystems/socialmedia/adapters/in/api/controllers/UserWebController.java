@@ -69,7 +69,7 @@ public class UserWebController {
         if (userAdapter.getUserById(userId) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
-        if (userAdapter.getUserById(userId).getUsername() == username) {
+        if (!userAdapter.getUserById(userId).getUsername().equals(username)) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         var likes = readLikeByUserIn.readLikeByUser(userId);
