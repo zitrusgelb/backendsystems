@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -75,6 +76,7 @@ public class UserWebController {
         var likes = readLikeByUserIn.readLikeByUser(userId);
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", likes.size())
+                       .cacheControl(new CacheControl())
                        .entity(likes)
                        .build();
     }

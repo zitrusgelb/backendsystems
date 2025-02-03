@@ -13,6 +13,7 @@ import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserB
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -38,7 +39,6 @@ public class LikerWebController {
 
     @Inject
     LikeMapper likeMapper;
-
 
     @POST
     @Path("{id}/likes")
@@ -88,6 +88,7 @@ public class LikerWebController {
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", likes.size())
                        .entity(likes)
+                       .cacheControl(new CacheControl())
                        .build();
     }
 
