@@ -5,26 +5,30 @@ import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapp
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadAllUsersOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserByIdOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserOut;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserOut {
-    private UserMapper mapper = Mappers.getMapper(UserMapper.class);
+public class UserRepository
+        implements CreateUserOut, ReadAllUsersOut, ReadUserOut, ReadUserByIdOut {
 
     @Inject
-    private EntityManager entityManager;
+    UserMapper mapper;
+
+    @Inject
+    EntityManager entityManager;
 
     @Transactional
     @Override
@@ -74,6 +78,24 @@ public class UserRepository implements CreateUserOut, ReadAllUsersOut, ReadUserO
             cq.where(cb.equal(cb.upper(from.get("username")), username.toUpperCase()));
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.getSingleResult();
+            if (requestedModel != null) {
+                returnValue = mapper.userEntityToUser(requestedModel);
+            }
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return returnValue;
+    }
+
+    @Override
+    public User getUserById(long id) {
+        User returnValue = null;
+        try {
+            final var requestedModel = this.entityManager.find(UserEntity.class, id);
             if (requestedModel != null) {
                 returnValue = mapper.userEntityToUser(requestedModel);
             }

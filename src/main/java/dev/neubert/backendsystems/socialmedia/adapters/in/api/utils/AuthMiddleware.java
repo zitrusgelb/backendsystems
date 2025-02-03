@@ -11,7 +11,6 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-import org.mapstruct.factory.Mappers;
 
 import java.io.IOException;
 import java.net.URI;
@@ -31,7 +30,8 @@ public class AuthMiddleware implements ContainerRequestFilter {
     @Inject
     UserAdapter userAdapter;
 
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    @Inject
+    UserMapper userMapper;
 
     public AuthMiddleware() throws URISyntaxException {}
 

@@ -10,9 +10,9 @@ import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapp
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
-import org.junit.jupiter.api.BeforeEach;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,14 +20,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-
+@QuarkusTest
 public class TestPostMapper {
-    private PostMapper postMapper;
 
-    @BeforeEach
-    public void setUp() {
-        postMapper = Mappers.getMapper(PostMapper.class);
-    }
+    @Inject
+    PostMapper postMapper;
 
     @Test
     public void testPostToPostDto() {
