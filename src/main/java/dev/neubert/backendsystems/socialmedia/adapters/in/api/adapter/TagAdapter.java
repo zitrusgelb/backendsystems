@@ -32,7 +32,7 @@ public class TagAdapter {
     TagMapper tagMapper = Mappers.getMapper(TagMapper.class);
 
     public TagDto createTag(CreateTagDto tagDto) {
-        return tagMapper.tagToTagDto(createTagIn.create(tagMapper.createTagDtoToTag(tagDto)));
+        return tagMapper.tagToTagDto(createTagIn.createTag(tagMapper.createTagDtoToTag(tagDto)));
     }
 
     public boolean deleteTag(TagDto tagDto) {
