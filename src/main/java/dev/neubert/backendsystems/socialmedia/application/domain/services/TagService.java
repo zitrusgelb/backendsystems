@@ -15,13 +15,13 @@ public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, Update
     TagRepository tagRepository;
 
     @Override
-    public Tag create(Tag tag) {
+    public Tag createTag(Tag tag) {
         return tagRepository.createTag(tag);
     }
 
 
     @Override
-    public boolean delete(Tag tag) {
+    public boolean deleteTag(Tag tag) {
         return tagRepository.deleteTag(tag.getId());
     }
 
@@ -36,7 +36,7 @@ public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, Update
     }
 
     @Override
-    public Tag update(Long id,Tag tag) {
+    public Tag updateTag(Long id,Tag tag) {
         tag.setId(id);
         return tagRepository.updateTag(tag);
     }
