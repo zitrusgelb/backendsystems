@@ -36,8 +36,8 @@ public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, Update
     }
 
     @Override
-    public Tag updateTag(Long id,Tag tag) {
+    public Tag update(Long id,Tag tag) {
         tag.setId(id);
-        return tagRepository.updateTag;
+        return tagRepository.updateTag(tag);
     }
 }
