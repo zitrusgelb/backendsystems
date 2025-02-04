@@ -14,7 +14,6 @@ public class PostService
         implements CreatePostIn, DeletePostIn, ReadAllPostsIn, ReadPostIn, UpdatePostIn {
 
     @Inject
-    PostRepository postRepository;
     ReadPostOut readPostOut;
 
     @Inject
@@ -35,6 +34,7 @@ public class PostService
     @Override
     public Post create(Post post) {
         post.setVersion(1);
+        Post completePost = getEntitiesFromDatabase(post);
         return createPostOut.createPost(completePost);
     }
 
@@ -55,6 +55,7 @@ public class PostService
 
     @Override
     public Post updatePost(long postId, Post post) {
+        post.setVersion(readPostOut.getPostById(postId).getVersion() + 1);
         return updatePostOut.updatePost(post);
     }
 
