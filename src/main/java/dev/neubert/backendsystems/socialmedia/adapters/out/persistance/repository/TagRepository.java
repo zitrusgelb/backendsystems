@@ -77,13 +77,9 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
     }
 
     @Override
-    public boolean updateTag(Long id, String newName) {
-        TagEntity entity = entityManager.find(TagEntity.class, id);
-        if (entity == null) {
-            return false;
-        }
-        entity.setName(newName);
+    public Tag updateTag(Tag tag) {
+        final var entity = this.mapper.tagToTagEntity(tag);
         entityManager.merge(entity);
-        return true;
+        return tag;
     }
 }
