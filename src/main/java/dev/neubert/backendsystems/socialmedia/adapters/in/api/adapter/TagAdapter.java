@@ -51,7 +51,7 @@ public class TagAdapter {
     }
 
     public TagDto updateTag(long id, TagDto tagDto) {
-        return tagMapper.tagToTagDto(updateTagIn.updateTag(id, tagMapper.tagDtoToTag(tagDto)));
+        return tagMapper.tagToTagDto(updateTagIn.update(id, tagMapper.tagDtoToTag(tagDto)));
 
     }
 }
