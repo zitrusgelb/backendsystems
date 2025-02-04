@@ -37,7 +37,7 @@ public class TagAdapter {
 
     public boolean deleteTag(TagDto tagDto) {
         Tag tag = tagMapper.tagDtoToTag(tagDto);
-        return deleteTagIn.delete(tag);
+        return deleteTagIn.deleteTag(tag);
     }
 
     public List<TagDto> readAllTags() {
