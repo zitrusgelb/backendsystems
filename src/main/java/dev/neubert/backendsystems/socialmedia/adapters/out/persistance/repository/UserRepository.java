@@ -55,7 +55,7 @@ public class UserRepository
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
@@ -84,7 +84,7 @@ public class UserRepository
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
@@ -100,7 +100,7 @@ public class UserRepository
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
