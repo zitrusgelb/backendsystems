@@ -8,13 +8,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "jakarta-cdi", uses = {PostMapper.class})
+@Mapper(componentModel = "jakarta-cdi",uses = {PostMapper.class})
 public interface TagMapper {
 
     @Mapping(target = "name", source = "name")
     TagDto tagToTagDto(Tag tag);
 
-
+    @Mapping(target = "name", source = "name")
     Tag tagDtoToTag(TagDto tagDto);
 
     TagEntity tagToTagEntity(Tag tag);
