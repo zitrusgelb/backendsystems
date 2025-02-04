@@ -63,7 +63,7 @@ public class PostRepository
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
@@ -84,7 +84,7 @@ public class PostRepository
                 returnValue = mapper.postEntityToPost(requestedModel);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
