@@ -28,7 +28,7 @@ public class MockAuthMiddleware extends AuthMiddleware {
     public void filter(ContainerRequestContext requestContext) {
         var user = userFaker.createModel();
         var newUser = createUserIn.createUser(user);
-
+        if (requestContext.getHeaders().containsKey("X-User-Id")) return;
         requestContext.getHeaders().add("X-User-Id", String.valueOf(newUser.getId()));
     }
 }
