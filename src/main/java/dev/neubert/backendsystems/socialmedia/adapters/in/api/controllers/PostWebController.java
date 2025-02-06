@@ -15,6 +15,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Path("posts")
@@ -47,8 +48,10 @@ public class PostWebController {
     @Context
     private UriInfo uriInfo;
 
-    private CacheControl cacheControl;
+    @Context
+    private Request request;
 
+    private CacheControl cacheControl;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -82,20 +85,30 @@ public class PostWebController {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getById(
+            @HeaderParam("If-None-Match")
+            String ifNoneMatch,
             @Positive
             @PathParam("id")
             long id
     ) {
-        setCacheControlFiveMinutes();
         var requestedPost = this.readPostIn.getPostById(id);
         if (requestedPost == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
-        return Response.ok(requestedPost)
-                       .tag(Long.toString(requestedPost.hashCode()))
-                       .cacheControl(this.cacheControl)
-                       .build();
+        if (ifNoneMatch != null && ifNoneMatch.equals("v" + requestedPost.getVersion())) {
+            return Response.status(HttpResponseStatus.NOT_MODIFIED.code())
+                           .tag(new EntityTag("v" + requestedPost.getVersion()))
+                           .build();
+        } else {
+            setCacheControlFiveMinutes();
+            return Response.ok(requestedPost)
+                           .tag(Long.toString(requestedPost.hashCode()))
+                           .cacheControl(this.cacheControl)
+                           .tag(new EntityTag("v" + requestedPost.getVersion()))
+                           .build();
+        }
     }
+
 
     @AuthorizationBinding
     @POST
@@ -108,10 +121,11 @@ public class PostWebController {
     ) {
         setCacheControlFiveMinutes();
         model.setUsername(getUsernameFromHeader(userId));
+        model.setCreatedAt(LocalDateTime.now());
         var result = this.createPostIn.create(postMapper.createPostDtoToPost(model));
         return Response.status(HttpResponseStatus.CREATED.code())
                        .header("Location", createLocationHeader(postMapper.postToPostDto(result)))
-                       .tag(Long.toString(result.hashCode()))
+                       .tag(new EntityTag("v" + result.getVersion()))
                        .cacheControl(this.cacheControl)
                        .build();
     }
@@ -123,25 +137,47 @@ public class PostWebController {
     public Response updatePost(
             @HeaderParam("X-User-Id")
             String userId,
+            @HeaderParam("If-Match")
+            String ifMatch,
             @Positive
             @PathParam("id")
             long id,
             @Valid
             PostDto model
     ) {
-        setCacheControlFiveMinutes();
-        var toBeUpdated = readPostIn.getPostById(id);
-        if (toBeUpdated == null) {
-            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
-        } else if (!getUsernameFromHeader(userId).equals(toBeUpdated.getUser().getUsername())) {
-            return Response.status(HttpResponseStatus.UNAUTHORIZED.code()).build();
+        Response.ResponseBuilder conditionalResponse = null;
+        EntityTag requestTag = null;
+        if (ifMatch != null) {
+            requestTag = new EntityTag(ifMatch);
+            conditionalResponse = request.evaluatePreconditions(requestTag);
         }
-        var result = this.updatePostIn.updatePost(id, postMapper.postDtoToPost(model));
-        return Response.status(HttpResponseStatus.NO_CONTENT.code())
-                       .header("Location", createLocationHeader(postMapper.postToPostDto(result)))
-                       .tag(Long.toString(result.hashCode()))
-                       .cacheControl(this.cacheControl)
-                       .build();
+        if (conditionalResponse != null) {
+            return conditionalResponse.build();
+        } else {
+            if (model == null || model.getUser() == null) {
+                return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+            }
+            setCacheControlFiveMinutes();
+            var toBeUpdated = readPostIn.getPostById(id);
+            if (toBeUpdated == null) {
+                return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+            } else if (!getUsernameFromHeader(userId).equals(toBeUpdated.getUser().getUsername())) {
+                return Response.status(HttpResponseStatus.UNAUTHORIZED.code()).build();
+            }
+
+            EntityTag currentTag = new EntityTag("v" + toBeUpdated.getVersion());
+            if (requestTag == null || !requestTag.equals(currentTag)) {
+                return Response.status(HttpResponseStatus.PRECONDITION_FAILED.code()).build();
+            }
+
+            var result = this.updatePostIn.updatePost(id, postMapper.postDtoToPost(model));
+            return Response.status(HttpResponseStatus.NO_CONTENT.code())
+                           .header("Location",
+                                   createLocationHeader(postMapper.postToPostDto(result)))
+                           .tag(new EntityTag("v" + result.getVersion()))
+                           .cacheControl(this.cacheControl)
+                           .build();
+        }
     }
 
     @AuthorizationBinding
