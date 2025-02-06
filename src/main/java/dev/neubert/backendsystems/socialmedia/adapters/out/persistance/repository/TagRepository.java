@@ -14,32 +14,30 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import org.jboss.resteasy.util.NoContent;
+
+
+import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @ApplicationScoped
 public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut {
 
     @Inject
-    TagMapper mapper;
-
-    @Inject
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
-    public NoContent createTag(Tag tag) {
+    public Tag createTag(Tag tag) {
         final var entity = this.mapper.tagToTagEntity(tag);
         this.entityManager.persist(entity);
-        return new NoContent();
+        return tag;
     }
 
     @Override
-    public NoContent deleteTag(long id) {
+    public boolean deleteTag(long id) {
         final var entity = this.entityManager.find(Tag.class, id);
         this.entityManager.remove(entity);
-        return new NoContent();
+        return true;
     }
 
     @Override
@@ -71,10 +69,18 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
         return readAllTags(limit, 0);
     }
 
+    public Tag findById(long id) {
+        TagEntity entity = entityManager.find(TagEntity.class, id);
+        if (entity != null) {
+            return mapper.tagEntityToTag(entity);
+        }
+        return null;
+    }
+
     @Override
-    public NoContent updateTag(Tag tag) {
+    public Tag updateTag(Tag tag) {
         final var entity = this.mapper.tagToTagEntity(tag);
-        this.entityManager.merge(entity);
-        return new NoContent();
+        entityManager.merge(entity);
+        return tag;
     }
 }
