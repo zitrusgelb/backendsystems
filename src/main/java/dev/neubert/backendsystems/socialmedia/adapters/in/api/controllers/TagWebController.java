@@ -34,7 +34,7 @@ public class TagWebController {
     @Inject
     UpdateTagIn updateTagIn;
 
-    @inject
+    @Inject
 
     TagMapper tagMapper = Mappers.getMapper(TagMapper.class);
 
