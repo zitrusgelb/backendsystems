@@ -29,14 +29,14 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
 
     @Override
     public Tag createTag(Tag tag) {
-        final var entity = this.mapper.tagToTagEntity(tag);
+        final var entity = mapper.tagToTagEntity(tag);
         this.entityManager.persist(entity);
         return tag;
     }
 
     @Override
     public boolean deleteTag(long id) {
-        final var entity = this.entityManager.find(Tag.class, id);
+        final var entity = entityManager.find(Tag.class, id);
         this.entityManager.remove(entity);
         return true;
     }
@@ -80,7 +80,7 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
 
     @Override
     public Tag updateTag(Tag tag) {
-        final var entity = this.mapper.tagToTagEntity(tag);
+        final var entity = mapper.tagToTagEntity(tag);
         entityManager.merge(entity);
         return tag;
     }
