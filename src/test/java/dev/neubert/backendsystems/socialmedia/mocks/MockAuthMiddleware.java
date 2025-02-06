@@ -1,9 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.mocks;
 
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthMiddleware;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
 import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
