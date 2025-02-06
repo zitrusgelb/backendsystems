@@ -15,16 +15,17 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 
-
-import org.mapstruct.factory.Mappers;
-
 import java.util.ArrayList;
 import java.util.List;
+
 @ApplicationScoped
 public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut {
 
     @Inject
-    private EntityManager entityManager;
+    TagMapper mapper;
+
+    @Inject
+    EntityManager entityManager;
 
     @Override
     public Tag createTag(Tag tag) {
@@ -57,7 +58,7 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
