@@ -120,6 +120,9 @@ public class PostWebController {
             CreatePostDto model
     ) {
         setCacheControlFiveMinutes();
+        if (model == null) {
+            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+        }
         model.setUsername(getUsernameFromHeader(userId));
         model.setCreatedAt(LocalDateTime.now());
         var result = this.createPostIn.create(postMapper.createPostDtoToPost(model));
