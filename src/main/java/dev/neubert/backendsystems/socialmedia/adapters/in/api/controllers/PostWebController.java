@@ -157,7 +157,9 @@ public class PostWebController {
         if (conditionalResponse != null) {
             return conditionalResponse.build();
         } else {
-            if (model == null || model.getUser() == null) {
+            if (model == null) {
+                return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+            } else if (model.getUser() == null) {
                 return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
             }
             setCacheControlFiveMinutes();
