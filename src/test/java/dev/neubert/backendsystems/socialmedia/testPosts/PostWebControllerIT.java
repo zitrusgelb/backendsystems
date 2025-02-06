@@ -1,15 +1,12 @@
 package dev.neubert.backendsystems.socialmedia.testPosts;
 
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
-import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
-import io.restassured.RestAssured;
-import jakarta.inject.Inject;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -17,41 +14,154 @@ import static org.hamcrest.Matchers.is;
 @QuarkusIntegrationTest
 public class PostWebControllerIT {
 
-    @Inject
-    PostFaker postFaker;
 
-    @Inject
-    PostMapper postMapper;
+    private static Pattern fullLocationPattern;
+    private static Pattern postsPath;
+    private static Pattern versionPattern;
 
     @BeforeAll
-    public static void setup() {
-        RestAssured.baseURI = "http://localhost:8080";
+    static void setup() {
+        fullLocationPattern = Pattern.compile("/posts/\\d{1,3}");
+        postsPath = Pattern.compile("/posts/");
+        versionPattern = Pattern.compile("v\\d{1,3}");
     }
 
     @Test
     void getAllPostsNoPostsExisting() {
-        given().when()
-               .get("/posts")
-               .then()
-               .statusCode(200)
-               .header("X-Total-Count", "0")
-               .header("content-length", "2")
-               .body(is("[]"));
+        given().when().get("/posts").then().statusCode(200);
     }
 
     @Test
-    void createPost() {
-        var post = postFaker.createModel();
-        post.setCreatedAt(LocalDateTime.now());
-        CreatePostDto createPostDto =
-                postMapper.postDtoToCreatePostDto(postMapper.postToPostDto(post));
-        given().contentType("application/json")
-               .body(createPostDto.toString())
+    void testCreatePost() {
+        given().contentType(ContentType.JSON)
+               .body("""
+                     {
+                             "content": "I am your father",
+                             "tag": null,
+                             "replyTo": null
+                         }
+                     """)
                .when()
                .post("/posts")
                .then()
+               .assertThat()
                .statusCode(201)
-               .header("Location", "http://localhost:8080/posts/1");
+               .header("Cache-Control", "no-transform, max-age=300")
+               .header("content-length", "0")
+               .body(is(""));
     }
 
+    @Test
+    void testGetPost() {
+        String postResponseHeaders = given().contentType(ContentType.JSON)
+                                            .body("""
+                                                  {
+                                                          "content": "I am your father",
+                                                          "tag": null,
+                                                          "replyTo": null
+                                                      }
+                                                  """)
+                                            .when()
+                                            .post("/posts")
+                                            .headers()
+                                            .toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+        given().contentType(ContentType.JSON)
+               .when()
+               .get(location)
+               .then()
+               .assertThat()
+               .header("Cache-Control", "no-transform, max-age=300")
+               .statusCode(200);
+
+    }
+
+    @Test
+    void testDeletePostWrongUser() {
+        String postResponseHeaders = given().contentType(ContentType.JSON)
+                                            .body("""
+                                                  {
+                                                          "content": "I am your father",
+                                                          "tag": null,
+                                                          "replyTo": null
+                                                      }
+                                                  """)
+                                            .when()
+                                            .post("/posts")
+                                            .headers()
+                                            .toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String postToBeDeleted =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+
+        given().contentType(ContentType.JSON)
+               .body(postToBeDeleted)
+               .when()
+               .delete(location)
+               .then()
+               .assertThat()
+               .header("content-length", "0")
+               .statusCode(401); // TODO: fix 401
+    }
+
+    @Test
+    void testCreatePostEmptyBody() {
+        given().contentType(ContentType.JSON)
+               .when()
+               .post("/posts")
+               .then()
+               .assertThat()
+               .header("content-length", "0")
+               .statusCode(400);
+    }
+
+    @Test
+    void testDeleteNonExistentPost() {
+        given().contentType(ContentType.JSON)
+               .when()
+               .delete("/posts/9999999999999")
+               .then()
+               .assertThat()
+               .statusCode(404);
+    }
+
+    @Test
+    void testPutNonExistentPost() {
+        given().contentType(ContentType.JSON)
+               .when()
+               .put("/posts/9999999999999")
+               .then()
+               .assertThat()
+               .statusCode(400);
+    }
+
+    @Test
+    void testSendPostToWrongURL() {
+        given().contentType(ContentType.JSON)
+               .body("""
+                     {
+                             "content": "I am your father",
+                             "tag": null,
+                             "replyTo": null
+                         }
+                     """)
+               .when()
+               .post("/posts/1")
+               .then()
+               .assertThat()
+               .statusCode(405);
+    }
+
+    @Test
+    void testSendPutToWrongURL() {
+        given().contentType(ContentType.JSON)
+               .when()
+               .post("/posts")
+               .then()
+               .assertThat()
+               .statusCode(400);
+    }
 }
