@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
@@ -43,6 +44,7 @@ public class LikeWebController {
     @POST
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})
+    @AuthorizationBinding
     public Response createLike(
             @HeaderParam("X-User-Id")
             long userId,
@@ -68,6 +70,7 @@ public class LikeWebController {
     @DELETE
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})
+    @AuthorizationBinding
     public Response deleteLike(
             @HeaderParam("X-User-Id")
             long userId,
