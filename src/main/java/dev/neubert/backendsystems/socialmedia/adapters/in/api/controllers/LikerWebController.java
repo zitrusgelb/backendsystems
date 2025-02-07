@@ -49,7 +49,11 @@ public class LikerWebController {
             @PathParam("id")
             long postId
     ) {
-        if (readPostIn.getPostById(postId) == null || readUserByIdIn.getUserById(userId) == null) {
+        if (readPostIn.getPostById(postId) == null) {
+            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+        }
+
+        if (readUserByIdIn.getUserById(userId) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         LikeDto returnValue =
@@ -84,10 +88,12 @@ public class LikerWebController {
         if (readPostIn.getPostById(id) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
-        var likes = readLikeByPostIn.readLikeByPost(id);
+        var returnValue = readLikeByPostIn.readLikeByPost(id);
+        returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", likes.size())
-                       .entity(likes)
+                       .header("X-Total-Count", returnValue.size())
+                       .entity(returnValue)
                        .cacheControl(new CacheControl())
                        .build();
     }
