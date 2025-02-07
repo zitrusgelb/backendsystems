@@ -32,6 +32,8 @@ public class UserWebController {
     @Inject
     LikeMapper likeMapper;
 
+    CacheControl cacheControl;
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response getAllUsers(
@@ -78,12 +80,12 @@ public class UserWebController {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         var returnValue = readLikeByUserIn.readLikeByUser(userId);
-        returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+        var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
 
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", returnValue.size())
-                       .cacheControl(new CacheControl())
-                       .entity(returnValue)
+                       .header("X-Total-Count", dtoList.size())
+                       .cacheControl(this.getCacheControl())
+                       .entity(dtoList)
                        .build();
     }
 
@@ -94,5 +96,12 @@ public class UserWebController {
         userAdapter.createUser(userMapper.userToUserDto(user));
 
         return Response.status(HttpResponseStatus.CREATED.code()).build();
+    }
+
+    private CacheControl getCacheControl() {
+        this.cacheControl = new CacheControl();
+        cacheControl.setMaxAge(300);
+        cacheControl.setPrivate(false);
+        return cacheControl;
     }
 }

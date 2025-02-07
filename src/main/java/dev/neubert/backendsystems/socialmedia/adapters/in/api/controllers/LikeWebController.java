@@ -20,7 +20,7 @@ import jakarta.ws.rs.core.Response;
 import java.time.LocalDateTime;
 
 @Path("posts")
-public class LikerWebController {
+public class LikeWebController {
 
     @Inject
     CreateLikeIn createLikeIn;
@@ -89,12 +89,16 @@ public class LikerWebController {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         var returnValue = readLikeByPostIn.readLikeByPost(id);
-        returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+        var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(300);
+        cacheControl.setPrivate(false);
 
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", returnValue.size())
-                       .entity(returnValue)
-                       .cacheControl(new CacheControl())
+                       .header("X-Total-Count", dtoList.size())
+                       .cacheControl(cacheControl)
+                       .entity(dtoList)
                        .build();
     }
 
