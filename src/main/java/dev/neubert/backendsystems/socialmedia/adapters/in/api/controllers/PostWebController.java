@@ -102,7 +102,6 @@ public class PostWebController {
         } else {
             setCacheControlFiveMinutes();
             return Response.ok(requestedPost)
-                           .tag(Long.toString(requestedPost.hashCode()))
                            .cacheControl(this.cacheControl)
                            .tag(new EntityTag("v" + requestedPost.getVersion()))
                            .build();

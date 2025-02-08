@@ -16,13 +16,11 @@ public class PostWebControllerTest {
 
     private static Pattern fullLocationPattern;
     private static Pattern postsPath;
-    private static Pattern versionPattern;
 
     @BeforeAll
     static void setup() {
         fullLocationPattern = Pattern.compile("/posts/\\d{1,3}");
         postsPath = Pattern.compile("/posts/");
-        versionPattern = Pattern.compile("v\\d{1,3}");
     }
 
     @Test
