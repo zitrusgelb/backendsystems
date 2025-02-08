@@ -16,11 +16,13 @@ public class PostWebControllerTest {
 
     private static Pattern fullLocationPattern;
     private static Pattern postsPath;
+    private static Pattern tagId;
 
     @BeforeAll
     static void setup() {
         fullLocationPattern = Pattern.compile("/posts/\\d{1,3}");
         postsPath = Pattern.compile("/posts/");
+        tagId = Pattern.compile("\"id\": (\\d{1,3})");
     }
 
     @Test
@@ -46,6 +48,46 @@ public class PostWebControllerTest {
                .header("Cache-Control", "no-transform, max-age=300")
                .header("content-length", "0")
                .body(is(""));
+    }
+
+    @Test
+    void testCreatePostWithReply() {
+        String postResponseHeaders = given().contentType(ContentType.JSON)
+                                            .body("""
+                                                  {
+                                                          "content": "I am your father",
+                                                          "tag": null,
+                                                          "replyTo": null
+                                                      }
+                                                  """)
+                                            .when()
+                                            .post("/posts")
+                                            .headers()
+                                            .toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String replyToPostId =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+        String id =
+                tagId.matcher(replyToPostId).find() ? tagId.matcher(replyToPostId).group() : null;
+
+        String postRequest = String.format("""
+                                           {
+                                                   "content": "I am your father",
+                                                   "tag": null,
+                                                   "replyTo": %s
+                                               }
+                                           """, id);
+
+        given().contentType(ContentType.JSON)
+               .body(postRequest)
+               .when()
+               .post("/posts")
+               .then()
+               .assertThat()
+               .header("content-length", "0")
+               .statusCode(201);
     }
 
     @Test
