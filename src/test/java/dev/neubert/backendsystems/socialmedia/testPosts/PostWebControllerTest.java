@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
 public class PostWebControllerTest {
@@ -87,6 +88,35 @@ public class PostWebControllerTest {
                .header("content-length", "0")
                .statusCode(201);
     }
+
+    @Test
+    void testReplyToNonExistingPost() {
+        String postResponseHeaders =
+                given().contentType(ContentType.JSON)
+                       .header("X-User-Id", 1)
+                       .body("""
+                             {
+                                     "content": "I am your father",
+                                     "tag": null,
+                                     "replyTo": 99999
+                                 }
+                             """)
+                       .when()
+                       .post("/posts")
+                       .headers()
+                       .toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String getResponse =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+        System.out.println(getResponse);
+
+        assertTrue(getResponse.contains("\"replyTo\":null"));
+
+
+    }
+
 
     @Test
     void testGetPost() {
