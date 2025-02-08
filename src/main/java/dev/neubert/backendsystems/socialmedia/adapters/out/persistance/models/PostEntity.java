@@ -22,7 +22,7 @@ public class PostEntity {
     @JoinColumn
     private TagEntity tag;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private PostEntity replyTo;
 
     private int version;
