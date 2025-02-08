@@ -15,13 +15,11 @@ import static org.hamcrest.Matchers.is;
 public class PostWebControllerTest {
 
     private static Pattern fullLocationPattern;
-    private static Pattern postsPath;
     private static Pattern tagId;
 
     @BeforeAll
     static void setup() {
         fullLocationPattern = Pattern.compile("/posts/\\d{1,3}");
-        postsPath = Pattern.compile("/posts/");
         tagId = Pattern.compile("\"id\": (\\d{1,3})");
     }
 
