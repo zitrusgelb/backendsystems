@@ -69,14 +69,14 @@ public class PostWebController {
             long size
     ) {
         setCacheControlFiveMinutes();
-        var allPosts = this.readAllPostsIn.readAllPosts();
+        var allPosts = readAllPostsIn.readAllPosts();
         var filteredPosts =
                 allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
         var result = filteredPosts.stream().skip(offset).limit(size).collect(Collectors.toList());
 
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", result.size())
-                       .cacheControl(this.cacheControl)
+                       .cacheControl(cacheControl)
                        .entity(result)
                        .build();
     }
@@ -91,7 +91,7 @@ public class PostWebController {
             @PathParam("id")
             long id
     ) {
-        var requestedPost = this.readPostIn.getPostById(id);
+        var requestedPost = postMapper.postToPostDto(readPostIn.getPostById(id));
         if (requestedPost == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
@@ -101,8 +101,7 @@ public class PostWebController {
                            .build();
         } else {
             setCacheControlFiveMinutes();
-            return Response.ok(requestedPost)
-                           .cacheControl(this.cacheControl)
+            return Response.ok(requestedPost).cacheControl(cacheControl)
                            .tag(new EntityTag("v" + requestedPost.getVersion()))
                            .build();
         }
@@ -114,7 +113,7 @@ public class PostWebController {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response createPost(
             @HeaderParam("X-User-Id")
-            String userId,
+            long userId,
             @Valid
             CreatePostDto model
     ) {
@@ -124,11 +123,11 @@ public class PostWebController {
         }
         model.setUsername(getUsernameFromHeader(userId));
         model.setCreatedAt(LocalDateTime.now());
-        var result = this.createPostIn.create(postMapper.createPostDtoToPost(model));
+        var result = createPostIn.create(postMapper.createPostDtoToPost(model));
         return Response.status(HttpResponseStatus.CREATED.code())
                        .header("Location", createLocationHeader(postMapper.postToPostDto(result)))
                        .tag(new EntityTag("v" + result.getVersion()))
-                       .cacheControl(this.cacheControl)
+                       .cacheControl(cacheControl)
                        .build();
     }
 
@@ -138,7 +137,7 @@ public class PostWebController {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response updatePost(
             @HeaderParam("X-User-Id")
-            String userId,
+            long userId,
             @HeaderParam("If-Match")
             String ifMatch,
             @Positive
@@ -174,12 +173,12 @@ public class PostWebController {
                 return Response.status(HttpResponseStatus.PRECONDITION_FAILED.code()).build();
             }
 
-            var result = this.updatePostIn.updatePost(id, postMapper.postDtoToPost(model));
+            var result = updatePostIn.updatePost(id, postMapper.postDtoToPost(model));
             return Response.status(HttpResponseStatus.NO_CONTENT.code())
                            .header("Location",
                                    createLocationHeader(postMapper.postToPostDto(result)))
                            .tag(new EntityTag("v" + result.getVersion()))
-                           .cacheControl(this.cacheControl)
+                           .cacheControl(cacheControl)
                            .build();
         }
     }
@@ -189,17 +188,17 @@ public class PostWebController {
     @Path("{id}")
     public Response deletePost(
             @HeaderParam("X-User-Id")
-            String userId,
+            long userId,
             @Positive
             @PathParam("id")
             long id
     ) {
-        var toBeDeleted = this.readPostIn.getPostById(id);
+        var toBeDeleted = readPostIn.getPostById(id);
         if (toBeDeleted == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         } else if (!getUsernameFromHeader(userId).equals(toBeDeleted.getUser().getUsername())) {
             return Response.status(HttpResponseStatus.UNAUTHORIZED.code()).build();
-        } else if (this.deletePostIn.delete(toBeDeleted)) {
+        } else if (deletePostIn.delete(toBeDeleted)) {
             return Response.status(HttpResponseStatus.NO_CONTENT.code()).build();
         } else {
             return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();
@@ -220,12 +219,12 @@ public class PostWebController {
     }
 
     private void setCacheControlFiveMinutes() {
-        this.cacheControl = new CacheControl();
-        this.cacheControl.setMaxAge(300);
+        cacheControl = new CacheControl();
+        cacheControl.setMaxAge(300);
     }
 
-    private String getUsernameFromHeader(String userId) {
-        var user = readUserByIdIn.getUserById(Long.parseLong(userId));
+    private String getUsernameFromHeader(long userId) {
+        var user = readUserByIdIn.getUserById(userId);
         return user.getUsername();
     }
 }
