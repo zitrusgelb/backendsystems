@@ -375,4 +375,30 @@ public class PostWebControllerTest {
                .assertThat()
                .statusCode(400);
     }
+
+    @Test
+    void testIfNoneMatch() {
+        String postResponseHeaders = given().contentType(ContentType.JSON)
+                                            .body("""
+                                                  {
+                                                          "content": "I am your father",
+                                                          "tag": null,
+                                                          "replyTo": null
+                                                      }
+                                                  """)
+                                            .when()
+                                            .post("/posts")
+                                            .headers()
+                                            .toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        given().contentType(ContentType.JSON)
+               .header("If-None-Match", "v1")
+               .when()
+               .get(location)
+               .then()
+               .assertThat()
+               .statusCode(304);
+    }
 }
