@@ -1,6 +1,6 @@
 package dev.neubert.backendsystems.socialmedia.testPosts;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@QuarkusTest
+@QuarkusIntegrationTest
 public class PostWebControllerIT {
 
     private static Pattern fullLocationPattern;
