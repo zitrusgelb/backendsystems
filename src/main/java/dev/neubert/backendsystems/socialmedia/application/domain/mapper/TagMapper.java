@@ -6,7 +6,6 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Ta
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "jakarta-cdi", uses = {PostMapper.class})
 public interface TagMapper {
@@ -19,5 +18,7 @@ public interface TagMapper {
 
     Tag tagEntityToTag(TagEntity tag);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "posts", ignore = true)
     Tag createTagDtoToTag(CreateTagDto createTagDto);
 }
