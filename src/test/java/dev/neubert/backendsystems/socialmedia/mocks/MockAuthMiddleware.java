@@ -1,9 +1,8 @@
 package dev.neubert.backendsystems.socialmedia.mocks;
 
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthMiddleware;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
 import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
@@ -17,20 +16,19 @@ import java.net.URISyntaxException;
 @ApplicationScoped
 public class MockAuthMiddleware extends AuthMiddleware {
     @Inject
-    UserAdapter userAdapter;
+    CreateUserIn createUserIn;
 
     @Inject
-    UserMapper userMapper;
+    UserFaker userFaker;
 
 
     public MockAuthMiddleware() throws URISyntaxException {}
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
-        var user = userMapper.userToUserDto(new UserFaker().createModel());
-
-        var newUser = userMapper.userDtoToUser(userAdapter.createUser(user));
-
+        var user = userFaker.createModel();
+        var newUser = createUserIn.createUser(user);
+        if (requestContext.getHeaders().containsKey("X-User-Id")) return;
         requestContext.getHeaders().add("X-User-Id", String.valueOf(newUser.getId()));
     }
 }
