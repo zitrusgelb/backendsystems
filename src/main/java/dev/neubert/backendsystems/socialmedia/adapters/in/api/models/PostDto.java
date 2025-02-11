@@ -8,6 +8,7 @@ public class PostDto extends AbstractDataTransferObject {
     private UserDto user;
     private TagDto tag;
     private PostDto replyTo;
+    private int version;
 
     public String getContent() {
         return content;
@@ -49,6 +50,13 @@ public class PostDto extends AbstractDataTransferObject {
         this.replyTo = replyTo;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }
 
 
