@@ -18,7 +18,8 @@ import java.util.List;
 
 @ApplicationScoped
 public class TagRepository
-        implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut, ReadTagOut {
+        implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut, ReadTagOut,
+        ReadTagByNameOut {
 
     @Inject
     TagMapper mapper;
@@ -94,6 +95,15 @@ public class TagRepository
     @Override
     public Tag getTagById(long id) {
         TagEntity entity = entityManager.find(TagEntity.class, id);
+        if (entity != null) {
+            return mapper.tagEntityToTag(entity);
+        }
+        return null;
+    }
+
+    @Override
+    public Tag getTagByName(String name) {
+        TagEntity entity = entityManager.find(TagEntity.class, name);
         if (entity != null) {
             return mapper.tagEntityToTag(entity);
         }
