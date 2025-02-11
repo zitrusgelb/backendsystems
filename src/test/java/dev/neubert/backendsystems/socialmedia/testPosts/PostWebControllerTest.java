@@ -110,7 +110,6 @@ public class PostWebControllerTest {
 
         String getResponse =
                 given().contentType(ContentType.JSON).when().get(location).getBody().asString();
-        System.out.println(getResponse);
 
         assertTrue(getResponse.contains("\"replyTo\":null"));
 
