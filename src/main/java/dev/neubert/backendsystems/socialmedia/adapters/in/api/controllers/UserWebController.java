@@ -1,10 +1,12 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadAllUsersIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserIn;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
 import jakarta.validation.constraints.Positive;
@@ -18,16 +20,22 @@ import jakarta.ws.rs.core.Response;
 public class UserWebController {
 
     @Inject
-    UserAdapter userAdapter;
+    CreateUserIn createUserIn;
+
+    @Inject
+    ReadAllUsersIn readAllUsersIn;
+
+    @Inject
+    ReadUserIn readUserIn;
+
+    @Inject
+    ReadUserByIdIn readUserByIdIn;
 
     @Inject
     ReadLikeByUserIn readLikeByUserIn;
 
     @Inject
     UserFaker userFaker;
-
-    @Inject
-    UserMapper userMapper;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -41,7 +49,7 @@ public class UserWebController {
             @QueryParam("size")
             int size
     ) {
-        var users = userAdapter.getAllUsers(size, offset);
+        var users = readAllUsersIn.getAllUsers(size, offset);
         return Response.ok(users).header("X-Total-Count", users.size()).build();
     }
 
@@ -52,7 +60,7 @@ public class UserWebController {
             @PathParam("username")
             String username
     ) {
-        var user = userAdapter.getUserByName(username);
+        var user = readUserIn.getUser(username);
         if (user == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -68,10 +76,10 @@ public class UserWebController {
             @PathParam("username")
             String username
     ) {
-        if (userAdapter.getUserById(userId) == null) {
+        if (readUserByIdIn.getUserById(userId) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
-        if (!userAdapter.getUserById(userId).getUsername().equals(username)) {
+        if (!readUserByIdIn.getUserById(userId).getUsername().equals(username)) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         var likes = readLikeByUserIn.readLikeByUser(userId);
@@ -90,7 +98,7 @@ public class UserWebController {
             @HeaderParam("X-User-Id")
             String userId
     ) {
-        var user = userAdapter.getUserById(Integer.parseInt(userId));
+        var user = readUserByIdIn.getUserById(Long.parseLong(userId));
 
         return Response.ok(user).build();
     }
@@ -99,7 +107,7 @@ public class UserWebController {
     @Path("populate")
     public Response populateDatabase() {
         var user = userFaker.createModel();
-        userAdapter.createUser(userMapper.userToUserDto(user));
+        createUserIn.createUser(user);
 
         return Response.status(HttpResponseStatus.CREATED.code()).build();
     }
