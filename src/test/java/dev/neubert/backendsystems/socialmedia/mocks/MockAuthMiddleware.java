@@ -9,7 +9,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
-import org.mapstruct.factory.Mappers;
 
 import java.net.URISyntaxException;
 
@@ -20,7 +19,8 @@ public class MockAuthMiddleware extends AuthMiddleware {
     @Inject
     UserAdapter userAdapter;
 
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    @Inject
+    UserMapper userMapper;
 
 
     public MockAuthMiddleware() throws URISyntaxException {}

@@ -2,10 +2,12 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.UserDto;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
-import dev.neubert.backendsystems.socialmedia.application.port.in.User.*;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadAllUsersIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserIn;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.mapstruct.factory.Mappers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,8 @@ public class UserAdapter {
     @Inject
     ReadUserByIdIn readUserByIdIn;
 
-    UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    @Inject
+    UserMapper userMapper;
 
     public UserDto createUser(UserDto userDto) {
         var user = userMapper.userDtoToUser(userDto);

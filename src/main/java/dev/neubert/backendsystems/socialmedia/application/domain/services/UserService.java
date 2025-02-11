@@ -2,7 +2,10 @@ package dev.neubert.backendsystems.socialmedia.application.domain.services;
 
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.UserRepository;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
-import dev.neubert.backendsystems.socialmedia.application.port.in.User.*;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadAllUsersIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserIn;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -35,7 +38,7 @@ public class UserService implements CreateUserIn, ReadAllUsersIn, ReadUserIn, Re
     }
 
     @Override
-    public User getUserById(int userId) {
+    public User getUserById(long userId) {
         return userRepository.getUserById(userId);
     }
 }
