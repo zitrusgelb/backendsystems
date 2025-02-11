@@ -3,7 +3,6 @@ package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.reposito
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
-import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadAllUsersOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserByIdOut;
@@ -89,7 +88,7 @@ public class UserRepository
     }
 
     @Override
-    public User getUserById(int userId) {
+    public User getUserById(long userId) {
         User returnValue = null;
         try {
             final var requestedModel = this.entityManager.find(UserEntity.class, userId);

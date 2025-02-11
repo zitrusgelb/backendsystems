@@ -35,7 +35,7 @@ public class UserService implements CreateUserIn, ReadAllUsersIn, ReadUserIn, Re
     }
 
     @Override
-    public User getUserById(int userId) {
+    public User getUserById(long userId) {
         return userRepository.getUserById(userId);
     }
 }

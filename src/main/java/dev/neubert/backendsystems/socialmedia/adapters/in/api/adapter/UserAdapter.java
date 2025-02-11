@@ -44,7 +44,7 @@ public class UserAdapter {
         return userMapper.userToUserDto(user);
     }
 
-    public UserDto getUserById(int userId) {
+    public UserDto getUserById(long userId) {
         var user = readUserByIdIn.getUserById(userId);
         return userMapper.userToUserDto(user);
     }
