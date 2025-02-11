@@ -24,10 +24,7 @@ public class PostFaker extends AbstractFaker implements FakerMethods<Post> {
         LocalDateTime createdAt = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         Post post = new Post();
         var user = userFaker.createModel();
-        var newUser = userRepository.getUserById(user.getId());
-        if (newUser == null) {
-            newUser = userRepository.createUser(user);
-        }
+        var newUser = userRepository.createUser(user);
         post.setContent(content.substring(0, content.length() > 250 ? 255 : content.length() - 1));
         post.setCreatedAt(createdAt);
         post.setUser(newUser);
