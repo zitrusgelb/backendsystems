@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
-
 @QuarkusTest
 public class LikeWebControllerTest {
 
