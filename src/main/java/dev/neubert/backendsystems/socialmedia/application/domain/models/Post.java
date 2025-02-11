@@ -9,6 +9,7 @@ public class Post extends AbstractModel {
     private User user;
     private Tag tag;
     private Post replyTo;
+    private int version;
 
     public Post() {}
 
@@ -50,5 +51,13 @@ public class Post extends AbstractModel {
 
     public void setReplyTo(Post replyTo) {
         this.replyTo = replyTo;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }
