@@ -1,8 +1,8 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.services;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.TagRepository;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.*;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -12,32 +12,45 @@ import java.util.List;
 public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, UpdateTagIn, DeleteTagIn {
 
     @Inject
-    TagRepository tagRepository;
+    ReadTagOut readTagOut;
+
+    @Inject
+    ReadAllTagsOut readAllTagsOut;
+
+    @Inject
+    CreateTagOut createTagOut;
+
+    @Inject
+    DeleteTagOut deleteTagOut;
+
+    @Inject
+    UpdateTagOut updateTagOut;
+
 
     @Override
     public Tag createTag(Tag tag) {
-        return tagRepository.createTag(tag);
+        return createTagOut.createTag(tag);
     }
 
 
     @Override
     public boolean deleteTag(Tag tag) {
-        return tagRepository.deleteTag(tag.getId());
+        return deleteTagOut.deleteTag(tag.getId());
     }
 
     @Override
     public List<Tag> readAllTags() {
-        return tagRepository.readAllTags(100);
+        return readAllTagsOut.readAllTags(100);
     }
 
     @Override
     public Tag getTagById(long id) {
-        return tagRepository.findById(id);
+        return readTagOut.getTagById(id);
     }
 
     @Override
-    public Tag update(Long id,Tag tag) {
+    public Tag update(Long id, Tag tag) {
         tag.setId(id);
-        return tagRepository.updateTag(tag);
+        return updateTagOut.updateTag(tag);
     }
 }

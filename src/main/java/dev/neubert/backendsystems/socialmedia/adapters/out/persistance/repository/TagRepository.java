@@ -7,7 +7,6 @@ import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Transient;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -18,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut,
-        ReadTagOut {
+public class TagRepository
+        implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut, ReadTagOut {
 
     @Inject
     TagMapper mapper;
@@ -32,14 +31,19 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
     public Tag createTag(Tag tag) {
         final var entity = mapper.tagToTagEntity(tag);
         this.entityManager.persist(entity);
-        return tag;
+        return mapper.tagEntityToTag(entityManager.find(TagEntity.class, entity.getId()));
     }
 
+    @Transactional
     @Override
     public boolean deleteTag(long id) {
-        final var entity = entityManager.find(Tag.class, id);
-        this.entityManager.remove(entity);
-        return true;
+        try {
+            this.entityManager.remove(entityManager.find(TagEntity.class, id));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     @Override
@@ -79,12 +83,14 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
         return null;
     }
 
+    @Transactional
     @Override
     public Tag updateTag(Tag tag) {
         final var entity = mapper.tagToTagEntity(tag);
         entityManager.merge(entity);
         return tag;
     }
+
     @Override
     public Tag getTagById(long id) {
         TagEntity entity = entityManager.find(TagEntity.class, id);
