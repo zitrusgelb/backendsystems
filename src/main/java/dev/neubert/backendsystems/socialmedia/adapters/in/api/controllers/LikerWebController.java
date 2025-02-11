@@ -1,12 +1,19 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.LikeAdapter;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.UserDto;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
+import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
+import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
+import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Like.CreateLikeIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Like.DeleteLikeIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByPostIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Post.ReadPostIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -16,21 +23,22 @@ import java.time.LocalDateTime;
 public class LikerWebController {
 
     @Inject
-    LikeAdapter likeAdapter;
+    CreateLikeIn createLikeIn;
 
-    @GET
-    @Path("{id}/likes")
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response getLikesByPost(
-            @PathParam("id")
-            long id
-    ) {
-        var likes = likeAdapter.getLikeByPost(id);
-        return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", likes.size())
-                       .entity(likes)
-                       .build();
-    }
+    @Inject
+    DeleteLikeIn deleteLikeIn;
+
+    @Inject
+    ReadLikeByPostIn readLikeByPostIn;
+
+    @Inject
+    ReadPostIn readPostIn;
+
+    @Inject
+    ReadUserByIdIn readUserByIdIn;
+
+    @Inject
+    LikeMapper likeMapper;
 
     @POST
     @Path("{id}/likes")
@@ -41,9 +49,16 @@ public class LikerWebController {
             @PathParam("id")
             long postId
     ) {
+        if (readPostIn.getPostById(postId) == null || readUserByIdIn.getUserById(userId) == null) {
+            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+        }
+        LikeDto returnValue =
+                likeMapper.likeToLikeDto(createLikeIn.create(getLike(postId, userId)));
 
-        likeAdapter.createLike(getLikeDto(postId, userId));
-        return Response.status(HttpResponseStatus.CREATED.code()).build();
+        if (returnValue == null) {
+            return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();
+        }
+        return Response.status(HttpResponseStatus.CREATED.code()).entity(returnValue).build();
     }
 
     @DELETE
@@ -55,16 +70,31 @@ public class LikerWebController {
             @PathParam("id")
             long postId
     ) {
-        likeAdapter.deleteLike(getLikeDto(postId, userId));
+        deleteLikeIn.deleteLike(getLike(postId, userId));
         return Response.status(HttpResponseStatus.NO_CONTENT.code()).build();
     }
 
+    @GET
+    @Path("{id}/likes")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getLikesByPost(
+            @PathParam("id")
+            long id
+    ) {
+        if (readPostIn.getPostById(id) == null) {
+            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+        }
+        var likes = readLikeByPostIn.readLikeByPost(id);
+        return Response.status(HttpResponseStatus.OK.code())
+                       .header("X-Total-Count", likes.size())
+                       .entity(likes)
+                       .cacheControl(new CacheControl())
+                       .build();
+    }
 
-    private LikeDto getLikeDto(long postId, long userId) {
-        PostDto postDto = new PostDto();
-        postDto.setId(postId);
-        UserDto userDto = new UserDto();
-        userDto.setId(userId);
-        return new LikeDto(postDto, userDto, LocalDateTime.now());
+    private Like getLike(long postId, long userId) {
+        Post post = readPostIn.getPostById(postId);
+        User user = readUserByIdIn.getUserById((userId));
+        return new Like(post, user, LocalDateTime.now());
     }
 }
