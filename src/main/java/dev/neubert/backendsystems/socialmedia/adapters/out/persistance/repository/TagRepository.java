@@ -7,6 +7,7 @@ import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -103,10 +104,24 @@ public class TagRepository
 
     @Override
     public Tag getTagByName(String name) {
-        TagEntity entity = entityManager.find(TagEntity.class, name);
-        if (entity != null) {
-            return mapper.tagEntityToTag(entity);
+        Tag returnValue = null;
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TagEntity> cq = cb.createQuery(TagEntity.class);
+            Root<TagEntity> from = cq.from(TagEntity.class);
+            cq.select(from);
+            cq.where(cb.equal(cb.upper(from.get("name")), name.toUpperCase()));
+            TypedQuery<TagEntity> query = entityManager.createQuery(cq);
+            final var requestedModel = query.getSingleResult();
+            if (requestedModel != null) {
+                returnValue = mapper.tagEntityToTag(requestedModel);
+            }
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
         }
-        return null;
+        return returnValue;
     }
 }
