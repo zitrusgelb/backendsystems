@@ -72,7 +72,7 @@ public class LikeWebControllerTest {
                    .when()
                    .post("/posts/{id}/likes")
                    .then()
-                   .statusCode(400);
+                   .statusCode(404);
     }
 
     @Test
@@ -181,6 +181,7 @@ public class LikeWebControllerTest {
                    .then()
                    .statusCode(200)
                    .header("X-Total-Count", "2")
+                   .header("Cache-Control", equalTo("no-transform, max-age=300"))
                    .body("size()", equalTo(2))
                    .body("[0].user.id", equalTo((int) (user1.getId())))
                    .body("[0].post.id", equalTo((int) (post1.getId())))
@@ -197,7 +198,7 @@ public class LikeWebControllerTest {
                    .when()
                    .get("/users/{username}/likes")
                    .then()
-                   .statusCode(400);
+                   .statusCode(404);
     }
 
     @Test
@@ -246,6 +247,7 @@ public class LikeWebControllerTest {
                    .then()
                    .statusCode(200)
                    .header("X-Total-Count", "2")
+                   .header("Cache-Control", equalTo("no-transform, max-age=300"))
                    .body("size()", equalTo(2))
                    .body("[0].user.id", equalTo((int) (user1.getId())))
                    .body("[0].post.id", equalTo((int) (post1.getId())))

@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
@@ -20,7 +21,7 @@ import jakarta.ws.rs.core.Response;
 import java.time.LocalDateTime;
 
 @Path("posts")
-public class LikerWebController {
+public class LikeWebController {
 
     @Inject
     CreateLikeIn createLikeIn;
@@ -43,13 +44,18 @@ public class LikerWebController {
     @POST
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})
+    @AuthorizationBinding
     public Response createLike(
             @HeaderParam("X-User-Id")
             long userId,
             @PathParam("id")
             long postId
     ) {
-        if (readPostIn.getPostById(postId) == null || readUserByIdIn.getUserById(userId) == null) {
+        if (readPostIn.getPostById(postId) == null) {
+            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
+        }
+
+        if (readUserByIdIn.getUserById(userId) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
         LikeDto returnValue =
@@ -64,6 +70,7 @@ public class LikerWebController {
     @DELETE
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})
+    @AuthorizationBinding
     public Response deleteLike(
             @HeaderParam("X-User-Id")
             long userId,
@@ -84,11 +91,17 @@ public class LikerWebController {
         if (readPostIn.getPostById(id) == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
-        var likes = readLikeByPostIn.readLikeByPost(id);
+        var returnValue = readLikeByPostIn.readLikeByPost(id);
+        var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+
+        CacheControl cacheControl = new CacheControl();
+        cacheControl.setMaxAge(300);
+        cacheControl.setPrivate(false);
+
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", likes.size())
-                       .entity(likes)
-                       .cacheControl(new CacheControl())
+                       .header("X-Total-Count", dtoList.size())
+                       .cacheControl(cacheControl)
+                       .entity(dtoList)
                        .build();
     }
 
