@@ -22,6 +22,7 @@ public interface PostMapper {
     @Mapping(target = "user.username", source = "username")
     @Mapping(target = "tag.id", source = "tagId")
     @Mapping(target = "replyTo.id", source = "replyToId")
+    @Mapping(target = "version", ignore = true)
     Post createPostDtoToPost(CreatePostDto createPostDto);
 
     @Mapping(target = "username", source = "user.username")
