@@ -107,20 +107,4 @@ public class UserRepository
 
         return returnValue;
     }
-
-    @Override
-    public User getUserById(long userId) {
-        User returnValue = null;
-        try {
-            final var requestedModel = this.entityManager.find(UserEntity.class, userId);
-            if (requestedModel != null) {
-                returnValue = mapper.userEntityToUser(requestedModel);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return returnValue;
-    }
 }
