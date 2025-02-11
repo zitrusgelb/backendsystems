@@ -7,10 +7,12 @@ import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Transient;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,7 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
     @Inject
     EntityManager entityManager;
 
+    @Transactional
     @Override
     public Tag createTag(Tag tag) {
         final var entity = mapper.tagToTagEntity(tag);
