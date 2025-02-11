@@ -77,14 +77,6 @@ public class TagRepository
         return readAllTags(limit, 0);
     }
 
-    public Tag findById(long id) {
-        TagEntity entity = entityManager.find(TagEntity.class, id);
-        if (entity != null) {
-            return mapper.tagEntityToTag(entity);
-        }
-        return null;
-    }
-
     @Transactional
     @Override
     public Tag updateTag(Tag tag) {
