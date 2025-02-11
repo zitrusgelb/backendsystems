@@ -3,23 +3,23 @@ package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.reposito
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.TagEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
-import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.CreateTagOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.DeleteTagOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.ReadAllTagsOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.UpdateTagOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Transient;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut {
+public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut,
+        ReadTagOut {
 
     @Inject
     TagMapper mapper;
@@ -27,6 +27,7 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
     @Inject
     EntityManager entityManager;
 
+    @Transactional
     @Override
     public Tag createTag(Tag tag) {
         final var entity = mapper.tagToTagEntity(tag);
@@ -83,5 +84,13 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
         final var entity = mapper.tagToTagEntity(tag);
         entityManager.merge(entity);
         return tag;
+    }
+    @Override
+    public Tag getTagById(long id) {
+        TagEntity entity = entityManager.find(TagEntity.class, id);
+        if (entity != null) {
+            return mapper.tagEntityToTag(entity);
+        }
+        return null;
     }
 }
