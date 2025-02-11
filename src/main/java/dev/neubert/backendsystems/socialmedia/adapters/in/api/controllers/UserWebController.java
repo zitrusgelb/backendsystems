@@ -2,6 +2,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -27,6 +28,11 @@ public class UserWebController {
 
     @Inject
     UserMapper userMapper;
+
+    @Inject
+    LikeMapper likeMapper;
+
+    CacheControl cacheControl;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -68,16 +74,18 @@ public class UserWebController {
             String username
     ) {
         if (userAdapter.getUserById(userId) == null) {
-            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
         if (!userAdapter.getUserById(userId).getUsername().equals(username)) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
-        var likes = readLikeByUserIn.readLikeByUser(userId);
+        var returnValue = readLikeByUserIn.readLikeByUser(userId);
+        var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", likes.size())
-                       .cacheControl(new CacheControl())
-                       .entity(likes)
+                       .header("X-Total-Count", dtoList.size())
+                       .cacheControl(this.getCacheControl())
+                       .entity(dtoList)
                        .build();
     }
 
@@ -88,5 +96,12 @@ public class UserWebController {
         userAdapter.createUser(userMapper.userToUserDto(user));
 
         return Response.status(HttpResponseStatus.CREATED.code()).build();
+    }
+
+    private CacheControl getCacheControl() {
+        this.cacheControl = new CacheControl();
+        cacheControl.setMaxAge(300);
+        cacheControl.setPrivate(false);
+        return cacheControl;
     }
 }
