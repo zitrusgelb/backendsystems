@@ -32,8 +32,8 @@ public class LikeFaker extends AbstractFaker implements FakerMethods<Like> {
         LocalDateTime createdAt = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         like.setTimestamp(createdAt);
         var newUser = userFaker.createModel();
-        var newPost = postFaker.createModel();
         like.setUser(userRepository.createUser(newUser));
+        var newPost = postFaker.createModel();
         like.setPost(postRepository.createPost(newPost));
         return like;
     }
