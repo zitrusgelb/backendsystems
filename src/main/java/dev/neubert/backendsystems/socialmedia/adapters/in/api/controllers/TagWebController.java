@@ -1,7 +1,8 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreateTagDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.TagDto;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.*;
@@ -11,7 +12,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,60 +37,125 @@ public class TagWebController {
     @Inject
     TagMapper tagMapper;
 
-
     @Context
     private UriInfo uriInfo;
     private HttpHeaders httpHeaders;
-    private CacheControl cacheControl;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response readAllTags(
-            @DefaultValue("") @QueryParam("q") String query,
-            @PositiveOrZero @DefaultValue("0") @QueryParam("offset") int offset,
-            @Positive @DefaultValue("10") @QueryParam("limit") int limit) {
-        List<Tag> tags = readAllTagsIn.readAllTags();
-        List<TagDto> tagDtos = tags.stream().map(tagMapper::tagToTagDto).collect(Collectors.toList());
-        return Response.ok(tagDtos).build();
-    }
-
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON})
-    @Produces({MediaType.APPLICATION_JSON})
-    public Response createTag(@Valid CreateTagDto tagDto) {
-        TagDto createdTag = tagMapper.tagToTagDto(createTagIn.createTag(tagMapper.createTagDtoToTag(tagDto)));
-        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        builder.path(Long.toString(createdTag.getId()));
-        return Response.created(builder.build()).entity(createdTag).build();
+            @DefaultValue("")
+            @QueryParam("q")
+            String query,
+            @PositiveOrZero
+            @DefaultValue("0")
+            @QueryParam("offset")
+            int offset,
+            @Positive
+            @DefaultValue("10")
+            @QueryParam("limit")
+            int limit
+    ) {
+        try {
+            List<Tag> tags = readAllTagsIn.readAllTags();
+            if (tags.isEmpty()) {
+                return Response.status(Response.Status.NO_CONTENT).build();
+            }
+            List<TagDto> tagDtos =
+                    tags.stream().map(tagMapper::tagToTagDto).collect(Collectors.toList());
+            return Response.ok(tagDtos).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Fehler beim Laden der Tags")
+                           .build();
+        }
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getTagById(@PathParam("id") long id) {
-        Tag tag = readTagIn.getTagById(id);
-        return Response.ok(tagMapper.tagToTagDto(tag)).build();
+    @Cached
+    public Response getTagById(
+            @PathParam("id")
+            long id
+    ) {
+        try {
+            Tag tag = readTagIn.getTagById(id);
+            if (tag == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("Tag nicht gefunden")
+                               .build();
+            }
+            return Response.ok(tagMapper.tagToTagDto(tag)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Fehler beim Abrufen des Tags")
+                           .build();
+        }
     }
 
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public Response updateTag(@PathParam("id") long id, @Valid TagDto tagDto) {
-        TagDto updatedTag = tagMapper.tagToTagDto(updateTagIn.update(id, tagMapper.tagDtoToTag(tagDto)));
-        return Response.ok(updatedTag).build();
+    @AuthorizationBinding
+    @Cached
+    public Response updateTag(
+            @PathParam("id")
+            long id,
+            @Valid
+            TagDto tagDto
+    ) {
+        try {
+            if (tagDto == null || tagDto.getName() == null || tagDto.getName().isBlank()) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                               .entity("Tag-Name darf nicht leer sein")
+                               .build();
+            }
+            Tag existingTag = readTagIn.getTagById(id);
+            if (existingTag == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("Tag nicht gefunden")
+                               .build();
+            }
+            TagDto updatedTag =
+                    tagMapper.tagToTagDto(updateTagIn.update(id, tagMapper.tagDtoToTag(tagDto)));
+            return Response.ok(updatedTag).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Fehler beim Aktualisieren des Tags")
+                           .build();
+        }
     }
 
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response deleteTag(@PathParam("id") long id) {
-        Tag tag = readTagIn.getTagById(id);
-        boolean deleted = deleteTagIn.deleteTag(tag);
-        if (deleted) {
-            return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+    @AuthorizationBinding
+    public Response deleteTag(
+            @PathParam("id")
+            long id
+    ) {
+        try {
+            Tag tag = readTagIn.getTagById(id);
+            if (tag == null) {
+                return Response.status(Response.Status.NOT_FOUND)
+                               .entity("Tag nicht gefunden")
+                               .build();
+            }
+            boolean deleted = deleteTagIn.deleteTag(tag);
+            if (deleted) {
+                return Response.noContent().build();
+            } else {
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                               .entity("Fehler beim Löschen des Tags")
+                               .build();
+            }
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("Fehler beim Löschen des Tags")
+                           .build();
         }
     }
 }

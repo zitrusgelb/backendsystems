@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
@@ -13,7 +14,6 @@ import jakarta.inject.Inject;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -41,10 +41,10 @@ public class UserWebController {
     @Inject
     LikeMapper likeMapper;
 
-    CacheControl cacheControl;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response getAllUsers(
             @PositiveOrZero
             @DefaultValue("0")
@@ -62,6 +62,7 @@ public class UserWebController {
     @Path("{username}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response getById(
             @PathParam("username")
             String username
@@ -76,6 +77,7 @@ public class UserWebController {
     @GET
     @Path("{username}/likes")
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response getLikesByUser(
             @HeaderParam("X-User-Id")
             long userId,
@@ -93,7 +95,6 @@ public class UserWebController {
 
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", dtoList.size())
-                       .cacheControl(this.getCacheControl())
                        .entity(dtoList)
                        .build();
     }
@@ -102,6 +103,7 @@ public class UserWebController {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @AuthorizationBinding
+    @Cached
     public Response getMe(
             @HeaderParam("X-User-Id")
             String userId
@@ -118,12 +120,5 @@ public class UserWebController {
         createUserIn.createUser(user);
 
         return Response.status(HttpResponseStatus.CREATED.code()).build();
-    }
-
-    private CacheControl getCacheControl() {
-        this.cacheControl = new CacheControl();
-        cacheControl.setMaxAge(300);
-        cacheControl.setPrivate(false);
-        return cacheControl;
     }
 }
