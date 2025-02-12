@@ -26,12 +26,10 @@ public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, Update
     @Inject
     UpdateTagOut updateTagOut;
 
-
     @Override
-    public Tag createTag(Tag tag) {
-        return createTagOut.createTag(tag);
+    public Tag createTag(String name) {
+        return createTagOut.createTag(name);
     }
-
 
     @Override
     public boolean deleteTag(Tag tag) {
