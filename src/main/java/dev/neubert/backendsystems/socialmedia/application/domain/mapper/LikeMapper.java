@@ -6,7 +6,7 @@ import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "cdi", uses = {PostMapper.class, UserMapper.class})
+@Mapper(componentModel = "jakarta-cdi", uses = {PostMapper.class, UserMapper.class})
 public interface LikeMapper {
 
     @Mapping(target = "id", ignore = true)

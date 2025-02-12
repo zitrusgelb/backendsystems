@@ -3,6 +3,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.reposito
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadAllUsersOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserByIdOut;
@@ -55,7 +56,7 @@ public class UserRepository
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
@@ -75,7 +76,7 @@ public class UserRepository
             CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
             Root<UserEntity> from = cq.from(UserEntity.class);
             cq.select(from);
-            cq.where(cb.equal(from.get("username"), username));
+            cq.where(cb.equal(cb.upper(from.get("username")), username.toUpperCase()));
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.getSingleResult();
             if (requestedModel != null) {
@@ -84,7 +85,7 @@ public class UserRepository
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
@@ -100,7 +101,7 @@ public class UserRepository
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 

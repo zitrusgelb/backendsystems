@@ -7,7 +7,7 @@ import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "cdi", uses = {UserMapper.class, TagMapper.class})
+@Mapper(componentModel = "jakarta-cdi", uses = {UserMapper.class, TagMapper.class})
 public interface PostMapper {
 
     PostDto postToPostDto(Post post);
@@ -22,6 +22,7 @@ public interface PostMapper {
     @Mapping(target = "user.username", source = "username")
     @Mapping(target = "tag.id", source = "tagId")
     @Mapping(target = "replyTo.id", source = "replyToId")
+    @Mapping(target = "version", ignore = true)
     Post createPostDtoToPost(CreatePostDto createPostDto);
 
     @Mapping(target = "username", source = "user.username")

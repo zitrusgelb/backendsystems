@@ -3,9 +3,9 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.utils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserIn;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
@@ -28,10 +28,10 @@ public class AuthMiddleware implements ContainerRequestFilter {
     final private ObjectMapper objectMapper = new ObjectMapper();
 
     @Inject
-    UserAdapter userAdapter;
+    ReadUserIn readUserIn;
 
     @Inject
-    UserMapper userMapper;
+    CreateUserIn createUserIn;
 
     public AuthMiddleware() throws URISyntaxException {}
 
@@ -78,7 +78,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
         var userName = body.cn;
         var displayName = body.firstName + " " + body.lastName;
 
-        var existingUser = userAdapter.getUserByName(userName);
+        var existingUser = readUserIn.getUser(userName);
 
         if (existingUser != null) {
             return existingUser.getId();
@@ -88,7 +88,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
         newUser.setUsername(userName);
         newUser.setDisplayName(displayName);
 
-        var createdUser = userAdapter.createUser(userMapper.userToUserDto(newUser));
+        var createdUser = createUserIn.createUser(newUser);
 
         return createdUser.getId();
     }
