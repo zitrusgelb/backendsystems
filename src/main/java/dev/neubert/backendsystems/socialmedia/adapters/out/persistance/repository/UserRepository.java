@@ -3,7 +3,6 @@ package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.reposito
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
-import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadAllUsersOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserByIdOut;
@@ -80,6 +79,8 @@ public class UserRepository
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.getSingleResult();
             if (requestedModel != null) {
+                requestedModel.getPosts().size();
+                requestedModel.getLikes().size();
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (NoResultException e) {
@@ -98,6 +99,8 @@ public class UserRepository
         try {
             final var requestedModel = this.entityManager.find(UserEntity.class, id);
             if (requestedModel != null) {
+                requestedModel.getPosts().size();
+                requestedModel.getLikes().size();
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (Exception e) {
