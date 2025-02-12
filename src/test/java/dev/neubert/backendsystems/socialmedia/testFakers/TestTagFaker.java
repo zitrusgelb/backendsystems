@@ -17,7 +17,7 @@ public class TestTagFaker {
     @Test
     void testOneTag() {
         var tag = tagFaker.createModel();
-        assertNotNull(tag.getName());
+        assertNotNull(tag);
     }
 
 }

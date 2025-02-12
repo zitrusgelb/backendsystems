@@ -20,14 +20,14 @@ public class TestTagService {
 
     @Test
     void testCreateTag() {
-        Tag expected = tagFaker.createModel();
-        Tag created = tagService.createTag(expected.getName());
-        assertEquals(expected.getName(), created.getName());
+        String expected = tagFaker.createModel();
+        String created = tagService.createTag(expected).getName();
+        assertEquals(expected, created);
     }
 
     @Test
     void testDeleteExistingTag() {
-        Tag created = tagService.createTag(tagFaker.createModel());
+        String created = tagService.createTag(tagFaker.createModel()).getName();
         assertTrue(tagService.deleteTag(created));
     }
 

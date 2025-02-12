@@ -6,19 +6,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
-public class TagFaker extends AbstractFaker implements FakerMethods<Tag> {
+public class TagFaker extends AbstractFaker implements FakerMethods<String> {
 
     @Inject
     ReadTagByNameOut readTagByNameOut;
 
     @Override
-    public Tag createModel() {
+    public String createModel() {
         String name = faker.esports().team();
         while (readTagByNameOut.getTagByName(name) != null) {
             name = name + faker.esports().team();
         }
         Tag tag = new Tag();
         tag.setName(name);
-        return tag;
+        return tag.getName();
     }
 }

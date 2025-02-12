@@ -138,7 +138,7 @@ public class TagWebController {
                                .entity("Tag nicht gefunden")
                                .build();
             }
-            boolean deleted = deleteTagIn.deleteTag(tag);
+            boolean deleted = deleteTagIn.deleteTag(tag.getName());
             if (deleted) {
                 return Response.noContent().build();
             } else {

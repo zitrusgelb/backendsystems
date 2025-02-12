@@ -42,9 +42,9 @@ public class TagRepository
 
     @Transactional
     @Override
-    public boolean deleteTag(long id) {
+    public boolean deleteTag(String name) {
         try {
-            this.entityManager.remove(entityManager.find(TagEntity.class, id));
+            this.entityManager.remove(entityManager.find(TagEntity.class, this.getTagByName(name).getId()));
             return true;
         } catch (Exception e) {
             return false;

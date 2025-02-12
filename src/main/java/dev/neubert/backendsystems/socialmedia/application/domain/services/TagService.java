@@ -32,8 +32,8 @@ public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, Update
     }
 
     @Override
-    public boolean deleteTag(Tag tag) {
-        return deleteTagOut.deleteTag(tag.getId());
+    public boolean deleteTag(String name) {
+        return deleteTagOut.deleteTag(name);
     }
 
     @Override
