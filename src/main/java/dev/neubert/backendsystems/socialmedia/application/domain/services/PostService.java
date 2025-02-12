@@ -44,7 +44,7 @@ public class PostService
     }
 
     @Override
-    public List<Post> readAllPosts() {
+    public List<Post> readAllPosts(String query, int offset, int limit) {
         return readAllPostsOut.readAllPosts(100); // TODO: set correct limit!
     }
 

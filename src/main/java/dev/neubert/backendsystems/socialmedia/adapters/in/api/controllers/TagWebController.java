@@ -93,23 +93,6 @@ public class TagWebController {
                            .entity("Fehler beim Abrufen des Tags")
                            .build();
         }
-    public Response getTagById(
-            @PathParam("id")
-            long id
-    ) {
-        try {
-            Tag tag = readTagIn.getTagById(id);
-            if (tag == null) {
-                return Response.status(Response.Status.NOT_FOUND)
-                               .entity("Tag nicht gefunden")
-                               .build();
-            }
-            return Response.ok(tagMapper.tagToTagDto(tag)).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("Fehler beim Abrufen des Tags")
-                           .build();
-        }
     }
 
     @PUT

@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.testTags;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreateTagDto;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.TagDto;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.TagFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import io.quarkus.test.junit.QuarkusTest;
@@ -8,7 +9,8 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
 public class TagWebControllerTest {
@@ -21,17 +23,14 @@ public class TagWebControllerTest {
 
     @Test
     void getAllTagsNoTagsExisting() {
-        given().when()
-               .get("/tags")
-               .then()
-               .statusCode(204);
+        given().when().get("/tags").then().statusCode(204);
     }
 
     @Test
     void createTag() {
         var tag = tagFaker.createModel();
         CreateTagDto createTagDto = new CreateTagDto();
-        createTagDto.setName(tag.getName());
+        createTagDto.setName(tag);
 
         given().contentType("application/json")
                .body(createTagDto)
@@ -58,11 +57,7 @@ public class TagWebControllerTest {
 
     @Test
     void getNonExistingTagShouldReturnNotFound() {
-        given().when()
-               .get("/tags/9999")
-               .then()
-               .statusCode(404)
-               .body(equalTo("Tag nicht gefunden"));
+        given().when().get("/tags/9999").then().statusCode(404).body(equalTo("Tag nicht gefunden"));
     }
 
     @Test
