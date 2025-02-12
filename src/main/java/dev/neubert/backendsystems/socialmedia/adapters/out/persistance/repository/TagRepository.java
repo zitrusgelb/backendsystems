@@ -30,8 +30,12 @@ public class TagRepository
 
     @Transactional
     @Override
-    public Tag createTag(Tag tag) {
-        final var entity = mapper.tagToTagEntity(tag);
+    public Tag createTag(String name) {
+        if (getTagByName(name) != null) {
+            return getTagByName(name);
+        }
+        final var entity = new TagEntity();
+        entity.setName(name);
         this.entityManager.persist(entity);
         return mapper.tagEntityToTag(entityManager.find(TagEntity.class, entity.getId()));
     }
