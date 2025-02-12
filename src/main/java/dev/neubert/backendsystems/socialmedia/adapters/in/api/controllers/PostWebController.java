@@ -3,6 +3,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.CreatePostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.PostFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Post.*;
@@ -53,6 +54,7 @@ public class PostWebController {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response readAllPosts(
             @DefaultValue("")
             @QueryParam("q")
@@ -73,7 +75,6 @@ public class PostWebController {
 
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", result.size())
-                       .cacheControl(setCacheControlFiveMinutes())
                        .entity(result)
                        .build();
     }
@@ -81,6 +82,7 @@ public class PostWebController {
     @Path("{id}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response getById(
             @HeaderParam("If-None-Match")
             String ifNoneMatch,
@@ -98,7 +100,6 @@ public class PostWebController {
                            .build();
         } else {
             return Response.ok(requestedPost)
-                           .cacheControl(setCacheControlFiveMinutes())
                            .tag(new EntityTag("v" + requestedPost.getVersion()))
                            .build();
         }
@@ -108,6 +109,7 @@ public class PostWebController {
     @AuthorizationBinding
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
+    @Cached
     public Response createPost(
             @HeaderParam("X-User-Id")
             long userId,
@@ -123,7 +125,6 @@ public class PostWebController {
         return Response.status(HttpResponseStatus.CREATED.code())
                        .header("Location", createLocationHeader(postMapper.postToPostDto(result)))
                        .tag(new EntityTag("v" + result.getVersion()))
-                       .cacheControl(setCacheControlFiveMinutes())
                        .build();
     }
 
@@ -131,6 +132,7 @@ public class PostWebController {
     @PUT
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
+    @Cached
     public Response updatePost(
             @HeaderParam("X-User-Id")
             long userId,
@@ -173,7 +175,6 @@ public class PostWebController {
                            .header("Location",
                                    createLocationHeader(postMapper.postToPostDto(result)))
                            .tag(new EntityTag("v" + result.getVersion()))
-                           .cacheControl(setCacheControlFiveMinutes())
                            .build();
         }
     }
@@ -202,8 +203,8 @@ public class PostWebController {
 
     @POST
     @Path("populate")
+    @Cached
     public Response populateDatabase() {
-        setCacheControlFiveMinutes();
         var result = postFaker.createModel();
         createPostIn.create(result);
         return Response.status(HttpResponseStatus.CREATED.code()).build();
@@ -211,12 +212,6 @@ public class PostWebController {
 
     private String createLocationHeader(PostDto model) {
         return uriInfo.getRequestUriBuilder().path(Long.toString(model.getId())).build().toString();
-    }
-
-    private CacheControl setCacheControlFiveMinutes() {
-        CacheControl cacheControl = new CacheControl();
-        cacheControl.setMaxAge(300);
-        return cacheControl;
     }
 
     private String getUsernameFromHeader(long userId) {
