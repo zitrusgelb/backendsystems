@@ -2,6 +2,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
@@ -14,7 +15,6 @@ import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserB
 import io.netty.handler.codec.http.HttpResponseStatus;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -44,7 +44,9 @@ public class LikeWebController {
     @POST
     @Path("{id}/likes")
     @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     @AuthorizationBinding
+    @Cached
     public Response createLike(
             @HeaderParam("X-User-Id")
             long userId,
@@ -84,6 +86,7 @@ public class LikeWebController {
     @GET
     @Path("{id}/likes")
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response getLikesByPost(
             @PathParam("id")
             long id
@@ -94,13 +97,8 @@ public class LikeWebController {
         var returnValue = readLikeByPostIn.readLikeByPost(id);
         var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
 
-        CacheControl cacheControl = new CacheControl();
-        cacheControl.setMaxAge(300);
-        cacheControl.setPrivate(false);
-
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", dtoList.size())
-                       .cacheControl(cacheControl)
                        .entity(dtoList)
                        .build();
     }
