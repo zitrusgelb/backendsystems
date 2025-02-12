@@ -47,13 +47,16 @@ public class PostRepository
     }
 
     @Override
-    public List<Post> readAllPosts(int limit, int offset) {
+    public List<Post> readAllPosts(String queryString, int offset, int limit) {
         List<Post> returnValue = new ArrayList<>();
         try {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<PostEntity> cq = cb.createQuery(PostEntity.class);
             Root<PostEntity> from = cq.from(PostEntity.class);
             cq.select(from);
+            if (queryString != null && !queryString.isEmpty()) {
+                cq.where(cb.like(cb.upper(from.get("content")), "%" + queryString.toUpperCase() + "%"));
+            }
             TypedQuery<PostEntity> query = entityManager.createQuery(cq);
             final var requestedModel =
                     query.setFirstResult(offset).setMaxResults(limit).getResultList();
@@ -71,8 +74,13 @@ public class PostRepository
     }
 
     @Override
-    public List<Post> readAllPosts(int limit) {
-        return readAllPosts(limit, 0);
+    public List<Post> readAllPosts(int offset) {
+        return readAllPosts(null, 20, offset);
+    }
+
+    @Override
+    public List<Post> readAllPosts(String query) {
+        return readAllPosts(query, 20, 0);
     }
 
     @Override
