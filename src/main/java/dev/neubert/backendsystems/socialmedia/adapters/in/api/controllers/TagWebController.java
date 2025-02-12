@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.TagDto;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
@@ -98,6 +99,7 @@ public class TagWebController {
     @Path("{id}")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @AuthorizationBinding
     @Cached
     public Response updateTag(
             @PathParam("id")
@@ -130,6 +132,7 @@ public class TagWebController {
     @DELETE
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
+    @AuthorizationBinding
     public Response deleteTag(
             @PathParam("id")
             long id
