@@ -66,7 +66,6 @@ public class PostWebController {
             @QueryParam("size")
             long size
     ) {
-        setCacheControlFiveMinutes();
         var allPosts = readAllPostsIn.readAllPosts();
         var filteredPosts =
                 allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
@@ -98,8 +97,8 @@ public class PostWebController {
                            .tag(new EntityTag("v" + requestedPost.getVersion()))
                            .build();
         } else {
-            setCacheControlFiveMinutes();
-            return Response.ok(requestedPost).cacheControl(setCacheControlFiveMinutes())
+            return Response.ok(requestedPost)
+                           .cacheControl(setCacheControlFiveMinutes())
                            .tag(new EntityTag("v" + requestedPost.getVersion()))
                            .build();
         }
@@ -115,7 +114,6 @@ public class PostWebController {
             @Valid
             CreatePostDto model
     ) {
-        setCacheControlFiveMinutes();
         if (model == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
@@ -158,7 +156,6 @@ public class PostWebController {
             } else if (model.getUser() == null) {
                 return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
             }
-            setCacheControlFiveMinutes();
             var toBeUpdated = readPostIn.getPostById(id);
             if (toBeUpdated == null) {
                 return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
