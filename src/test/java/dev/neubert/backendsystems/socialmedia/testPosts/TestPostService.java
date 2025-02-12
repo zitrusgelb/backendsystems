@@ -71,7 +71,7 @@ public class TestPostService {
         Post expected1 = postService.create(postFaker.createModel());
         Post expected2 = postService.create(postFaker.createModel());
         Post expected3 = postService.create(postFaker.createModel());
-        List<Post> returnedPosts = postService.readAllPosts();
+        List<Post> returnedPosts = postService.readAllPosts(null, 0, 20);
         assertNotNull(returnedPosts);
 
     }

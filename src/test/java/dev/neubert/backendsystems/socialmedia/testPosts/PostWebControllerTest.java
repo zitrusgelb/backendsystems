@@ -69,7 +69,7 @@ public class PostWebControllerTest {
     @Test
     void testGetAllPostsWithLimit() {
         given().when()
-               .queryParam("size", 2)
+               .queryParam("limit", 2)
                .get("/posts")
                .then()
                .statusCode(200)

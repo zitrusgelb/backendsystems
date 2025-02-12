@@ -16,7 +16,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 @Path("posts")
 public class PostWebController {
@@ -63,13 +62,10 @@ public class PostWebController {
             long offset,
             @Positive
             @DefaultValue("20")
-            @QueryParam("size")
-            long size
+            @QueryParam("limit")
+            long limit
     ) {
-        var allPosts = readAllPostsIn.readAllPosts();
-        var filteredPosts =
-                allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
-        var result = filteredPosts.stream().skip(offset).limit(size).collect(Collectors.toList());
+        var result = readAllPostsIn.readAllPosts(query, (int) offset, (int) limit);
 
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", result.size())
