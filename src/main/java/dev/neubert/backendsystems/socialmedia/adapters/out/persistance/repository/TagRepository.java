@@ -7,6 +7,7 @@ import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -18,7 +19,8 @@ import java.util.List;
 
 @ApplicationScoped
 public class TagRepository
-        implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut, ReadTagOut {
+        implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut, ReadTagOut,
+        ReadTagByNameOut {
 
     @Inject
     TagMapper mapper;
@@ -75,14 +77,6 @@ public class TagRepository
         return readAllTags(limit, 0);
     }
 
-    public Tag findById(long id) {
-        TagEntity entity = entityManager.find(TagEntity.class, id);
-        if (entity != null) {
-            return mapper.tagEntityToTag(entity);
-        }
-        return null;
-    }
-
     @Transactional
     @Override
     public Tag updateTag(Tag tag) {
@@ -98,5 +92,28 @@ public class TagRepository
             return mapper.tagEntityToTag(entity);
         }
         return null;
+    }
+
+    @Override
+    public Tag getTagByName(String name) {
+        Tag returnValue = null;
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TagEntity> cq = cb.createQuery(TagEntity.class);
+            Root<TagEntity> from = cq.from(TagEntity.class);
+            cq.select(from);
+            cq.where(cb.equal(cb.upper(from.get("name")), name.toUpperCase()));
+            TypedQuery<TagEntity> query = entityManager.createQuery(cq);
+            final var requestedModel = query.getSingleResult();
+            if (requestedModel != null) {
+                returnValue = mapper.tagEntityToTag(requestedModel);
+            }
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        return returnValue;
     }
 }
