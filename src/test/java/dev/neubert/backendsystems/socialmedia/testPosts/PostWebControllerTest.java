@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
@@ -24,10 +24,73 @@ public class PostWebControllerTest {
         tagId = Pattern.compile("\"id\": (\\d{1,3})");
     }
 
+
     @Test
-    void getAllPostsNoPostsExisting() {
-        given().when().get("/posts").then().statusCode(200);
+    void testGetAllPosts() {
+        given().contentType(ContentType.JSON).body("""
+                                                   {
+                                                           "content": "I am your father",
+                                                           "tag": null,
+                                                           "replyTo": null
+                                                       }
+                                                   """).when().post("/posts");
+
+        given().when()
+               .get("/posts")
+               .then()
+               .statusCode(200)
+               .header("X-Total-Count", Integer::parseInt, greaterThanOrEqualTo(1))
+               .body(is(notNullValue()));
     }
+
+
+    @Test
+    void testGetAllPostsWithQuery() {
+        given().contentType(ContentType.JSON).body("""
+                                                   {
+                                                           "content": "I am your father",
+                                                           "tag": null,
+                                                           "replyTo": null
+                                                       }
+                                                   """).when().post("/posts");
+
+        int amount = Integer.parseInt(given().when().get("/posts").getHeader("X-Total-Count"));
+
+        given().when()
+               .queryParam("q", "father")
+               .get("/posts")
+               .then()
+               .statusCode(200)
+               .header("X-Total-Count", Integer::parseInt, lessThanOrEqualTo(amount))
+               .body(is(notNullValue()));
+    }
+
+
+    @Test
+    void testGetAllPostsWithLimit() {
+        given().when()
+               .queryParam("size", 2)
+               .get("/posts")
+               .then()
+               .statusCode(200)
+               .header("X-Total-Count", Integer::parseInt, lessThanOrEqualTo(2))
+               .body(is(notNullValue()));
+    }
+
+
+    @Test
+    void testGetAllPostsWithOffset() {
+        int amount = Integer.parseInt(given().when().get("/posts").getHeader("X-Total-Count"));
+
+        given().when()
+               .queryParam("offset", 2)
+               .get("/posts")
+               .then()
+               .statusCode(200)
+               .header("X-Total-Count", Integer::parseInt, lessThanOrEqualTo(amount))
+               .body(is(notNullValue()));
+    }
+
 
     @Test
     void testCreatePost() {
@@ -48,6 +111,32 @@ public class PostWebControllerTest {
                .header("content-length", "0")
                .body(is(""));
     }
+
+
+    @Test
+    void createPostWithTag() {
+        String postResponseHeaders = given().contentType(ContentType.JSON)
+                                            .body("""
+                                                  {
+                                                          "content": "Han shot first",
+                                                          "tag": "Star Wars",
+                                                          "replyTo": null
+                                                      }
+                                                  """)
+                                            .when()
+                                            .post("/posts")
+                                            .getHeaders()
+                                            .toString();
+
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String getResponse =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+
+        assertTrue(getResponse.contains("\"tag\":\"Star Wars\""));
+    }
+
 
     @Test
     void testCreatePostWithReply() {
@@ -89,6 +178,7 @@ public class PostWebControllerTest {
                .statusCode(201);
     }
 
+
     @Test
     void testReplyToNonExistingPost() {
         String postResponseHeaders =
@@ -112,8 +202,54 @@ public class PostWebControllerTest {
                 given().contentType(ContentType.JSON).when().get(location).getBody().asString();
 
         assertTrue(getResponse.contains("\"replyTo\":null"));
+    }
 
 
+    @Test
+    void testCreatePostWithTagAndReply() {
+        String postResponseHeaders = given().contentType(ContentType.JSON)
+                                            .body("""
+                                                  {
+                                                          "content": "I am your father",
+                                                          "tag": null,
+                                                          "replyTo": null
+                                                      }
+                                                  """)
+                                            .when()
+                                            .post("/posts")
+                                            .headers()
+                                            .toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String replyToPostId =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+        String id =
+                tagId.matcher(replyToPostId).find() ? tagId.matcher(replyToPostId).group() : null;
+
+        String postRequest = String.format("""
+                                           {
+                                                   "content": "I am your father",
+                                                   "tag": "Star Wars",
+                                                   "replyTo": %s
+                                               }
+                                           """, id);
+
+        postResponseHeaders = given().contentType(ContentType.JSON)
+                                     .body(postRequest)
+                                     .when()
+                                     .post("/posts")
+                                     .headers()
+                                     .toString();
+
+        locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String getResponse =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+
+        assertTrue(getResponse.contains("\"tag\":\"Star Wars\""));
+        assertTrue(getResponse.contains(String.format("\"replyTo\":%s", id)));
     }
 
 
@@ -142,6 +278,7 @@ public class PostWebControllerTest {
                .statusCode(200);
 
     }
+
 
     @Test
     void testDeletePost() {
@@ -207,6 +344,7 @@ public class PostWebControllerTest {
                .statusCode(401);
     }
 
+
     @Test
     void testPutPost() {
         String postResponseHeaders =
@@ -246,6 +384,7 @@ public class PostWebControllerTest {
                .statusCode(204);
     }
 
+
     @Test
     void testPutFailPreconditions() {
         String postResponseHeaders =
@@ -284,6 +423,7 @@ public class PostWebControllerTest {
                .statusCode(412);
     }
 
+
     @Test
     void testPutPostWrongUser() {
         String postResponseHeaders = given().contentType(ContentType.JSON)
@@ -317,6 +457,7 @@ public class PostWebControllerTest {
                .statusCode(401);
     }
 
+
     @Test
     void testCreatePostEmptyBody() {
         given().contentType(ContentType.JSON)
@@ -328,6 +469,7 @@ public class PostWebControllerTest {
                .statusCode(400);
     }
 
+
     @Test
     void testDeleteNonExistentPost() {
         given().contentType(ContentType.JSON)
@@ -338,6 +480,7 @@ public class PostWebControllerTest {
                .statusCode(404);
     }
 
+
     @Test
     void testPutNonExistentPost() {
         given().contentType(ContentType.JSON)
@@ -347,6 +490,7 @@ public class PostWebControllerTest {
                .assertThat()
                .statusCode(404);
     }
+
 
     @Test
     void testSendPostToWrongURL() {
@@ -365,6 +509,7 @@ public class PostWebControllerTest {
                .statusCode(405);
     }
 
+
     @Test
     void testSendPutToWrongURL() {
         given().contentType(ContentType.JSON)
@@ -374,6 +519,7 @@ public class PostWebControllerTest {
                .assertThat()
                .statusCode(400);
     }
+
 
     @Test
     void testIfNoneMatch() {
