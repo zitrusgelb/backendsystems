@@ -1,10 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.testTags;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.TagDto;
-import dev.neubert.backendsystems.socialmedia.application.domain.fakers.TagFaker;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -12,12 +9,6 @@ import static org.hamcrest.Matchers.equalTo;
 
 @QuarkusTest
 public class TagWebControllerTest {
-
-    @Inject
-    TagFaker tagFaker;
-
-    @Inject
-    TagMapper tagMapper;
 
     @Test
     void getAllTagsNoTagsExisting() {
