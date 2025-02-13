@@ -20,7 +20,7 @@ public interface PostMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user.username", source = "username")
-    @Mapping(target = "tag.id", source = "tagId")
+    @Mapping(target = "tag.name", source = "tagName")
     @Mapping(target = "replyTo.id", source = "replyToId")
     @Mapping(target = "version", ignore = true)
     Post createPostDtoToPost(CreatePostDto createPostDto);
