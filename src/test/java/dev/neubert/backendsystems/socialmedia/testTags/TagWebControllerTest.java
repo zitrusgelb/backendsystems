@@ -12,7 +12,7 @@ public class TagWebControllerTest {
 
     @Test
     void getAllTagsNoTagsExisting() {
-        given().when().get("/tags").then().statusCode(204);
+        given().when().get("/tags").then().statusCode(200);
     }
 
     @Test
