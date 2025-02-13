@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
 
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.PostEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.TagEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Post.*;
@@ -30,6 +31,8 @@ public class PostRepository
     @Override
     public Post createPost(Post post) {
         final var entity = this.mapper.postToPostEntity(post);
+        entity.setTag(entityManager.find(TagEntity.class,
+                                         post.getTag().getId())); // assures Manged Entity
         this.entityManager.persist(entity);
         return mapper.postEntityToPost(entityManager.find(PostEntity.class, entity.getId()));
     }
@@ -55,7 +58,8 @@ public class PostRepository
             Root<PostEntity> from = cq.from(PostEntity.class);
             cq.select(from);
             if (queryString != null && !queryString.isEmpty()) {
-                cq.where(cb.like(cb.upper(from.get("content")), "%" + queryString.toUpperCase() + "%"));
+                cq.where(cb.like(cb.upper(from.get("content")),
+                                 "%" + queryString.toUpperCase() + "%"));
             }
             TypedQuery<PostEntity> query = entityManager.createQuery(cq);
             final var requestedModel =
