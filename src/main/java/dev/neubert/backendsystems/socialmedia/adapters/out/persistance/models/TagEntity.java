@@ -14,7 +14,7 @@ public class TagEntity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "tag", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tag", cascade = CascadeType.MERGE)
     private List<PostEntity> posts;
 
     public String getName() {
