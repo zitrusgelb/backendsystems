@@ -25,14 +25,13 @@ public class UserWebControllerTest {
         createUserIn.createUser(user);
 
         var body = given().when()
-                          .get("/users?limit=10")
+                          .get("/users?size=10")
                           .then()
                           .assertThat()
                           .statusCode(200)
                           .extract()
                           .body()
                           .as(List.class);
-
         assert !body.isEmpty() && body.size() <= 10;
     }
 
