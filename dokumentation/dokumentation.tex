@@ -1,22 +1,46 @@
 \documentclass[a4paper, 11pt]{article}
 \usepackage[utf8]{inputenc}
-
-\title{Project documentation for the portfolio exam}
-\date{\today}
-\author{Tim Knüttel  5123101, Laurin Neubert, Adrian Stellter, Jakob Hämmelmann}
-
+\usepackage{graphicx}
+\renewcommand{\familydefault}{\sfdefault}
 
 \begin{document}
-\maketitle
+
+    \title{\vspace{-3cm}\includegraphics[width=0.5\textwidth]{thws.png}\\ Project documentation for the portfolio exam}
+    \date{\today}
+    \author{Tim Knüttel (5123101) \and Adrian Stelter (5123031) \and Laurin Neubert (6824016) \and Jakob Hämmelmann (5123113)}
+
+
+
+    \maketitle
 % 4-6 Pages
 
-\section{Introduction of the Project Topic}
+
+    \section{Introduction of the Project Topic}\label{sec:introduction-of-the-project-topic}
+
+    \subsection{Domain}\label{subsec:domain}
+    The domain of our project is a social media platform like X (formerly Twitter), Threads or Bluesky.
+    Our goal for the project is to create a platform that enables users to interact with one another through means of text posts.
+    The main objective here is to give users the opportunity to interact not only by posting their own posts, but also to give feedback through likes and comments.
+    Tags help the users to find posts based on interests or topics.
+
+    \subsection{Use Cases}\label{subsec:use-cases}
+
+    \subsubsection{Posts}
+    The central and most important use case for our project is the ability for users to post text posts. When posting, users should be able to fill their post with content, also it should be visible which user posted at what exact time.
+
+    \subsubsection{Replies \& Likes}
+    Users should be able to interact with posts directly by replying to and \("\)liking\("\) them. This gives users the ability to converse on the platform and discuss their favorite topics. Additionally, replying keeps all the different posts together, so there can be an easy understanding of which post is a new topic and which post was written in response to an already existing topic.
+
+    \subsubsection{Tags}
+    Tags can be used to link a topic to the created post. By searching for posts tagged with the desired topic, users can easily find posts that are relevant to what they wish to converse about. This is designed to increase the usability and also user retention.
+
 %Summarize the domain and describe a few (but not all) use cases of your software.
 
 %Clear and concise summary of the domain. 
 %Description of use cases is relevant and demonstrates an understanding of the problem domain.
 
-\section{Description of the Software Architecture}
+
+    \section{Description of the Software Architecture}\label{sec:description-of-the-software-architecture}
 %Explain your interpretation of the hexagonal architecture. 
 %What belongs to the domain? 
 %What is the business logic? 
@@ -29,7 +53,8 @@
 %Explanation of ports and adapters and how they were implemented.
 %Reflection on challenges faced during implementation.
 
-\section{Explanation of the API Technology}
+
+    \section{Explanation of the API Technology}\label{sec:explanation-of-the-api-technology}
 %Why did you choose this technology? 
 %Do you see any advantages of this technology for this project?
 
@@ -37,7 +62,8 @@
 %Identification of advantages relevant to the project.
 %Consideration of any limitations or trade-oﬀs of the chosen technology.
 
-\section{Implementation Details}
+
+    \section{Implementation Details}\label{sec:implementation-details}
 %For example, how did you implement authentication?
 %How did you implement the mapping in the adapters? 
 %Did you use any framework like REST Easy, Jersey, or Spring? 
@@ -47,14 +73,18 @@
 %Justification of framework choice (e.g., REST Easy, Jersey, Spring).
 %Level of detail in the technical description (must be clear and understandable).
 
-\section{Testing Strategy}
+
+    \section{Testing Strategy}\label{sec:testing-strategy}
 %How did you implement unit and integration tests?
 
 %Explanation of the testing strategy, including unit and integration tests.
 %Description of how tests were implemented and what was tested.
 %Reflection on the eﬀectiveness of the testing strategy.
 
-\section{Learning Outcomes and Reflection}
+
+    \section{Learning Outcomes and Reflection}\label{sec:learning-outcomes-and-reflection}
+    Laurin's notes: next time, more time planning before we start coding (esp. when the API-technology is not yet picked); smaller goals that can be achieved quicker so we can support earlier in the process if someone needs help; utilising Git to it's full potential (namely creating milestones and issues;)
+
 %What did you learn from this project? 
 %What worked well, and what would you do diﬀerently in the future?
 %Reflect on team collaboration and the use of hexagonal architecture.
@@ -63,6 +93,6 @@
 %Honest reflection on what worked well and what could be improved. (1 Point)
 %Insightful discussion of team collaboration and the use of hexagonal architecture.
 
-\section*{Caption}
-This article was drafted and refined using GPT-4 based on an outline containing related information. The GPT-4 output was reviewed, revised, and enhanced with additional content. It was then edited for improved readability and active tense, partially using Grammarly.
+    \section*{Caption}
+    This article was drafted and refined using GPT-4 based on an outline containing related information. The GPT-4 output was reviewed, revised, and enhanced with additional content. It was then edited for improved readability and active tense, partially using Grammarly.
 \end{document}
