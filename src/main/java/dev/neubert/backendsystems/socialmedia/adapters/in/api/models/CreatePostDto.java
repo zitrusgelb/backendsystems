@@ -11,7 +11,7 @@ public class CreatePostDto implements DataTransferObject, Serializable, Cloneabl
     private String content;
     private LocalDateTime createdAt;
     private String username;
-    private long tagId;
+    private String tagName;
     private long replyToId;
 
     public String getContent() {
@@ -38,12 +38,12 @@ public class CreatePostDto implements DataTransferObject, Serializable, Cloneabl
         this.username = username;
     }
 
-    public long getTagId() {
-        return tagId;
+    public String getTagName() {
+        return tagName;
     }
 
-    public void setTagId(long tagId) {
-        this.tagId = tagId;
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 
     public long getReplyToId() {

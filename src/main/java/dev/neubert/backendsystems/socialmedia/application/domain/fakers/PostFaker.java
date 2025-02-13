@@ -2,12 +2,14 @@ package dev.neubert.backendsystems.socialmedia.application.domain.fakers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.UserRepository;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
+import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @ApplicationScoped
 public class PostFaker extends AbstractFaker implements FakerMethods<Post> {
@@ -28,7 +30,7 @@ public class PostFaker extends AbstractFaker implements FakerMethods<Post> {
         post.setContent(content.substring(0, content.length() > 250 ? 255 : content.length() - 1));
         post.setCreatedAt(createdAt);
         post.setUser(newUser);
-        post.setTag(null);
+        post.setTag(new Tag(faker.esports().team(), null));
 
         return post;
     }

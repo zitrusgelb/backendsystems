@@ -18,7 +18,7 @@ public class PostEntity {
     @JoinColumn(nullable = false)
     private UserEntity user;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn
     private TagEntity tag;
 

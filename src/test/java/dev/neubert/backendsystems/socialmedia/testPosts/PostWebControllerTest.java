@@ -30,7 +30,7 @@ public class PostWebControllerTest {
         given().contentType(ContentType.JSON).body("""
                                                    {
                                                            "content": "I am your father",
-                                                           "tag": null,
+                                                           "tagName": null,
                                                            "replyTo": null
                                                        }
                                                    """).when().post("/posts");
@@ -49,7 +49,7 @@ public class PostWebControllerTest {
         given().contentType(ContentType.JSON).body("""
                                                    {
                                                            "content": "I am your father",
-                                                           "tag": null,
+                                                           "tagName": null,
                                                            "replyTo": null
                                                        }
                                                    """).when().post("/posts");
@@ -98,7 +98,7 @@ public class PostWebControllerTest {
                .body("""
                      {
                              "content": "I am your father",
-                             "tag": null,
+                             "tagName": null,
                              "replyTo": null
                          }
                      """)
@@ -119,7 +119,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "Han shot first",
-                                                          "tag": "Star Wars",
+                                                          "tagName":"Star Wars",
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -144,7 +144,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -187,7 +187,7 @@ public class PostWebControllerTest {
                        .body("""
                              {
                                      "content": "I am your father",
-                                     "tag": null,
+                                     "tagName": null,
                                      "replyTo": 99999
                                  }
                              """)
@@ -211,7 +211,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -230,7 +230,7 @@ public class PostWebControllerTest {
         String postRequest = String.format("""
                                            {
                                                    "content": "I am your father",
-                                                   "tag": "Star Wars",
+                                                   "tagName": "Star Wars",
                                                    "replyTo": %s
                                                }
                                            """, id);
@@ -259,7 +259,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "This is where the fun begins.",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -288,7 +288,7 @@ public class PostWebControllerTest {
                        .body("""
                              {
                                      "content": "I am your father",
-                                     "tag": null,
+                                     "tagName": null,
                                      "replyTo": null
                                  }
                              """)
@@ -320,7 +320,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -353,7 +353,7 @@ public class PostWebControllerTest {
                        .body("""
                              {
                                      "content": "Hello there!",
-                                     "tag": null,
+                                     "tagName": null,
                                      "replyTo": null
                                  }
                              """)
@@ -393,7 +393,7 @@ public class PostWebControllerTest {
                        .body("""
                              {
                                      "content": "Hello there!",
-                                     "tag": null,
+                                     "tagName": null,
                                      "replyTo": null
                                  }
                              """)
@@ -430,7 +430,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -498,7 +498,7 @@ public class PostWebControllerTest {
                .body("""
                      {
                              "content": "I am your father",
-                             "tag": null,
+                             "tagName": null,
                              "replyTo": null
                          }
                      """)
@@ -527,7 +527,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
