@@ -133,7 +133,6 @@ public class PostWebControllerTest {
 
         String getResponse =
                 given().contentType(ContentType.JSON).when().get(location).getBody().asString();
-        System.err.println(getResponse);
 
         assertTrue(getResponse.contains("\"name\":\"Star Wars\""));
     }
@@ -249,7 +248,7 @@ public class PostWebControllerTest {
         String getResponse =
                 given().contentType(ContentType.JSON).when().get(location).getBody().asString();
 
-        assertTrue(getResponse.contains("\"tag\":\"Star Wars\""));
+        assertTrue(getResponse.contains("\"name\":\"Star Wars\""));
         assertTrue(getResponse.contains(String.format("\"replyTo\":%s", id)));
     }
 
