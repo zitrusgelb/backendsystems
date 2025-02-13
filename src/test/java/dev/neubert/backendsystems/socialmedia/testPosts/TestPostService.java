@@ -50,7 +50,7 @@ public class TestPostService {
         assertEquals(created.getContent(), returnedPost.getContent());
         assertEquals(created.getUser().getUsername(), returnedPost.getUser().getUsername());
         assertEquals(created.getCreatedAt(), returnedPost.getCreatedAt());
-        assertNull(returnedPost.getTag());
+        assertEquals(created.getTag().getName(), returnedPost.getTag().getName());
         assertNull(returnedPost.getReplyTo());
     }
 
@@ -61,7 +61,7 @@ public class TestPostService {
         assertEquals(expected.getContent(), actual.getContent());
         assertEquals(expected.getUser().getUsername(), actual.getUser().getUsername());
         assertEquals(expected.getCreatedAt(), actual.getCreatedAt());
-        assertNull(actual.getTag());
+        assertEquals(expected.getTag().getName(), actual.getTag().getName());
         assertNull(actual.getReplyTo());
     }
 
