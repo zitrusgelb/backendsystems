@@ -134,7 +134,12 @@ public class PostWebControllerTest {
         String getResponse =
                 given().contentType(ContentType.JSON).when().get(location).getBody().asString();
 
-        assertTrue(getResponse.contains("\"name\":\"Star Wars\""));
+        String regex =
+                "\"tag\"\\s*:\\s*\\{\\s*\"id\"\\s*:\\s*\\d+\\s*,\\s*\"name\"\\s*:\\s*\"Star Wars\"";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(getResponse);
+
+        assertTrue(matcher.find());
     }
 
 
@@ -248,7 +253,12 @@ public class PostWebControllerTest {
         String getResponse =
                 given().contentType(ContentType.JSON).when().get(location).getBody().asString();
 
-        assertTrue(getResponse.contains("\"name\":\"Star Wars\""));
+        String regex =
+                "\"tag\"\\s*:\\s*\\{\\s*\"id\"\\s*:\\s*\\d+\\s*,\\s*\"name\"\\s*:\\s*\"Star Wars\"";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(getResponse);
+        assertTrue(matcher.find());
+
         assertTrue(getResponse.contains(String.format("\"replyTo\":%s", id)));
     }
 
