@@ -63,7 +63,7 @@ public class UserWebController {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Cached
-    public Response getById(
+    public Response getByName(
             @PathParam("username")
             String username
     ) {
