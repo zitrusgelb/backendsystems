@@ -21,8 +21,8 @@ public class TestTagService {
     @Test
     void testCreateTag() {
         String expected = tagFaker.createModel();
-        String created = tagService.createTag(expected).getName();
-        assertEquals(expected, created);
+        Tag created = tagService.createTag(expected);
+        assertEquals(expected, created.getName());
     }
 
     @Test

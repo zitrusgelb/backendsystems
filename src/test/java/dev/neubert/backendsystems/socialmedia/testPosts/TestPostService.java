@@ -26,7 +26,7 @@ public class TestPostService {
         assertEquals(expected.getContent(), created.getContent());
         assertEquals(expected.getUser().getUsername(), created.getUser().getUsername());
         assertEquals(expected.getCreatedAt(), created.getCreatedAt());
-        assertNull(created.getTag());
+        assertEquals(expected.getTag().getName(), created.getTag().getName());
         assertNull(created.getReplyTo());
     }
 
