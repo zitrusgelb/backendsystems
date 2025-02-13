@@ -31,20 +31,22 @@ public class TagRepository
     @Transactional
     @Override
     public Tag createTag(String name) {
+        Tag existingTag = getTagByName(name);
         if (getTagByName(name) != null) {
-            return getTagByName(name);
+            return existingTag;
         }
-        final var entity = new TagEntity();
+        var entity = new TagEntity();
         entity.setName(name);
-        this.entityManager.persist(entity);
-        return mapper.tagEntityToTag(entityManager.find(TagEntity.class, entity.getId()));
+        entityManager.persist(entity);
+        return mapper.tagEntityToTag(entity);
     }
 
     @Transactional
     @Override
     public boolean deleteTag(String name) {
         try {
-            this.entityManager.remove(entityManager.find(TagEntity.class, this.getTagByName(name).getId()));
+            this.entityManager.remove(
+                    entityManager.find(TagEntity.class, this.getTagByName(name).getId()));
             return true;
         } catch (Exception e) {
             return false;
