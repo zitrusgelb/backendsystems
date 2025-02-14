@@ -11,7 +11,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,9 +38,6 @@ public class TagWebController {
     @Inject
     TagMapper tagMapper;
 
-    @Context
-    private UriInfo uriInfo;
-    private HttpHeaders httpHeaders;
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
