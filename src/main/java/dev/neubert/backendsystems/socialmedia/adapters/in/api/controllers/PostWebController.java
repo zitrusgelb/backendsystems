@@ -70,7 +70,7 @@ public class PostWebController {
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", result.size())
                        .cacheControl(setCacheControlFiveMinutes())
-                       .entity(result)
+                       .entity(postMapper.postToPostDto(result))
                        .build();
     }
 

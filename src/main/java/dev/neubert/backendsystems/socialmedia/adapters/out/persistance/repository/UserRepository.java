@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
 
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
@@ -26,6 +27,9 @@ public class UserRepository
 
     @Inject
     UserMapper mapper;
+
+    @Inject
+    PostMapper postMapper;
 
     @Inject
     EntityManager entityManager;
@@ -74,9 +78,9 @@ public class UserRepository
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.getSingleResult();
             if (requestedModel != null) {
-                requestedModel.getPosts().size();
-                requestedModel.getLikes().size();
+                System.out.println(requestedModel.getPosts().size());
                 returnValue = mapper.userEntityToUser(requestedModel);
+                System.out.println(returnValue);
             }
         } catch (NoResultException e) {
             return null;
@@ -94,8 +98,8 @@ public class UserRepository
         try {
             final var requestedModel = this.entityManager.find(UserEntity.class, id);
             if (requestedModel != null) {
-                requestedModel.getPosts().size();
-                requestedModel.getLikes().size();
+                requestedModel.getPosts().iterator();
+                requestedModel.getLikes().iterator();
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (Exception e) {
