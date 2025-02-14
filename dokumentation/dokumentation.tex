@@ -68,6 +68,9 @@
 %How did you implement the mapping in the adapters? 
 %Did you use any framework like REST Easy, Jersey, or Spring? 
 %Why did you choose this framework?
+As a framework we choose Quarkus and therefore REST Easy. Already collecting experience with Quarkus is a benefit for the members of our project. Furthermore, from a future proofing perspective Quarkus is ready for the use as a base for micro services. Meaning the application being split into multiple small parts.\\
+To implement mapping we went with MapStruct. We choose it because it is a modern approach to mapping as well as being generated instead of manually written, this reduces error in implementation.
+For authentication we choose to implement a custom middleware that interacts with the THWS Authentication System and takes the Bearer token it generates. This decision relies on the ever more increasing popularity of using bigger providers like Google or GitHub as the sole authentication source. 
 
 %Explanation of implementation choices (e.g., authentication, adapter mapping).
 %Justification of framework choice (e.g., REST Easy, Jersey, Spring).
