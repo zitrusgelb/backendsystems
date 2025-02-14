@@ -101,11 +101,9 @@ public class LikeWebControllerIT {
     @Test
     public void testGetLikesByPost() {
         int postId1 = createPost();
-        int postId2 = createPost();
 
         int userId1 = createLike(postId1);
         int userId2 = createLike(postId1);
-        int userId3 = createLike(postId2);
 
         RestAssured.given()
                    .pathParam("id", postId1)
@@ -168,7 +166,6 @@ public class LikeWebControllerIT {
     @Test
     public void testGetLikesByUser() {
         int postId1 = createPost();
-        int postId2 = createPost();
 
         int userId1 = createLike(postId1);
 
@@ -220,8 +217,7 @@ public class LikeWebControllerIT {
                        .header("Location");
 
         locationHeader = locationHeader.substring(locationHeader.length() - 1);
-        int postId = Integer.parseInt(locationHeader);
-        return postId;
+        return Integer.parseInt(locationHeader);
     }
 
     private int createLike(int postId) {
