@@ -6,8 +6,4 @@ import java.util.List;
 
 public interface ReadAllPostsOut {
     List<Post> readAllPosts(String query, int offset, int limit);
-
-    List<Post> readAllPosts(int offset);
-
-    List<Post> readAllPosts(String query);
 }

@@ -78,16 +78,6 @@ public class PostRepository
     }
 
     @Override
-    public List<Post> readAllPosts(int offset) {
-        return readAllPosts(null, 20, offset);
-    }
-
-    @Override
-    public List<Post> readAllPosts(String query) {
-        return readAllPosts(query, 20, 0);
-    }
-
-    @Override
     public Post getPostById(long id) {
         Post returnValue = null;
         try {

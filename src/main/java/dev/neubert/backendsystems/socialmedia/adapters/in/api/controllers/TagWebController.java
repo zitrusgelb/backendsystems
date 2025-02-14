@@ -5,7 +5,10 @@ import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Authorizatio
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
-import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.*;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.DeleteTagIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.ReadAllTagsIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.ReadTagIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.Tag.UpdateTagIn;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -19,9 +22,6 @@ import java.util.stream.Collectors;
 
 @Path("tags")
 public class TagWebController {
-
-    @Inject
-    CreateTagIn createTagIn;
 
     @Inject
     DeleteTagIn deleteTagIn;

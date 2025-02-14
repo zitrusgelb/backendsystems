@@ -63,11 +63,6 @@ public class UserRepository
     }
 
     @Override
-    public List<User> getAllUsers(int limit) {
-        return getAllUsers(limit, 0);
-    }
-
-    @Override
     public User getUser(String username) {
         User returnValue = null;
         try {

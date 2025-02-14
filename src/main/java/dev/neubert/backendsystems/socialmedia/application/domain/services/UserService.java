@@ -40,11 +40,6 @@ public class UserService implements CreateUserIn, ReadAllUsersIn, ReadUserIn, Re
     }
 
     @Override
-    public List<User> getAllUsers(int limit) {
-        return getAllUsers(limit, 0);
-    }
-
-    @Override
     public User getUser(String username) {
         return readUserOut.getUser(username);
     }
