@@ -52,7 +52,7 @@ public class UserWebController {
             int offset,
             @Positive
             @DefaultValue("20")
-            @QueryParam("size")
+            @QueryParam("limit")
             int size
     ) {
         var users = readAllUsersIn.getAllUsers(size, offset);
