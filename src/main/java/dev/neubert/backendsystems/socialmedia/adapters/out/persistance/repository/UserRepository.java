@@ -29,9 +29,6 @@ public class UserRepository
     UserMapper mapper;
 
     @Inject
-    PostMapper postMapper;
-
-    @Inject
     EntityManager entityManager;
 
     @Transactional
