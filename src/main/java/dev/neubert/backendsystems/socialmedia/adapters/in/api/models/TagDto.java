@@ -6,9 +6,10 @@ public class TagDto extends AbstractDataTransferObject {
     private String name;
     private List<PostDto> posts;
 
+    public TagDto() {}
+
     public TagDto(String name, List<PostDto> posts) {
         this.name = name;
-
         this.posts = posts;
     }
 

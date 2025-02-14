@@ -5,7 +5,7 @@ import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.Us
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "cdi", uses = {LikeMapper.class, PostMapper.class})
+@Mapper(componentModel = "jakarta-cdi", uses = {LikeMapper.class, PostMapper.class})
 public interface UserMapper {
 
     UserDto userToUserDto(User user);
