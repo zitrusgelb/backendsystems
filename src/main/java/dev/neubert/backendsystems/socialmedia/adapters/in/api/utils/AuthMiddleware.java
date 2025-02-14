@@ -36,6 +36,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
 
     @Inject
     CreateUserIn createUserIn;
+
     @Inject
     UserFaker userFaker;
 
@@ -49,6 +50,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
                           .stream()
                           .anyMatch(s -> s.startsWith("localhost"))) {
             var userIdString = requestContext.getHeaderString("X-User-Id");
+
             var userId = userIdString == null ? null : Long.parseLong(userIdString);
 
             var user = userId == null ? null : readUserByIdIn.getUserById(userId);
@@ -57,9 +59,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
                 user = userFaker.createModel();
                 if (userId != null) user.setId(userId);
 
-                // user = userRepository.createUserForAuthMiddleware(user);
                 user = createUserIn.createUser(user);
-                System.err.println("X-User-Id: " + userIdString + " CreatedUser: " + user.getId());
             }
 
             requestContext.getHeaders().add("X-User-Id", String.valueOf(user.getId()));
