@@ -1,7 +1,6 @@
 package dev.neubert.backendsystems.socialmedia.testFakers;
 
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.TagFaker;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
