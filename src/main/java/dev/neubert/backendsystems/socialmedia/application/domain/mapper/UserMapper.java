@@ -10,7 +10,9 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "jakarta-cdi", uses = {LikeMapper.class, PostMapper.class})
+@Named("UserMapper")
+@Mapper(componentModel = "jakarta-cdi",
+        uses = {LikeMapper.class, PostMapper.class, TagMapper.class})
 public interface UserMapper {
     UserDto userToUserDto(User user);
 
@@ -22,6 +24,7 @@ public interface UserMapper {
     UserEntity userToUserEntity(User user);
 
     @Mapping(target = "posts", qualifiedByName = {"PostMapper", "PostWithoutNested"})
+    @Mapping(target = "likes", qualifiedByName = {"LikeMapper", "LikeListWithoutNested"})
     User userEntityToUser(UserEntity user);
 
     @IterableMapping(qualifiedByName = "UserWithoutNested")

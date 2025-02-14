@@ -9,7 +9,8 @@ import org.mapstruct.*;
 import java.util.List;
 
 @Named("PostMapper")
-@Mapper(componentModel = "jakarta-cdi", uses = {UserMapper.class, TagMapper.class})
+@Mapper(componentModel = "jakarta-cdi",
+        uses = {UserMapper.class, TagMapper.class, LikeMapper.class})
 public interface PostMapper {
 
     @Mapping(target = "tag.posts", ignore = true)
@@ -26,6 +27,8 @@ public interface PostMapper {
     PostEntity postToPostEntity(Post post);
 
     @Mapping(target = "tag.posts", ignore = true)
+    @Mapping(target = "user.posts", ignore = true)
+    @Mapping(target = "user.likes", qualifiedByName = {"LikeMapper", "LikeListWithoutNested"})
     Post postEntityToPost(PostEntity postEntity);
 
     @Named("PostEntityListToPost")

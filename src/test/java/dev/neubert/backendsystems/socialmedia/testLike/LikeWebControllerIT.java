@@ -81,7 +81,7 @@ public class LikeWebControllerIT {
                    .when()
                    .get("/posts/{id}/likes")
                    .then()
-                   .statusCode(400);
+                   .statusCode(404);
     }
 
     @Test

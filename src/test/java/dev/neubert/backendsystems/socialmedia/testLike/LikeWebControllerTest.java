@@ -134,7 +134,7 @@ public class LikeWebControllerTest {
                    .when()
                    .get("/posts/{id}/likes")
                    .then()
-                   .statusCode(400);
+                   .statusCode(404);
     }
 
     @Test
@@ -241,7 +241,6 @@ public class LikeWebControllerTest {
         RestAssured.given()
                    .pathParam("username", user1.getUsername())
                    .contentType("application/json")
-                   .header("X-User-Id", user1.getId())
                    .when()
                    .get("/users/{username}/likes")
                    .then()

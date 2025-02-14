@@ -92,7 +92,7 @@ public class LikeWebController {
             long id
     ) {
         if (readPostIn.getPostById(id) == null) {
-            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
+            return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
         var returnValue = readLikeByPostIn.readLikeByPost(id);
         var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
