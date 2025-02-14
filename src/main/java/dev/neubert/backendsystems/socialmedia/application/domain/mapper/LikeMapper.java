@@ -10,11 +10,15 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(componentModel = "jakarta-cdi", uses = {PostMapper.class, UserMapper.class})
+@Mapper(componentModel = "jakarta-cdi",
+        uses = {PostMapper.class, UserMapper.class, TagMapper.class})
 public interface LikeMapper {
 
     @Mapping(target = "id", ignore = true)
     LikeDto likeToLikeDto(Like like);
+
+    @IterableMapping(qualifiedByName = "LikeDtoWithoutNested")
+    List<LikeDto> likeToLikeDto(List<Like> like);
 
     @Mapping(target = "id", ignore = true)
     Like likeDtoToLike(LikeDto like);
@@ -24,12 +28,20 @@ public interface LikeMapper {
     @Mapping(target = "id", ignore = true)
     Like likeEntityToLike(LikeEntity like);
 
-    @IterableMapping(qualifiedByName = "withoutNested")
+    @IterableMapping(qualifiedByName = "LikeWithoutNested")
     List<Like> likeEntityToLikeList(List<LikeEntity> likeEntities);
 
-    @Named("withoutNested")
+    @Named("LikeWithoutNested")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "user", ignore = true)
-    @Mapping(target = "post", qualifiedByName = {"PostMapper", "mapWithoutNested"})
+    @Mapping(target = "post", qualifiedByName = {"PostMapper", "PostWithoutNested"})
+    @Mapping(target = "post.replyTo", qualifiedByName = {"PostMapper", "PostWithoutNested"})
     Like withoutNested(LikeEntity like);
+
+    @Named("LikeDtoWithoutNested")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    @Mapping(target = "post", qualifiedByName = {"PostMapper", "PostDtoWithoutNested"})
+    LikeDto withoutNested(Like like);
+
 }

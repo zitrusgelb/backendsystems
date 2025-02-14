@@ -85,23 +85,18 @@ public class UserWebController {
     @Produces({MediaType.APPLICATION_JSON})
     @Cached
     public Response getLikesByUser(
-            @HeaderParam("X-User-Id")
-            long userId,
             @PathParam("username")
             String username
     ) {
-        if (readUserByIdIn.getUserById(userId) == null) {
+        var user = readUserIn.getUser(username);
+        if (user == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
-        if (!readUserByIdIn.getUserById(userId).getUsername().equals(username)) {
-            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
-        }
-        var returnValue = readLikeByUserIn.readLikeByUser(userId);
-        var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+        var returnValue = readLikeByUserIn.readLikeByUser(user.getId());
 
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", dtoList.size())
-                       .entity(dtoList)
+                       .header("X-Total-Count", returnValue.size())
+                       .entity(likeMapper.likeToLikeDto(returnValue))
                        .build();
     }
 

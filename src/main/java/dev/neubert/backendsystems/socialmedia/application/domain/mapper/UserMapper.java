@@ -14,25 +14,25 @@ import java.util.List;
 public interface UserMapper {
     UserDto userToUserDto(User user);
 
-    @IterableMapping(qualifiedByName = "dtoWithoutNested")
+    @IterableMapping(qualifiedByName = "UserDtoWithoutNested")
     List<UserDto> userToUserDto(List<User> users);
 
     User userDtoToUser(UserDto user);
 
     UserEntity userToUserEntity(User user);
 
-    @Mapping(target = "posts", qualifiedByName = {"PostMapper", "mapWithoutNested"})
+    @Mapping(target = "posts", qualifiedByName = {"PostMapper", "PostWithoutNested"})
     User userEntityToUser(UserEntity user);
 
-    @IterableMapping(qualifiedByName = "withoutNested")
+    @IterableMapping(qualifiedByName = "UserWithoutNested")
     List<User> userEntityToUser(List<UserEntity> users);
 
-    @Named("dtoWithoutNested")
+    @Named("UserDtoWithoutNested")
     @Mapping(target = "likes", ignore = true)
     @Mapping(target = "posts", ignore = true)
     UserDto dtoWithoutNested(User user);
 
-    @Named("withoutNested")
+    @Named("UserWithoutNested")
     @Mapping(target = "likes", ignore = true)
     @Mapping(target = "posts", ignore = true)
     User withoutNested(UserEntity user);
