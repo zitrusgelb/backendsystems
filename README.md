@@ -16,7 +16,7 @@ This project is the 5th portfolio task for the course "Backend Systems" by Prof.
 The integration tests for the API can be started with
 
 ```shell script
-    mvn verify
+  mvn verify
 ```
 
 # Manually Testing with Docker & Postman
@@ -24,13 +24,13 @@ The integration tests for the API can be started with
 To manually run tests (sending custom requests), first you need to build a docker container:
 
 ```shell script
-    docker build -f .\src\main\docker\Dockerfile.jvm -t quarkus/backendsystems-project-jvm .
+  docker build -f .\src\main\docker\Dockerfile.jvm -t quarkus/backendsystems-project-jvm .
 ```
 
 After doing that, we can run the container with:
 
 ```shell script
-    docker run -p 127.0.0.1:8080:8080 --name Backendsystems-Project-Social-Media --pull missing quarkus/backendsystems-project-jvm:latest 
+  docker run -p 127.0.0.1:8080:8080 --name Backendsystems-Project-Social-Media --pull missing quarkus/backendsystems-project-jvm:latest 
 ```
 
 The container can then be reached by sending a request to `http://localhost:8080/` or `http://127.0.0.1:8080/`. Please
@@ -38,13 +38,28 @@ note the following requirements for sending custom requests.
 
 ## Available paths
 
-| Path             | Available HTTP-Methods | Results                                             |
-|------------------|------------------------|-----------------------------------------------------|
-| `posts`          | `GET`, `POST`          | Requesting all posts or publishing a new post       |
-| `posts/{id}`     | `GET`, `PUT`, `DELETE` | Requesting, updating or deleting a specific post    |
-| `posts/populate` | `POST`                 | Creating a dummy Post and User for testing purposes |
-|                  |                        |                                                     |
-|                  |                        |                                                     |
+| Path               | Available HTTP-Methods  | Results                                                                |
+|--------------------|-------------------------|------------------------------------------------------------------------|
+| `posts`            | `GET`, `POST`           | Requesting all posts or publishing a new post                          |
+| `posts/{id}`       | `GET`, `PUT`, `DELETE`  | Requesting, updating or deleting a specific post                       |
+| `posts/populate`   | `POST`                  | Creating a dummy Post and User for testing purposes                    |
+| `posts/{id}/likes` | `GET`, `POST`, `DELETE` | Requesting all Likes from a Post, liking a Post or removing a like     |
+| `users`            | `GET`                   | Requesting all users                                                   |
+| `users/me`         | `GET`                   | Requesting the logged-in users profile                                 |   
+| `users/{username}` | `GET`                   | Requesting a specific user profile                                     |
+| `tags`             | `GET`                   | Requesting a list of all tags                                          |
+| `tags/{id}`        | `GET`, `PUT`, `DELETE`  | Requesting a list of posts with requested tag, updating or deleting it |
+
+### Query Parameters
+
+For the routes `posts`, `users` and `tags`, it is possible to send query parameters to limit the result set by either
+searching for specific results or paginate all results.
+
+| Query Parameter | Results                                                                    |
+|-----------------|----------------------------------------------------------------------------|
+| `q`             | Searching for content(`posts`) or names (`users`and `tags`)                |
+| `offset`        | Requesting posts with a certain offset, this enables pagination            |
+| `limit`         | Limiting the amount of results sent to the client, this enables pagination |
 
 ## Authentication
 
@@ -79,7 +94,7 @@ The request body needs to contain the values `content`, `tag` and `replyToId`. B
 ```json lines
 {
   "content": "The dark side is a path to many abilities some consider to be unnatural",
-  "tag": "Star Wars",
+  "tagName": "Star Wars",
   "replyToId": 1
 }
 
@@ -90,7 +105,7 @@ or
 ```json lines
 {
   "content": "Have you ever heard the tragedy of Darth Plagueis the Wise?",
-  "tag": null,
+  "tagName": null,
   "replyToId": null
 }
 ```
@@ -112,7 +127,11 @@ update.
     "posts": null,
     "likes": null
   },
-  "tag": "newTag",
+  "tag": {
+    "id": 1,
+    "name": "TagToChangeTo",
+    "posts": null
+  },
   "replyTo": null,
   "version": 1
 }
@@ -134,7 +153,11 @@ The request body needs to contain the JSON-representation of the post, that shou
     "posts": null,
     "likes": null
   },
-  "tag": "Star Wars",
+  "tag": {
+    "id": 1,
+    "name": "Star Wars",
+    "posts": null
+  },
   "replyTo": null,
   "version": 1
 }
