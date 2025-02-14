@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
 
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
+import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
@@ -19,6 +20,7 @@ import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class UserRepository
@@ -50,9 +52,7 @@ public class UserRepository
             final var requestedModel =
                     query.setFirstResult(offset).setMaxResults(limit).getResultList();
             if (requestedModel != null) {
-                for (UserEntity user : requestedModel) {
-                    returnValue.add(mapper.userEntityToUser(user));
-                }
+                returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -74,9 +74,7 @@ public class UserRepository
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.getSingleResult();
             if (requestedModel != null) {
-                System.out.println(requestedModel.getPosts().size());
                 returnValue = mapper.userEntityToUser(requestedModel);
-                System.out.println(returnValue);
             }
         } catch (NoResultException e) {
             return null;

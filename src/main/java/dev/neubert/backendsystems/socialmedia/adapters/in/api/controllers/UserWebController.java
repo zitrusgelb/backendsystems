@@ -4,6 +4,7 @@ import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Authorizatio
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadAllUsersIn;
@@ -41,6 +42,9 @@ public class UserWebController {
     @Inject
     LikeMapper likeMapper;
 
+    @Inject
+    UserMapper userMapper;
+
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -56,7 +60,9 @@ public class UserWebController {
             int size
     ) {
         var users = readAllUsersIn.getAllUsers(size, offset);
-        return Response.ok(users).header("X-Total-Count", users.size()).build();
+        return Response.ok(userMapper.userToUserDto(users))
+                       .header("X-Total-Count", users.size())
+                       .build();
     }
 
     @Path("{username}")
