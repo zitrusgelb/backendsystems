@@ -1,7 +1,9 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.fakers;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.UserRepository;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
+import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.CreateTagOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -15,7 +17,13 @@ public class PostFaker extends AbstractFaker implements FakerMethods<Post> {
     UserFaker userFaker;
 
     @Inject
-    UserRepository userRepository;
+    TagFaker tagFaker;
+
+    @Inject
+    CreateTagOut createTagOut;
+
+    @Inject
+    CreateUserOut createUserOut;
 
     @Override
     public Post createModel() {
@@ -24,14 +32,12 @@ public class PostFaker extends AbstractFaker implements FakerMethods<Post> {
         LocalDateTime createdAt = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         Post post = new Post();
         var user = userFaker.createModel();
-        var newUser = userRepository.getUserById(user.getId());
-        if (newUser == null) {
-            newUser = userRepository.createUser(user);
-        }
+        var newUser = createUserOut.createUser(user);
         post.setContent(content.substring(0, content.length() > 250 ? 255 : content.length() - 1));
         post.setCreatedAt(createdAt);
         post.setUser(newUser);
-        post.setTag(null);
+        Tag tag = createTagOut.createTag(tagFaker.createModel());
+        post.setTag(tag);
 
         return post;
     }

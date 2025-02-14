@@ -1,7 +1,7 @@
-package dev.neubert.backendsystems.socialmedia.application.port.out.Tag;
+package dev.neubert.backendsystems.socialmedia.application.port.in.Tag;
 
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 
-public interface CreateTagOut {
+public interface CreateTagIn {
     Tag createTag(String name);
 }

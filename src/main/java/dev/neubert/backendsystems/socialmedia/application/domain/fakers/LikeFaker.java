@@ -1,8 +1,8 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.fakers;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.PostRepository;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository.UserRepository;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Post.CreatePostOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -20,10 +20,10 @@ public class LikeFaker extends AbstractFaker implements FakerMethods<Like> {
     PostFaker postFaker;
 
     @Inject
-    UserRepository userRepository;
+    CreateUserOut createUserOut;
 
     @Inject
-    PostRepository postRepository;
+    CreatePostOut createPostOut;
 
     @Override
     public Like createModel() {
@@ -32,9 +32,9 @@ public class LikeFaker extends AbstractFaker implements FakerMethods<Like> {
         LocalDateTime createdAt = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         like.setTimestamp(createdAt);
         var newUser = userFaker.createModel();
+        like.setUser(createUserOut.createUser(newUser));
         var newPost = postFaker.createModel();
-        like.setUser(userRepository.createUser(newUser));
-        like.setPost(postRepository.createPost(newPost));
+        like.setPost(createPostOut.createPost(newPost));
         return like;
     }
 }

@@ -3,9 +3,11 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.utils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.neubert.backendsystems.socialmedia.adapters.in.api.adapter.UserAdapter;
-import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
+import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserIn;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
@@ -28,15 +30,42 @@ public class AuthMiddleware implements ContainerRequestFilter {
     final private ObjectMapper objectMapper = new ObjectMapper();
 
     @Inject
-    UserAdapter userAdapter;
+    ReadUserIn readUserIn;
+    @Inject
+    ReadUserByIdIn readUserByIdIn;
 
     @Inject
-    UserMapper userMapper;
+    CreateUserIn createUserIn;
+
+    @Inject
+    UserFaker userFaker;
 
     public AuthMiddleware() throws URISyntaxException {}
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+        if (requestContext.getHeaders().containsKey("X-Integration-Test") &&
+            requestContext.getHeaders()
+                          .get("Host")
+                          .stream()
+                          .anyMatch(s -> s.startsWith("localhost"))) {
+            var userIdString = requestContext.getHeaderString("X-User-Id");
+
+            var userId = userIdString == null ? null : Long.parseLong(userIdString);
+
+            var user = userId == null ? null : readUserByIdIn.getUserById(userId);
+
+            if (user == null) {
+                user = userFaker.createModel();
+                if (userId != null) user.setId(userId);
+
+                user = createUserIn.createUser(user);
+            }
+
+            requestContext.getHeaders().add("X-User-Id", String.valueOf(user.getId()));
+            return;
+        }
+
         if (!requestContext.getHeaders().containsKey("Authorization")) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             return;
@@ -78,7 +107,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
         var userName = body.cn;
         var displayName = body.firstName + " " + body.lastName;
 
-        var existingUser = userAdapter.getUserByName(userName);
+        var existingUser = readUserIn.getUser(userName);
 
         if (existingUser != null) {
             return existingUser.getId();
@@ -88,7 +117,7 @@ public class AuthMiddleware implements ContainerRequestFilter {
         newUser.setUsername(userName);
         newUser.setDisplayName(displayName);
 
-        var createdUser = userAdapter.createUser(userMapper.userToUserDto(newUser));
+        var createdUser = createUserIn.createUser(newUser);
 
         return createdUser.getId();
     }

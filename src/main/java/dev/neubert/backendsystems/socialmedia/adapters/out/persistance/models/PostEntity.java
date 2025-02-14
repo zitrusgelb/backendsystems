@@ -18,12 +18,14 @@ public class PostEntity {
     @JoinColumn(nullable = false)
     private UserEntity user;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn
     private TagEntity tag;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private PostEntity replyTo;
+
+    private int version;
 
     public long getId() {
         return id;
@@ -71,5 +73,13 @@ public class PostEntity {
 
     public void setReplyTo(PostEntity replyTo) {
         this.replyTo = replyTo;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
-
 @QuarkusTest
 public class LikeWebControllerTest {
 
@@ -41,13 +40,12 @@ public class LikeWebControllerTest {
     LikeFaker likeFaker;
 
     @Test
-    public void testCreateLike() {
+    public void testCreateLikeValid() {
         Post post = postFaker.createModel();
         post = postService.create(post);
 
         User user = userFaker.createModel();
         user = userService.createUser(user);
-
 
         RestAssured.given()
                    .pathParam("id", post.getId())
@@ -57,8 +55,39 @@ public class LikeWebControllerTest {
                    .post("/posts/{id}/likes")
                    .then()
                    .statusCode(201)
+                   .header("Cache-Control", equalTo("no-transform, max-age=300"))
                    .body("post.id", equalTo((int) (post.getId())))
                    .body("user.id", equalTo((int) (user.getId())));
+    }
+
+    @Test
+    public void testCreateLikeInvalidPostId() {
+        User user = userFaker.createModel();
+        user = userService.createUser(user);
+
+        RestAssured.given()
+                   .pathParam("id", Integer.MIN_VALUE)
+                   .contentType("application/json")
+                   .header("X-User-Id", user.getId())
+                   .when()
+                   .post("/posts/{id}/likes")
+                   .then()
+                   .statusCode(404);
+    }
+
+    @Test
+    public void testCreateLikeInvalidUserId() {
+        Post post = postFaker.createModel();
+        post = postService.create(post);
+
+        RestAssured.given()
+                   .pathParam("id", post.getId())
+                   .contentType("application/json")
+                   .header("X-User-Id", Integer.MAX_VALUE)
+                   .when()
+                   .post("/posts/{id}/likes")
+                   .then()
+                   .statusCode(400);
     }
 
     @Test
@@ -152,6 +181,7 @@ public class LikeWebControllerTest {
                    .then()
                    .statusCode(200)
                    .header("X-Total-Count", "2")
+                   .header("Cache-Control", equalTo("no-transform, max-age=300"))
                    .body("size()", equalTo(2))
                    .body("[0].user.id", equalTo((int) (user1.getId())))
                    .body("[0].post.id", equalTo((int) (post1.getId())))
@@ -168,7 +198,7 @@ public class LikeWebControllerTest {
                    .when()
                    .get("/users/{username}/likes")
                    .then()
-                   .statusCode(400);
+                   .statusCode(404);
     }
 
     @Test
@@ -217,6 +247,7 @@ public class LikeWebControllerTest {
                    .then()
                    .statusCode(200)
                    .header("X-Total-Count", "2")
+                   .header("Cache-Control", equalTo("no-transform, max-age=300"))
                    .body("size()", equalTo(2))
                    .body("[0].user.id", equalTo((int) (user1.getId())))
                    .body("[0].post.id", equalTo((int) (post1.getId())))

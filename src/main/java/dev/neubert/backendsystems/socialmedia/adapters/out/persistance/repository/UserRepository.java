@@ -55,16 +55,11 @@ public class UserRepository
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
         return returnValue;
-    }
-
-    @Override
-    public List<User> getAllUsers(int limit) {
-        return getAllUsers(limit, 0);
     }
 
     @Override
@@ -75,16 +70,18 @@ public class UserRepository
             CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
             Root<UserEntity> from = cq.from(UserEntity.class);
             cq.select(from);
-            cq.where(cb.equal(from.get("username"), username));
+            cq.where(cb.equal(cb.upper(from.get("username")), username.toUpperCase()));
             TypedQuery<UserEntity> query = entityManager.createQuery(cq);
             final var requestedModel = query.getSingleResult();
             if (requestedModel != null) {
+                requestedModel.getPosts().size();
+                requestedModel.getLikes().size();
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
@@ -97,10 +94,12 @@ public class UserRepository
         try {
             final var requestedModel = this.entityManager.find(UserEntity.class, id);
             if (requestedModel != null) {
+                requestedModel.getPosts().size();
+                requestedModel.getLikes().size();
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 

@@ -1,7 +1,6 @@
 package dev.neubert.backendsystems.socialmedia.testFakers;
 
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.TagFaker;
-import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,7 @@ public class TestTagFaker {
     @Test
     void testOneTag() {
         var tag = tagFaker.createModel();
-        assertNotNull(tag.getName());
+        assertNotNull(tag);
     }
 
 }

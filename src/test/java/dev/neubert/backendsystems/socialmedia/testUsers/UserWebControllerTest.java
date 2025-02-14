@@ -1,23 +1,74 @@
 package dev.neubert.backendsystems.socialmedia.testUsers;
 
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.UserDto;
+import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
+import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
 
 @QuarkusTest
 public class UserWebControllerTest {
 
+    @Inject
+    CreateUserIn createUserIn;
+    @Inject
+    UserFaker userFaker;
+
     @Test
-    void getAllUsersNoneExisting() {
-        given().when()
-               .get("/users")
-               .then()
-               .statusCode(200)
-               .header("X-Total-Count", "0")
-               .header("content-length", "2")
-               .body(is("[]"));
+    public void testGetAllUsers() {
+        var user = userFaker.createModel();
+        createUserIn.createUser(user);
+
+        var body = given().when()
+                          .get("/users?size=10")
+                          .then()
+                          .assertThat()
+                          .statusCode(200)
+                          .extract()
+                          .body()
+                          .as(List.class);
+        assert !body.isEmpty() && body.size() <= 10;
+    }
+
+    @Test
+    public void testGetUserByName() {
+        var user = userFaker.createModel();
+        user = createUserIn.createUser(user);
+
+        var body = given().when()
+                          .get("/users/" + user.getUsername())
+                          .then()
+                          .assertThat()
+                          .statusCode(200)
+                          .extract()
+                          .body()
+                          .as(UserDto.class);
+
+        assert user.getUsername().equals(body.getUsername());
+        assert user.getDisplayName().equals(body.getDisplayName());
+    }
+
+    @Test
+    public void testGetOwnUser() {
+        var user = userFaker.createModel();
+        user = createUserIn.createUser(user);
+
+        var body = given().when()
+                          .header("X-User-Id", user.getId())
+                          .get("/users/me")
+                          .then()
+                          .assertThat()
+                          .statusCode(200)
+                          .extract()
+                          .body()
+                          .as(UserDto.class);
+
+        assert user.getUsername().equals(body.getUsername());
+        assert user.getDisplayName().equals(body.getDisplayName());
     }
 }

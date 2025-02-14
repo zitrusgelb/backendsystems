@@ -1,6 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.models;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class Like extends AbstractModel {
     private Post post;
@@ -48,7 +49,7 @@ public class Like extends AbstractModel {
         if (like.getPost().getId() != post.getId()) return false;
         if (like.getUser().getId() != user.getId()) return false;
         return like.getTimestamp() != null
-                ? like.getTimestamp().equals(timestamp)
+                ? like.getTimestamp().truncatedTo(ChronoUnit.SECONDS).equals(timestamp.truncatedTo(ChronoUnit.SECONDS))
                 : timestamp == null;
     }
 }

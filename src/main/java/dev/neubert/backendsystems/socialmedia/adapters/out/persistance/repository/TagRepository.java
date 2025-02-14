@@ -3,24 +3,24 @@ package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.reposito
 import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.TagEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
-import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.CreateTagOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.DeleteTagOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.ReadAllTagsOut;
-import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.UpdateTagOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import org.jboss.resteasy.util.NoContent;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
-public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut {
+public class TagRepository
+        implements CreateTagOut, UpdateTagOut, ReadAllTagsOut, DeleteTagOut, ReadTagOut,
+        ReadTagByNameOut {
 
     @Inject
     TagMapper mapper;
@@ -28,18 +28,30 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
     @Inject
     EntityManager entityManager;
 
+    @Transactional
     @Override
-    public NoContent createTag(Tag tag) {
-        final var entity = this.mapper.tagToTagEntity(tag);
-        this.entityManager.persist(entity);
-        return new NoContent();
+    public Tag createTag(String name) {
+        Tag existingTag = getTagByName(name);
+        if (getTagByName(name) != null) {
+            return existingTag;
+        }
+        var entity = new TagEntity();
+        entity.setName(name);
+        entityManager.persist(entity);
+        return mapper.tagEntityToTag(entity);
     }
 
+    @Transactional
     @Override
-    public NoContent deleteTag(long id) {
-        final var entity = this.entityManager.find(Tag.class, id);
-        this.entityManager.remove(entity);
-        return new NoContent();
+    public boolean deleteTag(String name) {
+        try {
+            this.entityManager.remove(
+                    entityManager.find(TagEntity.class, this.getTagByName(name).getId()));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     @Override
@@ -59,7 +71,7 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
 
@@ -71,10 +83,43 @@ public class TagRepository implements CreateTagOut, UpdateTagOut, ReadAllTagsOut
         return readAllTags(limit, 0);
     }
 
+    @Transactional
     @Override
-    public NoContent updateTag(Tag tag) {
-        final var entity = this.mapper.tagToTagEntity(tag);
-        this.entityManager.merge(entity);
-        return new NoContent();
+    public Tag updateTag(Tag tag) {
+        final var entity = mapper.tagToTagEntity(tag);
+        entityManager.merge(entity);
+        return tag;
+    }
+
+    @Override
+    public Tag getTagById(long id) {
+        TagEntity entity = entityManager.find(TagEntity.class, id);
+        if (entity != null) {
+            return mapper.tagEntityToTag(entity);
+        }
+        return null;
+    }
+
+    @Override
+    public Tag getTagByName(String name) {
+        Tag returnValue = null;
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<TagEntity> cq = cb.createQuery(TagEntity.class);
+            Root<TagEntity> from = cq.from(TagEntity.class);
+            cq.select(from);
+            cq.where(cb.equal(cb.upper(from.get("name")), name.toUpperCase()));
+            TypedQuery<TagEntity> query = entityManager.createQuery(cq);
+            final var requestedModel = query.getSingleResult();
+            if (requestedModel != null) {
+                returnValue = mapper.tagEntityToTag(requestedModel);
+            }
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+        return returnValue;
     }
 }
