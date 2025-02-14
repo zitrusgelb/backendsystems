@@ -38,7 +38,6 @@ public class TagWebController {
     @Inject
     TagMapper tagMapper;
 
-
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Cached
@@ -56,16 +55,17 @@ public class TagWebController {
             int limit
     ) {
         try {
-            List<Tag> tags = readAllTagsIn.readAllTags();
+            List<Tag> tags = readAllTagsIn.readAllTags(query, offset, limit);
             if (tags.isEmpty()) {
                 return Response.status(Response.Status.NO_CONTENT).build();
             }
-            List<TagDto> tagDtos =
-                    tags.stream().map(tagMapper::tagToTagDto).collect(Collectors.toList());
-            return Response.ok(tagDtos).build();
+            List<TagDto> tagDtos = tags.stream().map(tagMapper::tagToTagDto).collect(Collectors.toList());
+            return Response.ok(tagDtos)
+                           .header("X-Total-Count", tags.size())
+                           .build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("Fehler beim Laden der Tags")
+                           .entity("Fehler beim Laden der Tags: " + e.getMessage())
                            .build();
         }
     }
@@ -88,7 +88,7 @@ public class TagWebController {
             return Response.ok(tagMapper.tagToTagDto(tag)).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("Fehler beim Abrufen des Tags")
+                           .entity("Fehler beim Abrufen des Tags: " + e.getMessage())
                            .build();
         }
     }
@@ -117,12 +117,11 @@ public class TagWebController {
                                .entity("Tag nicht gefunden")
                                .build();
             }
-            TagDto updatedTag =
-                    tagMapper.tagToTagDto(updateTagIn.update(id, tagMapper.tagDtoToTag(tagDto)));
+            TagDto updatedTag = tagMapper.tagToTagDto(updateTagIn.update(id, tagMapper.tagDtoToTag(tagDto)));
             return Response.ok(updatedTag).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("Fehler beim Aktualisieren des Tags")
+                           .entity("Fehler beim Aktualisieren des Tags: " + e.getMessage())
                            .build();
         }
     }
@@ -152,7 +151,7 @@ public class TagWebController {
             }
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("Fehler beim Löschen des Tags")
+                           .entity("Fehler beim Löschen des Tags: " + e.getMessage())
                            .build();
         }
     }

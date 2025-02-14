@@ -37,9 +37,10 @@ public class TagService implements CreateTagIn, ReadAllTagsIn, ReadTagIn, Update
     }
 
     @Override
-    public List<Tag> readAllTags() {
-        return readAllTagsOut.readAllTags(100);
+    public List<Tag> readAllTags(String query, int offset, int limit) {
+        return readAllTagsOut.readAllTags(query, offset, limit);
     }
+
 
     @Override
     public Tag getTagById(long id) {

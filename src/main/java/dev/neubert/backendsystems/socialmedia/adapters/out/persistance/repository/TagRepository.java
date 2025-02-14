@@ -55,33 +55,34 @@ public class TagRepository
     }
 
     @Override
-    public List<Tag> readAllTags(int limit, int offset) {
+    public List<Tag> readAllTags(String query, int offset, int limit) {
         List<Tag> returnValue = new ArrayList<>();
         try {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<TagEntity> cq = cb.createQuery(TagEntity.class);
             Root<TagEntity> from = cq.from(TagEntity.class);
+            if (query != null && !query.trim().isEmpty()) {
+                cq.where(cb.like(cb.lower(from.get("name")), "%" + query.toLowerCase() + "%"));
+            }
             cq.select(from);
-            TypedQuery<TagEntity> query = entityManager.createQuery(cq);
-            final var requestedModel =
-                    query.setFirstResult(offset).setMaxResults(limit).getResultList();
+            TypedQuery<TagEntity> typedQuery = entityManager.createQuery(cq)
+                                                            .setFirstResult(offset)
+                                                            .setMaxResults(limit);
+            List<TagEntity> requestedModel = typedQuery.getResultList();
+
             if (requestedModel != null) {
                 for (TagEntity tag : requestedModel) {
                     returnValue.add(mapper.tagEntityToTag(tag));
                 }
             }
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            System.err.println("Fehler beim Abrufen der Tags: " + e.getMessage());
             return null;
         }
 
         return returnValue;
     }
 
-    @Override
-    public List<Tag> readAllTags(int limit) {
-        return readAllTags(limit, 0);
-    }
 
     @Transactional
     @Override
