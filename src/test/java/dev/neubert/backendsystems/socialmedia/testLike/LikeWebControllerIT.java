@@ -12,23 +12,33 @@ public class LikeWebControllerIT {
 
     @Test
     public void testCreateLike() {
-        given().contentType(ContentType.JSON)
-               .body("""
-                     {
-                             "content": "I am your father",
-                             "tag": null,
-                             "replyTo": null
-                         }
-                     """)
-               .when()
-               .post("/posts")
-               .then()
-               .statusCode(201);
+        String locationHeader = given().contentType(ContentType.JSON)
+                                       .header("X-Integration-Test", "true")
+                                       .header("X-User-Id", 100)
+                                       .body("""
+                                             {
+                                                     "content": "I am your father",
+                                                     "tag": null,
+                                                     "replyTo": null
+                                                 }
+                                             """)
+                                       .when()
+                                       .post("/posts")
+                                       .then()
+                                       .extract()
+                                       .header("Location");
+
+        int postId = 1;
+        if (locationHeader != null) {
+            locationHeader = locationHeader.substring(locationHeader.length() - 1);
+            postId = Integer.parseInt(locationHeader);
+        }
 
         RestAssured.given()
-                   .pathParam("id", 1)
+                   .pathParam("id", postId)
                    .contentType("application/json")
-                   .header("X-User-Id", 1)
+                   .header("X-Integration-Test", "true")
+                   .header("X-User-Id", 100)
                    .when()
                    .post("/posts/{id}/likes")
                    .then()

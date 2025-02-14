@@ -110,4 +110,12 @@ public class UserRepository
 
         return returnValue;
     }
+
+    @Transactional
+    public User createUserForAuthMiddleware(User user) {
+        final var entity = this.mapper.userToUserEntity(user);
+        entity.setId(user.getId());
+        this.entityManager.persist(entity);
+        return mapper.userEntityToUser(entity);
+    }
 }

@@ -57,7 +57,9 @@ public class AuthMiddleware implements ContainerRequestFilter {
                 user = userFaker.createModel();
                 if (userId != null) user.setId(userId);
 
+                // user = userRepository.createUserForAuthMiddleware(user);
                 user = createUserIn.createUser(user);
+                System.err.println("X-User-Id: " + userIdString + " CreatedUser: " + user.getId());
             }
 
             requestContext.getHeaders().add("X-User-Id", String.valueOf(user.getId()));
