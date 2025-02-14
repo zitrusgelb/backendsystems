@@ -55,6 +55,7 @@ public class LikeWebControllerTest {
                    .post("/posts/{id}/likes")
                    .then()
                    .statusCode(201)
+                   .header("Cache-Control", equalTo("no-transform, max-age=300"))
                    .body("post.id", equalTo((int) (post.getId())))
                    .body("user.id", equalTo((int) (user.getId())));
     }
