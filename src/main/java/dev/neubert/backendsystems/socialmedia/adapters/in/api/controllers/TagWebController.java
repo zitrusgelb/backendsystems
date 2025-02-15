@@ -59,10 +59,9 @@ public class TagWebController {
             if (tags.isEmpty()) {
                 return Response.status(Response.Status.NO_CONTENT).build();
             }
-            List<TagDto> tagDtos = tags.stream().map(tagMapper::tagToTagDto).collect(Collectors.toList());
-            return Response.ok(tagDtos)
-                           .header("X-Total-Count", tags.size())
-                           .build();
+            List<TagDto> tagDtos =
+                    tags.stream().map(tagMapper::tagToTagDto).collect(Collectors.toList());
+            return Response.ok(tagDtos).header("X-Total-Count", tags.size()).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                            .entity("Fehler beim Laden der Tags: " + e.getMessage())
@@ -117,7 +116,8 @@ public class TagWebController {
                                .entity("Tag nicht gefunden")
                                .build();
             }
-            TagDto updatedTag = tagMapper.tagToTagDto(updateTagIn.update(id, tagMapper.tagDtoToTag(tagDto)));
+            TagDto updatedTag =
+                    tagMapper.tagToTagDto(updateTagIn.update(id, tagMapper.tagDtoToTag(tagDto)));
             return Response.ok(updatedTag).build();
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
@@ -145,7 +145,7 @@ public class TagWebController {
             if (deleted) {
                 return Response.noContent().build();
             } else {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                return Response.status(Response.Status.NOT_FOUND)
                                .entity("Fehler beim Löschen des Tags")
                                .build();
             }

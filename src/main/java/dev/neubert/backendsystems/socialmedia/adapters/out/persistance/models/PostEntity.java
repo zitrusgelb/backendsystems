@@ -19,7 +19,7 @@ public class PostEntity {
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn
+    @JoinColumn(name = "tag_id", nullable = true)
     private TagEntity tag;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
