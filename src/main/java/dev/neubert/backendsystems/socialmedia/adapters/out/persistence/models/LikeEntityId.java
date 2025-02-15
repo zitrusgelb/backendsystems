@@ -1,4 +1,4 @@
-package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models;
+package dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models;
 
 import java.io.Serializable;
 import java.util.Objects;

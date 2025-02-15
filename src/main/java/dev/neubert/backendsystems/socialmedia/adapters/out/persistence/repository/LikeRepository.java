@@ -1,9 +1,9 @@
-package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
+package dev.neubert.backendsystems.socialmedia.adapters.out.persistence.repository;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.LikeEntity;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.LikeEntityId;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.PostEntity;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.LikeEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.LikeEntityId;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.PostEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.CreateLikeOut;

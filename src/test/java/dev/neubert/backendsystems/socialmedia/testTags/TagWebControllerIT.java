@@ -120,5 +120,12 @@ public class TagWebControllerIT {
                .then()
                .statusCode(204)
                .body(anyOf(is(""), containsString("Tag nicht gefunden")));
+
+        given().header("X-Integration-Test", "true")
+               .when()
+               .get("/tags/{id}", tagId)
+               .then()
+               .statusCode(404)
+               .body(anyOf(is(""), containsString("Tag nicht gefunden")));
     }
 }
