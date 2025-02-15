@@ -94,7 +94,7 @@ public class TagWebControllerIT {
 
     @Test
     void testUpdateTag() {
-        this.setupTestTag();
+        int tagId = this.setupTestTag();
 
         given().contentType(ContentType.JSON)
                .header("X-Integration-Test", "true")
@@ -104,7 +104,7 @@ public class TagWebControllerIT {
                      }
                      """)
                .when()
-               .put("/tags/1")
+               .put("/tags/{id}", tagId)
                .then()
                .statusCode(200)
                .body(anyOf(is(notNullValue()), containsString("Tag nicht gefunden")));
@@ -112,11 +112,11 @@ public class TagWebControllerIT {
 
     @Test
     void testDeleteTag() {
-        this.setupTestTag();
+        int tagId = this.setupTestTag();
 
         given().header("X-Integration-Test", "true")
                .when()
-               .delete("/tags/1")
+               .delete("/tags/{id}", tagId)
                .then()
                .statusCode(204)
                .body(anyOf(is(""), containsString("Tag nicht gefunden")));
