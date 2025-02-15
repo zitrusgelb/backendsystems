@@ -1,6 +1,19 @@
 \documentclass[a4paper, 11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\lstset{
+    numbers=left,
+    numberstyle=\small\color{black},
+    numbersep=8pt,
+    frame = single,
+    rulecolor=\color{black},
+    keywordstyle=\color{ForestGreen},
+    basicstyle=\scriptsize\ttfamily\color{Blue},
+    commentstyle=\ttfamily\itshape\color{gray},
+    stringstyle=\ttfamily\color{YellowOrange},
+    showstringspaces=false}
 \renewcommand{\familydefault}{\sfdefault}
 
 \begin{document}
@@ -47,28 +60,57 @@
 %What are the infrastructure components?
 %How did you implement ports and adapters?
 %What was the most difficult aspect to learn when implementing this architecture?
-The hexagonal architecture is generally divided into two main components: adapters and the application. In our case, the adapter component consists of an API adapter and a persistence adapter, as our application does not rely on external APIs.
+    The hexagonal architecture is generally divided into two main components: adapters and the application. In our case, the adapter component consists of an API and a persistence adapter, as our application does not rely on any external APIs.
 
-The API adapter contains the web controllers responsible for handling API calls and requests, several helper classes in the utils directory that provide functionalities such as caching and AuthorizationBinding, as well as the models used within the API. The persistence adapter also has its own models, as each adapter in a hexagonal architecture should depend only on its own defined models. Additionally, each model has a dedicated repository responsible for storing and managing entities.
+    The API adapter contains the web controllers responsible for handling API calls and requests, several helper classes in the utils directory that provide functionalities such as caching and AuthorizationBinding, as well as the models used within the API. The persistence adapter also has its own models, as each adapter in a hexagonal architecture should depend only on its own defined models. Additionally, each model has a dedicated repository responsible for storing and managing entities.
 
-The application component consists of three main elements. First, the domain component, where the business logic resides. This includes mappers that handle conversions between the models of both adapters and the corresponding domain models. Additionally, there are predefined classes with methods for generating specific models, which are useful for testing the application. Second, the ports, which contain the interfaces for communication between the API and persistence adapters. In a well-structured hexagonal architecture, the application should only interact with the adapters through these interfaces to ensure a clear separation of concerns. Lastly, the service directory, another key part of the application component, where the core business logic is implemented. Here, parsed requests from the web controllers are processed and forwarded to the appropriate repositories in the persistence component.
+    The application component consists of three main elements. First, the domain component, where the business logic resides. This includes mappers that handle conversions between the models of both adapters and the corresponding domain models. Additionally, there are predefined classes with methods for generating specific models, which are useful for testing the application. Second, the ports, which contain the interfaces for communication between the API and persistence adapters. In a well-structured hexagonal architecture, the application should only interact with the adapters through these interfaces to ensure a clear separation of concerns. Lastly, the service directory, another key part of the application component, where the core business logic is implemented. Here, parsed requests from the web controllers are processed and forwarded to the appropriate repositories in the persistence component.
 
 
-One of the most challenging aspects of implementing a hexagonal architecture is designing and maintaining each component as truly independent. It is easy to unintentionally couple components, for example, by directly using repository methods within the corresponding services. Adhering strictly to the architectural principles ensures better modularity, maintainability, and testability of the application.
+    One of the most challenging aspects of implementing a hexagonal architecture is designing and maintaining each component as truly independent. It is easy to unintentionally couple components, for example, by directly using repository methods within the corresponding services. Adhering strictly to the architectural principles ensures better modularity, maintainability, and testability of the application.
 %Correct and thorough explanation of the hexagonal architecture.
 %Clear distinction between domain, business logic, and infrastructure components.
 %Explanation of ports and adapters and how they were implemented.
 %Reflection on challenges faced during implementation.
 
 
-\section{Explanation of the API technology} \label{sec:explanation-of-the-api-technology}
-For this project, a Quarkus-based API architecture was chosen due to its efficiency, scalability, and seamless integration capabilities. Quarkus is a lightweight, high-performance framework specifically optimized for cloud-native environments, ensuring efficient resource utilization. Its compatibility with various frontend technologies and mobile applications makes it particularly flexible. Additionally, Quarkus enhances developer productivity with built-in support for API development, authentication, and persistence, optimizing the entire development process.
+    \section{Explanation of the API technology} \label{sec:explanation-of-the-api-technology}
+    For this project, a WebAPI architecture was chosen due to its efficiency, scalability, and seamless integration capabilities.
+    The choice of an API technology is a critical decision when designing a social media platform. The API must facilitate efficient data retrieval, support large-scale user interactions, and integrate seamlessly with various front-end clients. This report evaluates the suitability of WebAPI compared to gRPC and GraphQL, providing justification for choosing WebAPI for this project.
 
-The web API is implemented using Quarkus and RESTEasy, a powerful solution for HTTP-based services. The relevant dependencies are defined in the pom.xml to ensure API functionality. This includes quarkus-resteasy, which provides fundamental support for HTTP APIs and enables smooth request and response processing. quarkus-resteasy-jackson ensures efficient JSON serialization via Jackson, facilitating data exchange between the backend and frontend. Additionally, quarkus-resteasy-jaxb is used to support XML serialization via JAXB, making the API more adaptable to various data formats.
+    \subsection{Justification for Choosing WebAPI}
+    WebAPI is chosen as the primary API technology for the social media platform due to its simplicity, broad compatibility, and ease of maintenance. Unlike gRPC, which is optimized for internal microservices, or GraphQL, which introduces complexity in caching and performance, WebAPI provides a balance of usability, scalability, and security for a public-facing application.
 
-These dependencies ensure reliable API functionality and enable effective communication between frontend applications and other services. However, a standard HTTP-based API does not include built-in support for real-time communication. Unlike WebSockets or GraphQL subscriptions, Quarkus RESTEasy does not provide native real-time update capabilities.
+    \subsection{Advantages of WebAPI for a Social Media Platform}
+    The following advantages make WebAPI the preferred choice for this project:
 
-Despite some limitations, a Quarkus-based API offers a robust, flexible, and scalable architecture that meets the project's requirements.
+    \subsubsection{Wide Adoption and Compatibility}
+    WebAPI is universally supported across web and mobile platforms, ensuring seamless integration with front-end technologies such as React, Angular, and native mobile applications.
+
+    \subsubsection{Scalability and Caching}
+    The stateless nature of WebAPI allows for easy horizontal scaling, which is crucial for handling large numbers of concurrent users.
+    HTTP caching mechanisms can be leveraged to optimize performance, reducing server load for frequently requested data such as user profiles and public posts.
+
+    \subsubsection{Ease of Development and Maintenance}
+    WebAPI follows a straightforward request-response model using HTTP methods (GET, POST, PUT, DELETE), making it easy to implement and understand.
+
+    \subsubsection{Security and Authentication}
+    WebAPI works well with authentication protocols such as OAuth 2.0 and JWT (JSON Web Tokens), ensuring secure user access and data protection.
+    API keys and token-based authentication mechanisms allow fine-grained access control, which is essential for managing user permissions and privacy settings.
+
+    \subsection{Limitations and Trade-offs of WebAPI}
+    While WebAPI is well-suited for this project, it does come with certain limitations:\\
+    \textbf{Over-fetching/Under-fetching:}Unlike GraphQL, WebAPI may return more data than needed or require multiple requests to gather related data.\\
+    \textbf{Less Flexible Queries:} WebAPI endpoints provide fixed response structures, which may not be as flexible as GraphQL’s dynamic querying capabilities.\\
+    \textbf{Strict API Versioning:} As the platform evolves, explicit versioning will be necessary to maintain backward compatibility with older clients.
+
+    \subsection{Conclusion}
+    WebAPI is the most appropriate choice for implementing the social media platform due to its simplicity, broad adoption, and efficient handling of CRUD operations. While gRPC excels in microservices communication and GraphQL provides flexible queries, WebAPI offers a balanced approach that ensures scalability, ease of integration, and security for a public-facing application. The limitations of WebAPI can be managed with best practices such as structured endpoint design and efficient caching strategies, making it the optimal choice for this project.
+
+
+%The third section should explain the API technology you chose for your im-
+%plementation. Why did you choose this technology? Do you see any advantages of this
+%technology for this project?
 
 %Justification for choosing the specific API technology (gRPC, GraphQL, or REST).
 %Identification of advantages relevant to the project.
@@ -80,9 +122,11 @@ Despite some limitations, a Quarkus-based API offers a robust, flexible, and sca
 %How did you implement the mapping in the adapters?
 %Did you use any framework like REST Easy, Jersey, or Spring?
 %Why did you choose this framework?
-As a framework we chose Quarkus and therefore REST Easy. Already collecting experience with Quarkus is a benefit for the members of our project. Furthermore, from a future-proofing perspective, Quarkus is ready for the use as a base for micro-services, meaning the application being split into multiple small parts.\\
-To implement mapping we went with MapStruct. We choose it because it is a modern approach to mapping as well as being generated instead of manually written, this reduces the possibilities of user error in the implementation.
-For authentication, we chose to implement a custom middleware that interacts with the THWS Authentication System and takes the Bearer token it generates. This decision relies on the ever increasing popularity of using bigger providers like Google or GitHub as the sole authentication source.
+    As a framework we chose Quarkus and therefore RESTEasy. Previous experience with Quarkus is a benefit for the members of our project. Furthermore, from a future-proofing perspective, Quarkus is ready for the use as a base for micro-services, meaning the application being split into multiple small parts.\\
+    Quarkus is a lightweight, high-performance framework specifically optimized for cloud-native environments, ensuring efficient resource utilization. Its compatibility with various frontend technologies and mobile applications makes it particularly flexible. Additionally, Quarkus enhances developer productivity with built-in support for API development, authentication, and persistence, optimizing the entire development process.\\
+    To implement mapping we went with MapStruct. We choose it because it is a modern approach to mapping as well as being generated instead of manually written, this reduces the possibilities of user error in the implementation.
+    For authentication, we chose to implement a custom middleware that interacts with the THWS Authentication System and takes the Bearer token it generates. This decision relies on the ever increasing popularity of using bigger providers like Google or GitHub as the sole authentication source.\\
+    For our caching strategy. we found that a validity period of five minutes is sufficient for our use cases. Five minutes are enough to reduce the load of requests to the server by a considerable amount (especially when requesting likes for a post), if the application needs to be scaled up. On the other hand, a caching time of five minutes allows users to always see a relatively current state of all responses. This is especially critical for editing posts after they have been published, as a simple edit could drastically change the meaning of the content. This caching time offers the best compromise between reducing network load and offering the latest data.
 
 %Explanation of implementation choices (e.g., authentication, adapter mapping).
 %Justification of framework choice (e.g., REST Easy, Jersey, Spring).
@@ -91,24 +135,31 @@ For authentication, we chose to implement a custom middleware that interacts wit
 
     \section{Testing Strategy}\label{sec:testing-strategy}
 %How did you implement unit and integration tests?
-This testing strategy describes the approach to ensuring software quality for the Quarkus project. It includes different testing levels to ensure the functionality, security, and scalability of the application. The tests are divided into four main categories: unit tests, integration tests, database tests.
-
-Unit tests ensure that individual modules, particularly services and repositories, function correctly in isolation. JUnit 5 is used for this purpose. These tests run in an in-memory environment without a real server to provide quick feedback on code changes.
-
-Integration tests verify the interaction of multiple modules, particularly Services, using Quarkus-Test. These tests run in a Quarkus test instance with an in-memory database.
-
-Database tests ensure the correct functionality of CRUD operations. An H2 database is used to simulate a realistic environment.
-
-The implementation of the tests covers all key components of the application. Unit tests validate individual methods, while integration tests check API endpoints and their interactions. Database tests secure CRUD operations.
-
-Overall, this strategy guarantees a stable, high-performance, and error-free application. By combining different testing methods, it ensures that both individual modules and the entire system function reliably.
+    Our testing strategy includes different levels to ensure the functionality, security, and scalability of the application. The tests are divided into two main categories: unit tests and integration tests.\\
+    Unit tests ensure that individual modules, particularly services and mappers, function correctly in isolation. These tests run in an in-memory environment without a real server to provide quick feedback on code changes.Integration tests verify the interaction of multiple modules, particularly between the domain layer and ports.\\
+    The implementation of tests covers all key components of the application. Unit tests validate individual methods, while integration tests check API endpoints and their interactions. Overall, this strategy guarantees a stable, high-performance, and error-free application. By combining different testing methods, it ensures that both individual modules and the entire system function reliably.
 %Explanation of the testing strategy, including unit and integration tests.
 %Description of how tests were implemented and what was tested.
 %Reflection on the eﬀectiveness of the testing strategy.
 
 
     \section{Learning Outcomes and Reflection}\label{sec:learning-outcomes-and-reflection}
-    Laurin's notes: next time, more time planning before we start coding (esp. when the API-technology is not yet picked); smaller goals that can be achieved quicker so we can support earlier in the process if someone needs help; utilising Git to it's full potential (namely creating milestones and issues;)
+
+    \subsection{Improving Planning Process}
+    The planning process is the most important part of the early development stages. By underestimating it's value, we had to recreate the entire repository, because we had already created a project before making a final decision on the API technology we wanted to use. This not only cost time but also a significant amount of planning, as we needed to keep the integrity of commits, so ~\lstinline|git blame| works correctly (this is important for evaluating the process later).
+
+    \subsection{Utilising Git To It's Full Potential}
+    As most of the group had never worked with a team through Git, there was a steep learning process. This especially showed in the beginning, when a couple of mistakes were made because of lacking experience with version control systems and Git in particular. Additionally, utilising milestones in general and issues more broadly could have improved communication and efficiency. We were able to see this towards the end of the project, when we started to create more issues to document and communicate bugs we found. Through those issues, a direct line of communication (like meetings) were needed less, because all the information was found in the appropriate section.
+
+    \subsection{Internal communication}
+    A positive learning from the project was the weekly meetings we held, as this kept everyone in the loop of what exactly the state of each task is. Additionally, this routine made helping each other solve technical problems easier, as presenting our issues to different sets of eyes often brought a new perspective to the problem. This helped improving our code and efficiently solving problems.\\
+
+    \subsection{Standards}
+    Starting from the beginnning, we implemented some standards for this project. These included conventional commit messages, a common code style and protecting the~\lstinline|main| -branch (thus requiring multiple approvals for pull requests). This helped finding errors, documenting changes in a concise manner and reducing the number of~\lstinline|style| commits (changing only the formatting of the code).
+
+    \subsection{Conclusion}
+    All in all, the project was a success in our view, as we not only learned the ins and outs of a WebAPI, but also coding in a team, using Git and solving complex problems.
+
 
 %What did you learn from this project?
 %What worked well, and what would you do diﬀerently in the future?
