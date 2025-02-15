@@ -5,7 +5,7 @@
 
 \begin{document}
 
-    \title{\vspace{-3cm}\includegraphics[width=0.5\textwidth]{thws.png}\\ Project documentation for the portfolio exam}
+    \title{\vspace{-3cm}\includegraphics[width=0.5\textwidth]{thws}\\ Project documentation for the portfolio exam}
     \date{\today}
     \author{Tim Knüttel (5123101) \and Adrian Stelter (5123031) \and Laurin Neubert (6824016) \and Jakob Hämmelmann (5123113)}
 
@@ -54,15 +54,15 @@
 %Reflection on challenges faced during implementation.
 
 
-\section{Erklärung der API-Technologie} \label{sec:erklaerung-der-api-technologie}
+\section{Explanation of the API technology} \label{sec:explanation-of-the-api-technology}
 
-FFor this project, we have chosen a RESTful API architecture with Spring Boot. This decision is based on several factors. REST is a widely adopted industry standard that significantly simplifies integration with other systems. Additionally, its stateless communication enables high scalability, which is particularly beneficial for large-scale applications. Furthermore, REST offers great flexibility, as it is compatible with various frontend technologies and mobile applications. Another crucial advantage is its ease of implementation: Spring Boot provides comprehensive support for REST controllers, authentication, and persistence, making development more efficient.
+For this project, we have chosen a RESTful API architecture with Spring Boot. This decision is based on several factors. REST is a widely adopted industry standard that significantly simplifies integration with other systems. Additionally, its stateless communication enables high scalability, which is particularly beneficial for large-scale applications. Furthermore, REST offers great flexibility, as it is compatible with various frontend technologies and mobile applications. Another crucial advantage is its ease of implementation: Spring Boot provides comprehensive support for REST controllers, authentication, and persistence, making development more efficient.
 
- This technology brings several benefits to our project. REST is simple and lightweight, as it relies on JSON over HTTP, which facilitates both implementation and debugging. The stateless architecture also ensures efficient resource utilization. Moreover, REST integrates seamlessly with Spring Data JPA, enabling a smooth connection with the database.
+This technology brings several benefits to our project. REST is simple and lightweight, as it relies on JSON over HTTP, which facilitates both implementation and debugging. The stateless architecture also ensures efficient resource utilization. Moreover, REST integrates seamlessly with Spring Data JPA, enabling a smooth connection with the database.
 
- Despite these advantages, some limitations and trade-offs need to be considered. One of the biggest challenges is the lack of real-time communication. Unlike WebSockets or GraphQL subscriptions, REST does not provide built-in support for real-time updates. Additionally, there is a risk of over-fetching or under-fetching, where clients may receive more or fewer data than necessary, potentially impacting performance—especially with large datasets. Another issue is state management: Since REST is stateless, handling complex transactions across multiple API calls can be challenging.
+Despite these advantages, some limitations and trade-offs need to be considered. One of the biggest challenges is the lack of real-time communication. Unlike WebSockets or GraphQL subscriptions, REST does not provide built-in support for real-time updates. Additionally, there is a risk of over-fetching or under-fetching, where clients may receive more or fewer data than necessary, potentially impacting performance—especially with large datasets. Another issue is state management: Since REST is stateless, handling complex transactions across multiple API calls can be challenging.
 
- Despite these limitations, the benefits of a RESTful API with Spring Boot outweigh the drawbacks for our use case, ensuring a robust, flexible, and highly scalable solution for our project.
+Despite these limitations, the benefits of a RESTful API with Spring Boot outweigh the drawbacks for our use case, ensuring a robust, flexible, and highly scalable solution for our project.
 %Why did you choose this technology?
 %Do you see any advantages of this technology for this project?
 
@@ -76,9 +76,9 @@ FFor this project, we have chosen a RESTful API architecture with Spring Boot. T
 %How did you implement the mapping in the adapters?
 %Did you use any framework like REST Easy, Jersey, or Spring?
 %Why did you choose this framework?
-As a framework we choose Quarkus and therefore REST Easy. Already collecting experience with Quarkus is a benefit for the members of our project. Furthermore, from a future proofing perspective Quarkus is ready for the use as a base for micro services. Meaning the application being split into multiple small parts.\\
-To implement mapping we went with MapStruct. We choose it because it is a modern approach to mapping as well as being generated instead of manually written, this reduces error in implementation.
-For authentication we choose to implement a custom middleware that interacts with the THWS Authentication System and takes the Bearer token it generates. This decision relies on the ever more increasing popularity of using bigger providers like Google or GitHub as the sole authentication source.
+As a framework we chose Quarkus and therefore REST Easy. Already collecting experience with Quarkus is a benefit for the members of our project. Furthermore, from a future-proofing perspective, Quarkus is ready for the use as a base for micro-services, meaning the application being split into multiple small parts.\\
+To implement mapping we went with MapStruct. We choose it because it is a modern approach to mapping as well as being generated instead of manually written, this reduces the possibilities of user error in the implementation.
+For authentication, we chose to implement a custom middleware that interacts with the THWS Authentication System and takes the Bearer token it generates. This decision relies on the ever increasing popularity of using bigger providers like Google or GitHub as the sole authentication source.
 
 %Explanation of implementation choices (e.g., authentication, adapter mapping).
 %Justification of framework choice (e.g., REST Easy, Jersey, Spring).
