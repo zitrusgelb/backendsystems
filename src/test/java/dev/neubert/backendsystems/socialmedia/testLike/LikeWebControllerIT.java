@@ -8,11 +8,16 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 @QuarkusIntegrationTest
 public class LikeWebControllerIT {
+
+    private static Pattern fullLocationPattern = Pattern.compile("/posts/(\\d{1,3})");
 
     @Test
     public void testCreateLike() {
@@ -21,6 +26,7 @@ public class LikeWebControllerIT {
         given().pathParam("id", postId)
                .contentType("application/json")
                .header("X-Integration-Test", "true")
+               //.header("X-User-Id", 2)
                .when()
                .post("/posts/{id}/likes")
                .then()
@@ -198,26 +204,43 @@ public class LikeWebControllerIT {
     }
 
     private int createPost() {
-        String locationHeader =
-                given().contentType(ContentType.JSON)
-                       .header("X-Integration-Test", "true")
-                       .body("""
-                             {
-                                     "content": "I am your father",
-                                     "tag": null,
-                                     "replyTo": null
-                                 }
-                             """)
-                       .when()
-                       .post("/posts")
-                       .then()
-                       .statusCode(201)
-                       .header("Cache-Control", "no-transform, max-age=300")
-                       .extract()
-                       .header("Location");
+        /*
+        String locationHeader = given().contentType(ContentType.JSON)
+                                       .header("X-Integration-Test", "true")
+                                       .header("X-User-Id", 1)
+                                       .body("""
+                                             {
+                                                     "content": "I am your father",
+                                                     "tag": null,
+                                                     "replyTo": null
+                                                 }
+                                             """)
+                                       .when()
+                                       .post("/posts")
+                                       .then()
+                                       .statusCode(201)
+                                       .header("Cache-Control", "no-transform, max-age=300")
+                                       .headers()
+                                       .toString();
 
         locationHeader = locationHeader.substring(locationHeader.length() - 1);
         return Integer.parseInt(locationHeader);
+
+         */
+
+        String postResponseHeaders =
+                given().contentType(ContentType.JSON).header("X-Integration-Test", "true")
+                       //.header("X-User-Id", 1)
+                       .body("""
+                             {
+                                     "content": "I am your father",
+                                     "tagName": null,
+                                     "replyTo": null
+                                 }
+                             """).when().post("/posts").headers().toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group(1) : null;
+        return Integer.parseInt(location);
     }
 
     private int createLike(int postId) {
