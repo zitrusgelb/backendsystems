@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
-import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserIn;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;
@@ -31,8 +30,6 @@ public class AuthMiddleware implements ContainerRequestFilter {
 
     @Inject
     ReadUserIn readUserIn;
-    @Inject
-    ReadUserByIdIn readUserByIdIn;
 
     @Inject
     CreateUserIn createUserIn;
@@ -49,15 +46,13 @@ public class AuthMiddleware implements ContainerRequestFilter {
                           .get("Host")
                           .stream()
                           .anyMatch(s -> s.startsWith("localhost"))) {
-            var userIdString = requestContext.getHeaderString("X-User-Id");
+            var userName = requestContext.getHeaderString("X-Username");
 
-            var userId = userIdString == null ? null : Long.parseLong(userIdString);
-
-            var user = userId == null ? null : readUserByIdIn.getUserById(userId);
+            var user = userName == null ? null : readUserIn.getUser(userName);
 
             if (user == null) {
                 user = userFaker.createModel();
-                if (userId != null) user.setId(userId);
+                if (userName != null) user.setUsername(userName);
 
                 user = createUserIn.createUser(user);
             }
