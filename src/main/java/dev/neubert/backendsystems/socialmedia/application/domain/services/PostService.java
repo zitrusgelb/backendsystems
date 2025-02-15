@@ -3,6 +3,8 @@ package dev.neubert.backendsystems.socialmedia.application.domain.services;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Post.*;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Post.*;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.CreateTagOut;
+import dev.neubert.backendsystems.socialmedia.application.port.out.Tag.ReadTagByNameOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserOut;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -31,6 +33,12 @@ public class PostService
     @Inject
     ReadUserOut readUserOut;
 
+    @Inject
+    CreateTagOut createTagOut;
+
+    @Inject
+    ReadTagByNameOut readTagByNameOut;
+
     @Override
     public Post create(Post post) {
         post.setVersion(1);
@@ -44,8 +52,8 @@ public class PostService
     }
 
     @Override
-    public List<Post> readAllPosts() {
-        return readAllPostsOut.readAllPosts(100); // TODO: set correct limit!
+    public List<Post> readAllPosts(String query, int offset, int limit) {
+        return readAllPostsOut.readAllPosts(query, offset, limit);
     }
 
     @Override
@@ -64,11 +72,13 @@ public class PostService
             var user = readUserOut.getUser(post.getUser().getUsername());
             post.setUser(user);
         }
-        if (post.getTag() != null && post.getTag().getName() != null &&
-            !post.getTag().getName().isEmpty()) {
-            post.setTag(post.getTag()); // TODO: use tagRepository as soon as it is implemented
-        } else {
-            post.setTag(null);
+        if (post.getTag().getName() != null) {
+            var existingTag = readTagByNameOut.getTagByName(post.getTag().getName());
+            if (existingTag == null) {
+                existingTag = createTagOut.createTag(
+                        post.getTag().getName());
+            }
+            post.setTag(existingTag);
         }
         if (post.getReplyTo() != null && post.getReplyTo().getId() != 0) {
             post.setReplyTo(readPostOut.getPostById(post.getReplyTo().getId()));

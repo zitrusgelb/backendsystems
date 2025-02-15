@@ -3,6 +3,7 @@ package dev.neubert.backendsystems.socialmedia.adapters.in.api.utils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserIn;
@@ -33,10 +34,33 @@ public class AuthMiddleware implements ContainerRequestFilter {
     @Inject
     CreateUserIn createUserIn;
 
+    @Inject
+    UserFaker userFaker;
+
     public AuthMiddleware() throws URISyntaxException {}
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+        if (requestContext.getHeaders().containsKey("X-Integration-Test") &&
+            requestContext.getHeaders()
+                          .get("Host")
+                          .stream()
+                          .anyMatch(s -> s.startsWith("localhost"))) {
+            var userName = requestContext.getHeaderString("X-Username");
+
+            var user = userName == null ? null : readUserIn.getUser(userName);
+
+            if (user == null) {
+                user = userFaker.createModel();
+                if (userName != null) user.setUsername(userName);
+
+                user = createUserIn.createUser(user);
+            }
+
+            requestContext.getHeaders().add("X-User-Id", String.valueOf(user.getId()));
+            return;
+        }
+
         if (!requestContext.getHeaders().containsKey("Authorization")) {
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
             return;

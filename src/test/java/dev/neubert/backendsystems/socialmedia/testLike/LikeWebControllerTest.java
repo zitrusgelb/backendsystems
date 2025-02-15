@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
-
 @QuarkusTest
 public class LikeWebControllerTest {
 
@@ -56,6 +55,7 @@ public class LikeWebControllerTest {
                    .post("/posts/{id}/likes")
                    .then()
                    .statusCode(201)
+                   .header("Cache-Control", equalTo("no-transform, max-age=300"))
                    .body("post.id", equalTo((int) (post.getId())))
                    .body("user.id", equalTo((int) (user.getId())));
     }
@@ -134,7 +134,7 @@ public class LikeWebControllerTest {
                    .when()
                    .get("/posts/{id}/likes")
                    .then()
-                   .statusCode(400);
+                   .statusCode(404);
     }
 
     @Test
@@ -241,7 +241,6 @@ public class LikeWebControllerTest {
         RestAssured.given()
                    .pathParam("username", user1.getUsername())
                    .contentType("application/json")
-                   .header("X-User-Id", user1.getId())
                    .when()
                    .get("/users/{username}/likes")
                    .then()

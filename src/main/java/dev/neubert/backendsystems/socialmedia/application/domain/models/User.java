@@ -1,5 +1,6 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User extends AbstractModel {
@@ -7,8 +8,8 @@ public class User extends AbstractModel {
     private String username; // This is the CN from the THWS Auth
     private String displayName;
 
-    private List<Post> posts;
-    private List<Like> likes;
+    private final List<Post> posts = new ArrayList<>();
+    private final List<Like> likes = new ArrayList<>();
 
     public User() {}
 

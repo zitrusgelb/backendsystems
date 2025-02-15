@@ -1,9 +1,9 @@
-package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
+package dev.neubert.backendsystems.socialmedia.adapters.out.persistence.repository;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.LikeEntity;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.LikeEntityId;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.PostEntity;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.LikeEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.LikeEntityId;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.PostEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Like.CreateLikeOut;
@@ -36,15 +36,17 @@ public class LikeRepository
     @Override
     public Like createLike(Like like) {
         try {
-            final var entity = this.mapper.likeToLikeEntity(like);
-            this.entityManager.merge(entity);
-
             PostEntity postEntity = entityManager.find(PostEntity.class, like.getPost().getId());
             UserEntity userEntity = entityManager.find(UserEntity.class, like.getUser().getId());
-            LikeEntityId likeEntityId = new LikeEntityId(postEntity, userEntity);
-            LikeEntity persistedEntity = this.entityManager.find(LikeEntity.class, likeEntityId);
 
-            return mapper.likeEntityToLike(persistedEntity);
+            var newEntity = new LikeEntity();
+            newEntity.setPost(postEntity);
+            newEntity.setUser(userEntity);
+            newEntity.setTimestamp(like.getTimestamp());
+
+            newEntity = entityManager.merge(newEntity);
+
+            return mapper.likeEntityToLike(newEntity);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;

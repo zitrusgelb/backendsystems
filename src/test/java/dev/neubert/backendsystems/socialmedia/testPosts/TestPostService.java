@@ -26,7 +26,7 @@ public class TestPostService {
         assertEquals(expected.getContent(), created.getContent());
         assertEquals(expected.getUser().getUsername(), created.getUser().getUsername());
         assertEquals(expected.getCreatedAt(), created.getCreatedAt());
-        assertNull(created.getTag());
+        assertEquals(expected.getTag().getName(), created.getTag().getName());
         assertNull(created.getReplyTo());
     }
 
@@ -50,7 +50,7 @@ public class TestPostService {
         assertEquals(created.getContent(), returnedPost.getContent());
         assertEquals(created.getUser().getUsername(), returnedPost.getUser().getUsername());
         assertEquals(created.getCreatedAt(), returnedPost.getCreatedAt());
-        assertNull(returnedPost.getTag());
+        assertEquals(created.getTag().getName(), returnedPost.getTag().getName());
         assertNull(returnedPost.getReplyTo());
     }
 
@@ -61,7 +61,7 @@ public class TestPostService {
         assertEquals(expected.getContent(), actual.getContent());
         assertEquals(expected.getUser().getUsername(), actual.getUser().getUsername());
         assertEquals(expected.getCreatedAt(), actual.getCreatedAt());
-        assertNull(actual.getTag());
+        assertEquals(expected.getTag().getName(), actual.getTag().getName());
         assertNull(actual.getReplyTo());
     }
 
@@ -71,7 +71,7 @@ public class TestPostService {
         Post expected1 = postService.create(postFaker.createModel());
         Post expected2 = postService.create(postFaker.createModel());
         Post expected3 = postService.create(postFaker.createModel());
-        List<Post> returnedPosts = postService.readAllPosts();
+        List<Post> returnedPosts = postService.readAllPosts(null, 0, 20);
         assertNotNull(returnedPosts);
 
     }

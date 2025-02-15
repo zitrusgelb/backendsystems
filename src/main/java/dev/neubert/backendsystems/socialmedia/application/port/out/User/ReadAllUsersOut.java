@@ -6,6 +6,4 @@ import java.util.List;
 
 public interface ReadAllUsersOut {
     List<User> getAllUsers(int limit, int offset);
-
-    List<User> getAllUsers(int limit);
 }

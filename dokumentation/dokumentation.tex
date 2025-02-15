@@ -1,0 +1,118 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\renewcommand{\familydefault}{\sfdefault}
+
+\begin{document}
+
+    \title{\vspace{-3cm}\includegraphics[width=0.5\textwidth]{thws}\\ Project documentation for the portfolio exam}
+    \date{\today}
+    \author{Tim Knüttel (5123101) \and Adrian Stelter (5123031) \and Laurin Neubert (6824016) \and Jakob Hämmelmann (5123113)}
+
+
+
+    \maketitle
+% 4-6 Pages
+
+
+    \section{Introduction of the Project Topic}\label{sec:introduction-of-the-project-topic}
+
+    \subsection{Domain}\label{subsec:domain}
+    The domain of our project is a social media platform like X (formerly Twitter), Threads or Bluesky.
+    Our goal for the project is to create a platform that enables users to interact with one another through means of text posts.
+    The main objective here is to give users the opportunity to interact not only by posting their own posts, but also to give feedback through likes and comments.
+    Tags help the users to find posts based on interests or topics.
+
+    \subsection{Use Cases}\label{subsec:use-cases}
+
+    \subsubsection{Posts}
+    The central and most important use case for our project is the ability for users to post text posts. When posting, users should be able to fill their post with content, also it should be visible which user posted at what exact time.
+
+    \subsubsection{Replies \& Likes}
+    Users should be able to interact with posts directly by replying to and \("\)liking\("\) them. This gives users the ability to converse on the platform and discuss their favorite topics. Additionally, replying keeps all the different posts together, so there can be an easy understanding of which post is a new topic and which post was written in response to an already existing topic.
+
+    \subsubsection{Tags}
+    Tags can be used to link a topic to the created post. By searching for posts tagged with the desired topic, users can easily find posts that are relevant to what they wish to converse about. This is designed to increase the usability and also user retention.
+
+%Summarize the domain and describe a few (but not all) use cases of your software.
+
+%Clear and concise summary of the domain.
+%Description of use cases is relevant and demonstrates an understanding of the problem domain.
+
+
+    \section{Description of the Software Architecture}\label{sec:description-of-the-software-architecture}
+%Explain your interpretation of the hexagonal architecture.
+%What belongs to the domain?
+%What is the business logic?
+%What are the infrastructure components?
+%How did you implement ports and adapters?
+%What was the most difficult aspect to learn when implementing this architecture?
+
+%Correct and thorough explanation of the hexagonal architecture.
+%Clear distinction between domain, business logic, and infrastructure components.
+%Explanation of ports and adapters and how they were implemented.
+%Reflection on challenges faced during implementation.
+
+
+\section{Explanation of the API technology} \label{sec:explanation-of-the-api-technology}
+For this project, we have chosen a Quarkus API architecture. This decision is based on several factors. REST is a widely adopted industry standard that significantly simplifies integration with other systems. Additionally, its stateless communication enables high scalability, which is particularly beneficial for large-scale applications. Furthermore, REST offers great flexibility, as it is compatible with various frontend technologies and mobile applications. Another crucial advantage is its ease of implementation: Quarkus provides comprehensive support for REST endpoints, authentication, and persistence, making development more efficient.
+
+This technology brings several benefits to our project. REST is simple and lightweight, as it relies on JSON over HTTP, which facilitates both implementation and debugging. The stateless architecture also ensures efficient resource utilization. Moreover, REST integrates seamlessly with Quarkus’ built-in extensions for database access, enabling a smooth connection with the database.
+
+Despite these advantages, some limitations and trade-offs need to be considered. One of the biggest challenges is the lack of real-time communication. Unlike WebSockets or GraphQL subscriptions, REST does not provide built-in support for real-time updates.
+
+Despite this limitation, the benefits of a Quarkus API outweigh the drawbacks for our use case, ensuring a robust, flexible, and highly scalable solution for our project.%Do you see any advantages of this technology for this project?
+
+%Justification for choosing the specific API technology (gRPC, GraphQL, or REST).
+%Identification of advantages relevant to the project.
+%Consideration o/f any limitations or trade-oﬀs of the chosen technology.
+
+
+    \section{Implementation Details}\label{sec:implementation-details}
+%For example, how did you implement authentication?
+%How did you implement the mapping in the adapters?
+%Did you use any framework like REST Easy, Jersey, or Spring?
+%Why did you choose this framework?
+As a framework we chose Quarkus and therefore REST Easy. Already collecting experience with Quarkus is a benefit for the members of our project. Furthermore, from a future-proofing perspective, Quarkus is ready for the use as a base for micro-services, meaning the application being split into multiple small parts.\\
+To implement mapping we went with MapStruct. We choose it because it is a modern approach to mapping as well as being generated instead of manually written, this reduces the possibilities of user error in the implementation.
+For authentication, we chose to implement a custom middleware that interacts with the THWS Authentication System and takes the Bearer token it generates. This decision relies on the ever increasing popularity of using bigger providers like Google or GitHub as the sole authentication source.
+
+%Explanation of implementation choices (e.g., authentication, adapter mapping).
+%Justification of framework choice (e.g., REST Easy, Jersey, Spring).
+%Level of detail in the technical description (must be clear and understandable).
+
+
+    \section{Testing Strategy}\label{sec:testing-strategy}
+%How did you implement unit and integration tests?
+This testing strategy describes the approach to ensuring software quality for the Quarkus project. It includes different testing levels to ensure the functionality, security, and scalability of the application. The tests are divided into four main categories: unit tests, integration tests, database tests, and CI/CD tests.
+
+Unit tests ensure that individual modules, particularly services and repositories, function correctly in isolation. JUnit 5 is used for this purpose. These tests run in an in-memory environment without a real server to provide quick feedback on code changes.
+
+Integration tests verify the interaction of multiple modules, particularly REST APIs and services, using RestAssured and Quarkus-Test. These tests run in a Quarkus test instance with an in-memory database.
+
+Database tests ensure the correct functionality of CRUD operations. An H2 database is used to simulate a realistic environment.
+
+CI/CD tests are executed automatically in the Jenkins pipeline. The pipeline includes a test stage where the project is tested using mvn test.
+
+The implementation of the tests covers all key components of the application. Unit tests validate individual methods, while integration tests check API endpoints and their interactions. Database tests secure CRUD operations, and CI/CD tests ensure continuous quality assurance.
+
+Overall, this strategy guarantees a stable, high-performance, and error-free application. By combining different testing methods, it ensures that both individual modules and the entire system function reliably.
+%Explanation of the testing strategy, including unit and integration tests.
+%Description of how tests were implemented and what was tested.
+%Reflection on the eﬀectiveness of the testing strategy.
+
+
+    \section{Learning Outcomes and Reflection}\label{sec:learning-outcomes-and-reflection}
+    Laurin's notes: next time, more time planning before we start coding (esp. when the API-technology is not yet picked); smaller goals that can be achieved quicker so we can support earlier in the process if someone needs help; utilising Git to it's full potential (namely creating milestones and issues;)
+
+%What did you learn from this project?
+%What worked well, and what would you do diﬀerently in the future?
+%Reflect on team collaboration and the use of hexagonal architecture.
+
+%Clear articulation of key learning outcomes from the project. (1 Point)
+%Honest reflection on what worked well and what could be improved. (1 Point)
+%Insightful discussion of team collaboration and the use of hexagonal architecture.
+
+    \section*{Caption}
+    This article was drafted and refined using GPT-4 based on an outline containing related information. The GPT-4 output was reviewed, revised, and enhanced with additional content. It was then edited for improved readability and active tense, partially using Grammarly.
+\end{document}

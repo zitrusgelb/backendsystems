@@ -1,9 +1,8 @@
-package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
+package dev.neubert.backendsystems.socialmedia.adapters.out.persistence.repository;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
-import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadUserByIdIn;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadAllUsersOut;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.ReadUserByIdOut;
@@ -51,9 +50,7 @@ public class UserRepository
             final var requestedModel =
                     query.setFirstResult(offset).setMaxResults(limit).getResultList();
             if (requestedModel != null) {
-                for (UserEntity user : requestedModel) {
-                    returnValue.add(mapper.userEntityToUser(user));
-                }
+                returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -61,11 +58,6 @@ public class UserRepository
         }
 
         return returnValue;
-    }
-
-    @Override
-    public List<User> getAllUsers(int limit) {
-        return getAllUsers(limit, 0);
     }
 
     @Override
@@ -98,6 +90,8 @@ public class UserRepository
         try {
             final var requestedModel = this.entityManager.find(UserEntity.class, id);
             if (requestedModel != null) {
+                requestedModel.getPosts().iterator();
+                requestedModel.getLikes().iterator();
                 returnValue = mapper.userEntityToUser(requestedModel);
             }
         } catch (Exception e) {

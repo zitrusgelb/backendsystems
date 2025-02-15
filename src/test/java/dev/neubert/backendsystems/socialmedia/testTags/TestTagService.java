@@ -7,8 +7,6 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @QuarkusTest
@@ -22,14 +20,14 @@ public class TestTagService {
 
     @Test
     void testCreateTag() {
-        Tag expected = tagFaker.createModel();
+        String expected = tagFaker.createModel();
         Tag created = tagService.createTag(expected);
-        assertEquals(expected.getName(), created.getName());
+        assertEquals(expected, created.getName());
     }
 
     @Test
     void testDeleteExistingTag() {
-        Tag created = tagService.createTag(tagFaker.createModel());
+        String created = tagService.createTag(tagFaker.createModel()).getName();
         assertTrue(tagService.deleteTag(created));
     }
 

@@ -17,7 +17,7 @@ public class TestLikeFaker {
     void testOneLike() {
         Like like = likeFaker.createModel();
         assertNotNull(like.getPost());
-        assertNotNull(like.getPost());
+        assertNotNull(like.getUser());
         assertNotNull(like.getTimestamp());
     }
 

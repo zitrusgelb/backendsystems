@@ -20,6 +20,7 @@ public class TestPostFaker {
         assertNotNull(post.getUser());
         assertNotNull(post.getCreatedAt());
         assertNotNull(post.getContent());
+        assertNotNull(post.getTag());
     }
 
 }

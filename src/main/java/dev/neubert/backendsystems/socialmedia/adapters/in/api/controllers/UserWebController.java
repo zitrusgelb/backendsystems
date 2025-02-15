@@ -1,8 +1,10 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.controllers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.AuthorizationBinding;
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadAllUsersIn;
@@ -13,7 +15,6 @@ import jakarta.inject.Inject;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -41,10 +42,13 @@ public class UserWebController {
     @Inject
     LikeMapper likeMapper;
 
-    CacheControl cacheControl;
+    @Inject
+    UserMapper userMapper;
+
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response getAllUsers(
             @PositiveOrZero
             @DefaultValue("0")
@@ -52,17 +56,20 @@ public class UserWebController {
             int offset,
             @Positive
             @DefaultValue("20")
-            @QueryParam("size")
+            @QueryParam("limit")
             int size
     ) {
         var users = readAllUsersIn.getAllUsers(size, offset);
-        return Response.ok(users).header("X-Total-Count", users.size()).build();
+        return Response.ok(userMapper.userToUserDto(users))
+                       .header("X-Total-Count", users.size())
+                       .build();
     }
 
     @Path("{username}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getById(
+    @Cached
+    public Response getByName(
             @PathParam("username")
             String username
     ) {
@@ -76,25 +83,20 @@ public class UserWebController {
     @GET
     @Path("{username}/likes")
     @Produces({MediaType.APPLICATION_JSON})
+    @Cached
     public Response getLikesByUser(
-            @HeaderParam("X-User-Id")
-            long userId,
             @PathParam("username")
             String username
     ) {
-        if (readUserByIdIn.getUserById(userId) == null) {
+        var user = readUserIn.getUser(username);
+        if (user == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
-        if (!readUserByIdIn.getUserById(userId).getUsername().equals(username)) {
-            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
-        }
-        var returnValue = readLikeByUserIn.readLikeByUser(userId);
-        var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+        var returnValue = readLikeByUserIn.readLikeByUser(user.getId());
 
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", dtoList.size())
-                       .cacheControl(this.getCacheControl())
-                       .entity(dtoList)
+                       .header("X-Total-Count", returnValue.size())
+                       .entity(likeMapper.likeToLikeDto(returnValue))
                        .build();
     }
 
@@ -102,6 +104,7 @@ public class UserWebController {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @AuthorizationBinding
+    @Cached
     public Response getMe(
             @HeaderParam("X-User-Id")
             String userId
@@ -118,12 +121,5 @@ public class UserWebController {
         createUserIn.createUser(user);
 
         return Response.status(HttpResponseStatus.CREATED.code()).build();
-    }
-
-    private CacheControl getCacheControl() {
-        this.cacheControl = new CacheControl();
-        cacheControl.setMaxAge(300);
-        cacheControl.setPrivate(false);
-        return cacheControl;
     }
 }

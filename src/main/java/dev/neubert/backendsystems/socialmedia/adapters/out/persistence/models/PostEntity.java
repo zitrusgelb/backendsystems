@@ -1,4 +1,4 @@
-package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models;
+package dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models;
 
 import jakarta.persistence.*;
 
@@ -18,8 +18,8 @@ public class PostEntity {
     @JoinColumn(nullable = false)
     private UserEntity user;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "tag_id", nullable = true)
     private TagEntity tag;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

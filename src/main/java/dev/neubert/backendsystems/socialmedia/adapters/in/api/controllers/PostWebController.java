@@ -16,7 +16,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
 import java.time.LocalDateTime;
-import java.util.stream.Collectors;
 
 @Path("posts")
 public class PostWebController {
@@ -63,19 +62,15 @@ public class PostWebController {
             long offset,
             @Positive
             @DefaultValue("20")
-            @QueryParam("size")
-            long size
+            @QueryParam("limit")
+            long limit
     ) {
-        setCacheControlFiveMinutes();
-        var allPosts = readAllPostsIn.readAllPosts();
-        var filteredPosts =
-                allPosts.stream().filter(post -> post.getContent().contains(query)).toList();
-        var result = filteredPosts.stream().skip(offset).limit(size).collect(Collectors.toList());
+        var result = readAllPostsIn.readAllPosts(query, (int) offset, (int) limit);
 
         return Response.status(HttpResponseStatus.OK.code())
                        .header("X-Total-Count", result.size())
                        .cacheControl(setCacheControlFiveMinutes())
-                       .entity(result)
+                       .entity(postMapper.postToPostDto(result))
                        .build();
     }
 
@@ -98,8 +93,8 @@ public class PostWebController {
                            .tag(new EntityTag("v" + requestedPost.getVersion()))
                            .build();
         } else {
-            setCacheControlFiveMinutes();
-            return Response.ok(requestedPost).cacheControl(setCacheControlFiveMinutes())
+            return Response.ok(requestedPost)
+                           .cacheControl(setCacheControlFiveMinutes())
                            .tag(new EntityTag("v" + requestedPost.getVersion()))
                            .build();
         }
@@ -115,7 +110,6 @@ public class PostWebController {
             @Valid
             CreatePostDto model
     ) {
-        setCacheControlFiveMinutes();
         if (model == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
@@ -158,7 +152,6 @@ public class PostWebController {
             } else if (model.getUser() == null) {
                 return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
             }
-            setCacheControlFiveMinutes();
             var toBeUpdated = readPostIn.getPostById(id);
             if (toBeUpdated == null) {
                 return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();

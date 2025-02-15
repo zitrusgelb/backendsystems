@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
@@ -24,10 +24,73 @@ public class PostWebControllerTest {
         tagId = Pattern.compile("\"id\": (\\d{1,3})");
     }
 
+
     @Test
-    void getAllPostsNoPostsExisting() {
-        given().when().get("/posts").then().statusCode(200);
+    void testGetAllPosts() {
+        given().contentType(ContentType.JSON).body("""
+                                                   {
+                                                           "content": "I am your father",
+                                                           "tagName": null,
+                                                           "replyTo": null
+                                                       }
+                                                   """).when().post("/posts");
+
+        given().when()
+               .get("/posts")
+               .then()
+               .statusCode(200)
+               .header("X-Total-Count", Integer::parseInt, greaterThanOrEqualTo(1))
+               .body(is(notNullValue()));
     }
+
+
+    @Test
+    void testGetAllPostsWithQuery() {
+        given().contentType(ContentType.JSON).body("""
+                                                   {
+                                                           "content": "I am your father",
+                                                           "tagName": null,
+                                                           "replyTo": null
+                                                       }
+                                                   """).when().post("/posts");
+
+        int amount = Integer.parseInt(given().when().get("/posts").getHeader("X-Total-Count"));
+
+        given().when()
+               .queryParam("q", "father")
+               .get("/posts")
+               .then()
+               .statusCode(200)
+               .header("X-Total-Count", Integer::parseInt, lessThanOrEqualTo(amount))
+               .body(is(notNullValue()));
+    }
+
+
+    @Test
+    void testGetAllPostsWithLimit() {
+        given().when()
+               .queryParam("limit", 2)
+               .get("/posts")
+               .then()
+               .statusCode(200)
+               .header("X-Total-Count", Integer::parseInt, lessThanOrEqualTo(2))
+               .body(is(notNullValue()));
+    }
+
+
+    @Test
+    void testGetAllPostsWithOffset() {
+        int amount = Integer.parseInt(given().when().get("/posts").getHeader("X-Total-Count"));
+
+        given().when()
+               .queryParam("offset", 2)
+               .get("/posts")
+               .then()
+               .statusCode(200)
+               .header("X-Total-Count", Integer::parseInt, lessThanOrEqualTo(amount))
+               .body(is(notNullValue()));
+    }
+
 
     @Test
     void testCreatePost() {
@@ -35,7 +98,7 @@ public class PostWebControllerTest {
                .body("""
                      {
                              "content": "I am your father",
-                             "tag": null,
+                             "tagName": null,
                              "replyTo": null
                          }
                      """)
@@ -49,13 +112,44 @@ public class PostWebControllerTest {
                .body(is(""));
     }
 
+
+    @Test
+    void createPostWithTag() {
+        String postResponseHeaders = given().contentType(ContentType.JSON)
+                                            .body("""
+                                                  {
+                                                          "content": "Han shot first",
+                                                          "tagName":"Star Wars",
+                                                          "replyTo": null
+                                                      }
+                                                  """)
+                                            .when()
+                                            .post("/posts")
+                                            .getHeaders()
+                                            .toString();
+
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String getResponse =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+
+        String regex =
+                "\"tag\"\\s*:\\s*\\{\\s*\"id\"\\s*:\\s*\\d+\\s*,\\s*\"name\"\\s*:\\s*\"Star Wars\"";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(getResponse);
+
+        assertTrue(matcher.find());
+    }
+
+
     @Test
     void testCreatePostWithReply() {
         String postResponseHeaders = given().contentType(ContentType.JSON)
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -89,6 +183,7 @@ public class PostWebControllerTest {
                .statusCode(201);
     }
 
+
     @Test
     void testReplyToNonExistingPost() {
         String postResponseHeaders =
@@ -97,7 +192,7 @@ public class PostWebControllerTest {
                        .body("""
                              {
                                      "content": "I am your father",
-                                     "tag": null,
+                                     "tagName": null,
                                      "replyTo": 99999
                                  }
                              """)
@@ -110,11 +205,61 @@ public class PostWebControllerTest {
 
         String getResponse =
                 given().contentType(ContentType.JSON).when().get(location).getBody().asString();
-        System.out.println(getResponse);
 
         assertTrue(getResponse.contains("\"replyTo\":null"));
+    }
 
 
+    @Test
+    void testCreatePostWithTagAndReply() {
+        String postResponseHeaders = given().contentType(ContentType.JSON)
+                                            .body("""
+                                                  {
+                                                          "content": "I am your father",
+                                                          "tagName": null,
+                                                          "replyTo": null
+                                                      }
+                                                  """)
+                                            .when()
+                                            .post("/posts")
+                                            .headers()
+                                            .toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String replyToPostId =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+        String id =
+                tagId.matcher(replyToPostId).find() ? tagId.matcher(replyToPostId).group() : null;
+
+        String postRequest = String.format("""
+                                           {
+                                                   "content": "I am your father",
+                                                   "tagName": "Star Wars",
+                                                   "replyTo": %s
+                                               }
+                                           """, id);
+
+        postResponseHeaders = given().contentType(ContentType.JSON)
+                                     .body(postRequest)
+                                     .when()
+                                     .post("/posts")
+                                     .headers()
+                                     .toString();
+
+        locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        location = locationMatcher.find() ? locationMatcher.group() : null;
+
+        String getResponse =
+                given().contentType(ContentType.JSON).when().get(location).getBody().asString();
+
+        String regex =
+                "\"tag\"\\s*:\\s*\\{\\s*\"id\"\\s*:\\s*\\d+\\s*,\\s*\"name\"\\s*:\\s*\"Star Wars\"";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(getResponse);
+        assertTrue(matcher.find());
+
+        assertTrue(getResponse.contains(String.format("\"replyTo\":%s", id)));
     }
 
 
@@ -124,7 +269,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "This is where the fun begins.",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -144,6 +289,7 @@ public class PostWebControllerTest {
 
     }
 
+
     @Test
     void testDeletePost() {
         String postResponseHeaders =
@@ -152,7 +298,7 @@ public class PostWebControllerTest {
                        .body("""
                              {
                                      "content": "I am your father",
-                                     "tag": null,
+                                     "tagName": null,
                                      "replyTo": null
                                  }
                              """)
@@ -184,7 +330,7 @@ public class PostWebControllerTest {
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -208,6 +354,7 @@ public class PostWebControllerTest {
                .statusCode(401);
     }
 
+
     @Test
     void testPutPost() {
         String postResponseHeaders =
@@ -216,7 +363,7 @@ public class PostWebControllerTest {
                        .body("""
                              {
                                      "content": "Hello there!",
-                                     "tag": null,
+                                     "tagName": null,
                                      "replyTo": null
                                  }
                              """)
@@ -247,6 +394,7 @@ public class PostWebControllerTest {
                .statusCode(204);
     }
 
+
     @Test
     void testPutFailPreconditions() {
         String postResponseHeaders =
@@ -255,7 +403,7 @@ public class PostWebControllerTest {
                        .body("""
                              {
                                      "content": "Hello there!",
-                                     "tag": null,
+                                     "tagName": null,
                                      "replyTo": null
                                  }
                              """)
@@ -285,13 +433,14 @@ public class PostWebControllerTest {
                .statusCode(412);
     }
 
+
     @Test
     void testPutPostWrongUser() {
         String postResponseHeaders = given().contentType(ContentType.JSON)
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
@@ -318,6 +467,7 @@ public class PostWebControllerTest {
                .statusCode(401);
     }
 
+
     @Test
     void testCreatePostEmptyBody() {
         given().contentType(ContentType.JSON)
@@ -329,6 +479,7 @@ public class PostWebControllerTest {
                .statusCode(400);
     }
 
+
     @Test
     void testDeleteNonExistentPost() {
         given().contentType(ContentType.JSON)
@@ -338,6 +489,7 @@ public class PostWebControllerTest {
                .assertThat()
                .statusCode(404);
     }
+
 
     @Test
     void testPutNonExistentPost() {
@@ -349,13 +501,14 @@ public class PostWebControllerTest {
                .statusCode(404);
     }
 
+
     @Test
     void testSendPostToWrongURL() {
         given().contentType(ContentType.JSON)
                .body("""
                      {
                              "content": "I am your father",
-                             "tag": null,
+                             "tagName": null,
                              "replyTo": null
                          }
                      """)
@@ -365,6 +518,7 @@ public class PostWebControllerTest {
                .assertThat()
                .statusCode(405);
     }
+
 
     @Test
     void testSendPutToWrongURL() {
@@ -376,13 +530,14 @@ public class PostWebControllerTest {
                .statusCode(400);
     }
 
+
     @Test
     void testIfNoneMatch() {
         String postResponseHeaders = given().contentType(ContentType.JSON)
                                             .body("""
                                                   {
                                                           "content": "I am your father",
-                                                          "tag": null,
+                                                          "tagName": null,
                                                           "replyTo": null
                                                       }
                                                   """)
