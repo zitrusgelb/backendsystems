@@ -4,6 +4,7 @@ import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Authorizatio
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.utils.Cached;
 import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.LikeMapper;
+import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.port.in.Like.ReadLikeByUserIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.CreateUserIn;
 import dev.neubert.backendsystems.socialmedia.application.port.in.User.ReadAllUsersIn;
@@ -41,6 +42,9 @@ public class UserWebController {
     @Inject
     LikeMapper likeMapper;
 
+    @Inject
+    UserMapper userMapper;
+
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -52,11 +56,13 @@ public class UserWebController {
             int offset,
             @Positive
             @DefaultValue("20")
-            @QueryParam("size")
+            @QueryParam("limit")
             int size
     ) {
         var users = readAllUsersIn.getAllUsers(size, offset);
-        return Response.ok(users).header("X-Total-Count", users.size()).build();
+        return Response.ok(userMapper.userToUserDto(users))
+                       .header("X-Total-Count", users.size())
+                       .build();
     }
 
     @Path("{username}")
@@ -79,23 +85,18 @@ public class UserWebController {
     @Produces({MediaType.APPLICATION_JSON})
     @Cached
     public Response getLikesByUser(
-            @HeaderParam("X-User-Id")
-            long userId,
             @PathParam("username")
             String username
     ) {
-        if (readUserByIdIn.getUserById(userId) == null) {
+        var user = readUserIn.getUser(username);
+        if (user == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
-        if (!readUserByIdIn.getUserById(userId).getUsername().equals(username)) {
-            return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
-        }
-        var returnValue = readLikeByUserIn.readLikeByUser(userId);
-        var dtoList = returnValue.stream().map(likeMapper::likeToLikeDto).toList();
+        var returnValue = readLikeByUserIn.readLikeByUser(user.getId());
 
         return Response.status(HttpResponseStatus.OK.code())
-                       .header("X-Total-Count", dtoList.size())
-                       .entity(dtoList)
+                       .header("X-Total-Count", returnValue.size())
+                       .entity(likeMapper.likeToLikeDto(returnValue))
                        .build();
     }
 

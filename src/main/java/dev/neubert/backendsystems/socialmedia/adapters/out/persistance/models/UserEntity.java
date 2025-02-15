@@ -14,10 +14,10 @@ public class UserEntity {
     private String username; // This is the CN from the THWS Auth
     private String displayName;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<PostEntity> posts;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user")
     private List<LikeEntity> likes;
 
     public UserEntity() {}
