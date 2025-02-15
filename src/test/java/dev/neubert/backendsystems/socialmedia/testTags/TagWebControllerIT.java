@@ -1,30 +1,56 @@
 package dev.neubert.backendsystems.socialmedia.testTags;
 
+import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.core.AnyOf.anyOf;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 @QuarkusIntegrationTest
 public class TagWebControllerIT {
 
-    private void setupTestTag() {
+    private static Pattern fullLocationPattern = Pattern.compile("/posts/(\\d{1,3})");
 
-        given().contentType(ContentType.JSON)
-               .header("X-Integration-Test", "true")
-               .body("""
-                     {
-                             "content": "TestPost for TagWebControllerIT",
-                             "tag": "TestTag",
-                             "replyTo": null
-                         }
-                     """)
-               .when()
-               .post("/posts")
-               .then()
-               .statusCode(201);
+    private int setupTestTag() {
+
+        String postResponseHeaders =
+                given().contentType(ContentType.JSON)
+                       .header("X-Integration-Test", "true")
+                       .body("""
+                             {
+                                     "content": "I am your father",
+                                     "tagName": "TestTag",
+                                     "replyTo": null
+                                 }
+                             """)
+                       .when()
+                       .post("/posts")
+                       .headers()
+                       .toString();
+        Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
+        String location = locationMatcher.find() ? locationMatcher.group(1) : null;
+        int postId = Integer.parseInt(location);
+
+        PostDto post = given().pathParam("id", postId)
+                              .contentType("application/json")
+                              .header("X-Integration-Test", "true")
+                              .when()
+                              .get("/posts/{id}")
+                              .then()
+                              .statusCode(200)
+                              .extract()
+                              .body()
+                              .as(PostDto.class);
+        return (int) post.getTag().getId();
     }
 
     @Test
@@ -55,11 +81,11 @@ public class TagWebControllerIT {
 
     @Test
     void testGetTagById() {
-        this.setupTestTag();
+        int tagId = this.setupTestTag();
 
         given().when()
                .header("X-Integration-Test", "true")
-               .get("/tags/1")
+               .get("/tags/{id}", tagId)
                .then()
                .statusCode(anyOf(is(200), is(404)))
                .body(anyOf(is(notNullValue()), containsString("Tag nicht gefunden")));
@@ -80,7 +106,7 @@ public class TagWebControllerIT {
                .when()
                .put("/tags/1")
                .then()
-               .statusCode(anyOf(is(200), is(404)))
+               .statusCode(200)
                .body(anyOf(is(notNullValue()), containsString("Tag nicht gefunden")));
     }
 
