@@ -87,7 +87,7 @@ public class TagWebControllerIT {
                .header("X-Integration-Test", "true")
                .get("/tags/{id}", tagId)
                .then()
-               .statusCode(anyOf(is(200), is(404)))
+               .statusCode(200)
                .body(anyOf(is(notNullValue()), containsString("Tag nicht gefunden")));
     }
 
@@ -118,7 +118,7 @@ public class TagWebControllerIT {
                .when()
                .delete("/tags/1")
                .then()
-               .statusCode(anyOf(is(204), is(404)))
+               .statusCode(204)
                .body(anyOf(is(""), containsString("Tag nicht gefunden")));
     }
 }
