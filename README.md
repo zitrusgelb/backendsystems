@@ -36,30 +36,37 @@ After doing that, we can run the container with:
 The container can then be reached by sending a request to `http://localhost:8080/` or `http://127.0.0.1:8080/`. Please
 note the following requirements for sending custom requests.
 
+## Postman Workspace
+
+We created a collection of API-Calls in our Postman Workspace. You can find the workspace
+via  [this link](https://www.postman.com/cyanidelion/workspace/backendsystems-social-media). In case you want to create
+your own requests, please see the following sections.
+
 ## Available paths
 
-| Path               | Available HTTP-Methods  | Results                                                                |
-|--------------------|-------------------------|------------------------------------------------------------------------|
-| `posts`            | `GET`, `POST`           | Requesting all posts or publishing a new post                          |
-| `posts/{id}`       | `GET`, `PUT`, `DELETE`  | Requesting, updating or deleting a specific post                       |
-| `posts/populate`   | `POST`                  | Creating a dummy Post and User for testing purposes                    |
-| `posts/{id}/likes` | `GET`, `POST`, `DELETE` | Requesting all Likes from a Post, liking a Post or removing a like     |
-| `users`            | `GET`                   | Requesting all users                                                   |
-| `users/me`         | `GET`                   | Requesting the logged-in users profile                                 |   
-| `users/{username}` | `GET`                   | Requesting a specific user profile                                     |
-| `tags`             | `GET`                   | Requesting a list of all tags                                          |
-| `tags/{id}`        | `GET`, `PUT`, `DELETE`  | Requesting a list of posts with requested tag, updating or deleting it |
+| Path                     | Available HTTP-Methods  | Results                                                                |
+|--------------------------|-------------------------|------------------------------------------------------------------------|
+| `posts`                  | `GET`, `POST`           | Requesting all posts or publishing a new post                          |
+| `posts/{id}`             | `GET`, `PUT`, `DELETE`  | Requesting, updating or deleting a specific post                       |
+| `posts/populate`         | `POST`                  | Creating a dummy Post and User for testing purposes                    |
+| `posts/{id}/likes`       | `GET`, `POST`, `DELETE` | Requesting all Likes from a Post, liking a Post or removing a like     |
+| `users`                  | `GET`                   | Requesting all users                                                   |
+| `users/me`               | `GET`                   | Requesting the logged-in users profile                                 |   
+| `users/{username}`       | `GET`                   | Requesting a specific user profile                                     |
+| `users/{username}/likes` | `GET`                   | Requesting all likes by a specific user                                |
+| `tags`                   | `GET`                   | Requesting a list of all tags                                          |
+| `tags/{id}`              | `GET`, `PUT`, `DELETE`  | Requesting a list of posts with requested tag, updating or deleting it |
 
 ### Query Parameters
 
 For the routes `posts`, `users` and `tags`, it is possible to send query parameters to limit the result set by either
 searching for specific results or paginate all results.
 
-| Query Parameter | Results                                                                    |
-|-----------------|----------------------------------------------------------------------------|
-| `q`             | Searching for content(`posts`) or names (`users`and `tags`)                |
-| `offset`        | Requesting posts with a certain offset, this enables pagination            |
-| `limit`         | Limiting the amount of results sent to the client, this enables pagination |
+| Query Parameter | Results                                                                             |
+|-----------------|-------------------------------------------------------------------------------------|
+| `q`             | Searching for content(`posts`) or names (`users`and `tags`), this enables filtering |
+| `offset`        | Requesting posts with a certain offset, this enables pagination                     |
+| `limit`         | Limiting the amount of results sent to the client, this enables pagination          |
 
 ## Authentication
 
