@@ -56,13 +56,13 @@ In generell the hexagonal architecture is divided in to the adapters and the app
 
 
 \section{Explanation of the API technology} \label{sec:explanation-of-the-api-technology}
-For this project, we have chosen a Quarkus API architecture. This decision is based on several factors. REST is a widely adopted industry standard that significantly simplifies integration with other systems. Additionally, its stateless communication enables high scalability, which is particularly beneficial for large-scale applications. Furthermore, REST offers great flexibility, as it is compatible with various frontend technologies and mobile applications. Another crucial advantage is its ease of implementation: Quarkus provides comprehensive support for REST endpoints, authentication, and persistence, making development more efficient.
+For this project, a Quarkus-based API architecture was chosen due to its efficiency, scalability, and seamless integration capabilities. Quarkus is a lightweight, high-performance framework specifically optimized for cloud-native environments, ensuring efficient resource utilization. Its compatibility with various frontend technologies and mobile applications makes it particularly flexible. Additionally, Quarkus enhances developer productivity with built-in support for API development, authentication, and persistence, optimizing the entire development process.
 
-This technology brings several benefits to our project. REST is simple and lightweight, as it relies on JSON over HTTP, which facilitates both implementation and debugging. The stateless architecture also ensures efficient resource utilization. Moreover, REST integrates seamlessly with Quarkus’ built-in extensions for database access, enabling a smooth connection with the database.
+The web API is implemented using Quarkus and RESTEasy, a powerful solution for HTTP-based services. The relevant dependencies are defined in the pom.xml to ensure API functionality. This includes quarkus-resteasy, which provides fundamental support for HTTP APIs and enables smooth request and response processing. quarkus-resteasy-jackson ensures efficient JSON serialization via Jackson, facilitating data exchange between the backend and frontend. Additionally, quarkus-resteasy-jaxb is used to support XML serialization via JAXB, making the API more adaptable to various data formats.
 
-Despite these advantages, some limitations and trade-offs need to be considered. One of the biggest challenges is the lack of real-time communication. Unlike WebSockets or GraphQL subscriptions, REST does not provide built-in support for real-time updates.
+These dependencies ensure reliable API functionality and enable effective communication between frontend applications and other services. However, a standard HTTP-based API does not include built-in support for real-time communication. Unlike WebSockets or GraphQL subscriptions, Quarkus RESTEasy does not provide native real-time update capabilities.
 
-Despite this limitation, the benefits of a Quarkus API outweigh the drawbacks for our use case, ensuring a robust, flexible, and highly scalable solution for our project.%Do you see any advantages of this technology for this project?
+Despite some limitations, a Quarkus-based API offers a robust, flexible, and scalable architecture that meets the project's requirements.
 
 %Justification for choosing the specific API technology (gRPC, GraphQL, or REST).
 %Identification of advantages relevant to the project.
