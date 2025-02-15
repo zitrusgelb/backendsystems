@@ -2,32 +2,35 @@ package dev.neubert.backendsystems.socialmedia.testTags;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusIntegrationTest
 public class TagWebControllerIT {
-    @BeforeAll
-    static void setupTestTag() {
+
+    private void setupTestTag() {
+
         given().contentType(ContentType.JSON)
                .header("X-Integration-Test", "true")
                .body("""
-                 {
-                     "name": "TestTag"
-                 }
-                 """)
+                     {
+                             "content": "TestPost for TagWebControllerIT",
+                             "tag": "TestTag",
+                             "replyTo": null
+                         }
+                     """)
                .when()
-               .put("/tags/1")
+               .post("/posts")
                .then()
-               .statusCode(anyOf(is(200), is(201), is(404)));
+               .statusCode(201);
     }
 
     @Test
     void testGetAllTags() {
+        this.setupTestTag();
+
         given().when()
                .header("X-Integration-Test", "true")
                .get("/tags")
@@ -39,6 +42,8 @@ public class TagWebControllerIT {
 
     @Test
     void testGetAllTagsWithQuery() {
+        this.setupTestTag();
+
         given().when()
                .queryParam("q", "test")
                .header("X-Integration-Test", "true")
@@ -50,6 +55,8 @@ public class TagWebControllerIT {
 
     @Test
     void testGetTagById() {
+        this.setupTestTag();
+
         given().when()
                .header("X-Integration-Test", "true")
                .get("/tags/1")
@@ -61,6 +68,8 @@ public class TagWebControllerIT {
 
     @Test
     void testUpdateTag() {
+        this.setupTestTag();
+
         given().contentType(ContentType.JSON)
                .header("X-Integration-Test", "true")
                .body("""
@@ -77,6 +86,8 @@ public class TagWebControllerIT {
 
     @Test
     void testDeleteTag() {
+        this.setupTestTag();
+
         given().header("X-Integration-Test", "true")
                .when()
                .delete("/tags/1")
