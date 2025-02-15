@@ -47,8 +47,14 @@
 %What are the infrastructure components?
 %How did you implement ports and adapters?
 %What was the most difficult aspect to learn when implementing this architecture?
-In generell the hexagonal architecture is divided in to the adapters and the application. In our case the adapter component consists of an API port and a persistence port, as our application dosen`t rely on third party  API`s. In the API adapter you can find the WebControllers for the handeling of in-API calls, a few helper classes in a utils direktory and the models the in-API 
+The hexagonal architecture is generally divided into two main components: adapters and the application. In our case, the adapter component consists of an API adapter and a persistence adapter, as our application does not rely on external APIs.
 
+The API adapter contains the web controllers responsible for handling API calls and requests, several helper classes in the utils directory that provide functionalities such as caching and AuthorizationBinding, as well as the models used within the API. The persistence adapter also has its own models, as each adapter in a hexagonal architecture should depend only on its own defined models. Additionally, each model has a dedicated repository responsible for storing and managing entities.
+
+The application component consists of three main elements. First, the domain component, where the business logic resides. This includes mappers that handle conversions between the models of both adapters and the corresponding domain models. Additionally, there are predefined classes with methods for generating specific models, which are useful for testing the application. Second, the ports, which contain the interfaces for communication between the API and persistence adapters. In a well-structured hexagonal architecture, the application should only interact with the adapters through these interfaces to ensure a clear separation of concerns. Lastly, the service directory, another key part of the application component, where the core business logic is implemented. Here, parsed requests from the web controllers are processed and forwarded to the appropriate repositories in the persistence component.
+
+
+One of the most challenging aspects of implementing a hexagonal architecture is designing and maintaining each component as truly independent. It is easy to unintentionally couple components, for example, by directly using repository methods within the corresponding services. Adhering strictly to the architectural principles ensures better modularity, maintainability, and testability of the application.
 %Correct and thorough explanation of the hexagonal architecture.
 %Clear distinction between domain, business logic, and infrastructure components.
 %Explanation of ports and adapters and how they were implemented.
