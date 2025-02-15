@@ -55,16 +55,13 @@
 
 
 \section{Explanation of the API technology} \label{sec:explanation-of-the-api-technology}
+For this project, we have chosen a Quarkus API architecture. This decision is based on several factors. REST is a widely adopted industry standard that significantly simplifies integration with other systems. Additionally, its stateless communication enables high scalability, which is particularly beneficial for large-scale applications. Furthermore, REST offers great flexibility, as it is compatible with various frontend technologies and mobile applications. Another crucial advantage is its ease of implementation: Quarkus provides comprehensive support for REST endpoints, authentication, and persistence, making development more efficient.
 
-For this project, we have chosen a RESTful API architecture with Spring Boot. This decision is based on several factors. REST is a widely adopted industry standard that significantly simplifies integration with other systems. Additionally, its stateless communication enables high scalability, which is particularly beneficial for large-scale applications. Furthermore, REST offers great flexibility, as it is compatible with various frontend technologies and mobile applications. Another crucial advantage is its ease of implementation: Spring Boot provides comprehensive support for REST controllers, authentication, and persistence, making development more efficient.
+This technology brings several benefits to our project. REST is simple and lightweight, as it relies on JSON over HTTP, which facilitates both implementation and debugging. The stateless architecture also ensures efficient resource utilization. Moreover, REST integrates seamlessly with Quarkus’ built-in extensions for database access, enabling a smooth connection with the database.
 
-This technology brings several benefits to our project. REST is simple and lightweight, as it relies on JSON over HTTP, which facilitates both implementation and debugging. The stateless architecture also ensures efficient resource utilization. Moreover, REST integrates seamlessly with Spring Data JPA, enabling a smooth connection with the database.
+Despite these advantages, some limitations and trade-offs need to be considered. One of the biggest challenges is the lack of real-time communication. Unlike WebSockets or GraphQL subscriptions, REST does not provide built-in support for real-time updates.
 
-Despite these advantages, some limitations and trade-offs need to be considered. One of the biggest challenges is the lack of real-time communication. Unlike WebSockets or GraphQL subscriptions, REST does not provide built-in support for real-time updates. Additionally, there is a risk of over-fetching or under-fetching, where clients may receive more or fewer data than necessary, potentially impacting performance—especially with large datasets. Another issue is state management: Since REST is stateless, handling complex transactions across multiple API calls can be challenging.
-
-Despite these limitations, the benefits of a RESTful API with Spring Boot outweigh the drawbacks for our use case, ensuring a robust, flexible, and highly scalable solution for our project.
-%Why did you choose this technology?
-%Do you see any advantages of this technology for this project?
+Despite this limitation, the benefits of a Quarkus API outweigh the drawbacks for our use case, ensuring a robust, flexible, and highly scalable solution for our project.%Do you see any advantages of this technology for this project?
 
 %Justification for choosing the specific API technology (gRPC, GraphQL, or REST).
 %Identification of advantages relevant to the project.
