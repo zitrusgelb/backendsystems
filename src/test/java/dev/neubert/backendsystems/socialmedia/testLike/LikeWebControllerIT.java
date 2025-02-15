@@ -22,16 +22,18 @@ public class LikeWebControllerIT {
     @Test
     public void testCreateLike() {
         int postId = createPost();
+        final int userId = 2;
 
         given().pathParam("id", postId)
                .contentType("application/json")
                .header("X-Integration-Test", "true")
-               //.header("X-User-Id", 2)
+               .header("X-User-Id", userId)
                .when()
                .post("/posts/{id}/likes")
                .then()
                .statusCode(201)
-               .body("post.id", equalTo(postId));
+               .body("post.id", equalTo(postId))
+               .body("user.id", equalTo(userId));
 
     }
 
@@ -172,8 +174,19 @@ public class LikeWebControllerIT {
     @Test
     public void testGetLikesByUser() {
         int postId1 = createPost();
+        int postId2 = createPost();
 
         int userId1 = createLike(postId1);
+        given().pathParam("id", postId2)
+               .contentType("application/json")
+               .header("X-Integration-Test", "true")
+               .header("X-User-Id", userId1)
+               .when()
+               .post("/posts/{id}/likes")
+               .then()
+               .statusCode(201)
+               .body("post.id", equalTo(postId2))
+               .body("user.id", equalTo(userId1));
 
         String username = given().when()
                                  .header("X-User-Id", userId1)
@@ -196,11 +209,13 @@ public class LikeWebControllerIT {
                    .get("/users/{username}/likes")
                    .then()
                    .statusCode(200)
-                   .header("X-Total-Count", "1")
+                   .header("X-Total-Count", "2")
                    .header("Cache-Control", equalTo("no-transform, max-age=300"))
-                   .body("size()", equalTo(1))
+                   .body("size()", equalTo(2))
                    .body("[0].user.id", equalTo(userId1))
-                   .body("[0].post.id", equalTo(postId1));
+                   .body("[0].post.id", equalTo(postId1))
+                   .body("[1].user.id", equalTo(userId1))
+                   .body("[1].post.id", equalTo(postId2));
     }
 
     private int createPost() {
