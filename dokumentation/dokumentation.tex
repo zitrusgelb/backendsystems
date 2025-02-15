@@ -54,30 +54,15 @@
 %Reflection on challenges faced during implementation.
 
 
-\section{Explanation of the API Technology}\label{sec:explanation-of-the-api-technology}
-\subsection{Why did we choose this technology?}
-We opted for a **RESTful API architecture using Spring Boot** due to the following reasons:
-\begin{itemize}
-    \item \textbf{Industry Standard}: REST is widely adopted, making integration with other systems easier.
-    \item \textbf{Scalability}: Stateless communication supports large-scale applications.
-    \item \textbf{Flexibility}: Compatible with various front-end technologies and mobile applications.
-    \item \textbf{Ease of Implementation}: Spring Boot offers built-in support for REST controllers, authentication, and persistence.
-\end{itemize}
+\section{Erklärung der API-Technologie} \label{sec:erklaerung-der-api-technologie}
 
-\subsection{Advantages for this project}
-\begin{itemize}
-    \item \textbf{Simple and Lightweight}: REST uses JSON over HTTP, making it easy to implement and debug.
-    \item \textbf{Efficient Data Handling}: The stateless nature allows efficient resource utilization.
-    \item \textbf{Security Features}: Supports JWT authentication for secure API calls.
-    \item \textbf{Integration with Frameworks}: Works seamlessly with Spring Data JPA for database interactions.
-\end{itemize}
+FFor this project, we have chosen a RESTful API architecture with Spring Boot. This decision is based on several factors. REST is a widely adopted industry standard that significantly simplifies integration with other systems. Additionally, its stateless communication enables high scalability, which is particularly beneficial for large-scale applications. Furthermore, REST offers great flexibility, as it is compatible with various frontend technologies and mobile applications. Another crucial advantage is its ease of implementation: Spring Boot provides comprehensive support for REST controllers, authentication, and persistence, making development more efficient.
 
-\subsection{Limitations and Trade-offs}
-\begin{itemize}
-    \item \textbf{Lack of Real-time Communication}: Unlike WebSockets or GraphQL subscriptions, REST APIs do not support real-time updates out-of-the-box.
-    \item \textbf{Over-fetching/Under-fetching}: Clients might receive more or less data than needed, which can impact performance in large datasets.
-    \item \textbf{State Management}: As REST is stateless, handling complex transactions across multiple API calls can be challenging.
-\end{itemize}
+ This technology brings several benefits to our project. REST is simple and lightweight, as it relies on JSON over HTTP, which facilitates both implementation and debugging. The stateless architecture also ensures efficient resource utilization. Moreover, REST integrates seamlessly with Spring Data JPA, enabling a smooth connection with the database.
+
+ Despite these advantages, some limitations and trade-offs need to be considered. One of the biggest challenges is the lack of real-time communication. Unlike WebSockets or GraphQL subscriptions, REST does not provide built-in support for real-time updates. Additionally, there is a risk of over-fetching or under-fetching, where clients may receive more or fewer data than necessary, potentially impacting performance—especially with large datasets. Another issue is state management: Since REST is stateless, handling complex transactions across multiple API calls can be challenging.
+
+ Despite these limitations, the benefits of a RESTful API with Spring Boot outweigh the drawbacks for our use case, ensuring a robust, flexible, and highly scalable solution for our project.
 %Why did you choose this technology?
 %Do you see any advantages of this technology for this project?
 
