@@ -1,7 +1,7 @@
-package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
+package dev.neubert.backendsystems.socialmedia.adapters.out.persistence.repository;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.PostEntity;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.TagEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.PostEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.TagEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.PostMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.port.out.Post.*;

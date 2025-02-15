@@ -2,8 +2,8 @@ package dev.neubert.backendsystems.socialmedia.testMappers;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.PostDto;
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.TagDto;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.PostEntity;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.TagEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.PostEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.TagEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.TagMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Post;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;

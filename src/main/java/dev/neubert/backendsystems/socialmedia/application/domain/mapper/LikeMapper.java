@@ -1,7 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.mapper;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.LikeDto;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.LikeEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.LikeEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Like;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;

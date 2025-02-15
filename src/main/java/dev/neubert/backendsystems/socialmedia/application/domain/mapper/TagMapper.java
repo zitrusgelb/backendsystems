@@ -1,7 +1,7 @@
 package dev.neubert.backendsystems.socialmedia.application.domain.mapper;
 
 import dev.neubert.backendsystems.socialmedia.adapters.in.api.models.TagDto;
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.TagEntity;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.TagEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.Tag;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

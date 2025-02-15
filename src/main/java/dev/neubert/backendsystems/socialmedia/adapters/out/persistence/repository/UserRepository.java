@@ -1,7 +1,6 @@
-package dev.neubert.backendsystems.socialmedia.adapters.out.persistance.repository;
+package dev.neubert.backendsystems.socialmedia.adapters.out.persistence.repository;
 
-import dev.neubert.backendsystems.socialmedia.adapters.out.persistance.models.UserEntity;
-import dev.neubert.backendsystems.socialmedia.application.domain.fakers.UserFaker;
+import dev.neubert.backendsystems.socialmedia.adapters.out.persistence.models.UserEntity;
 import dev.neubert.backendsystems.socialmedia.application.domain.mapper.UserMapper;
 import dev.neubert.backendsystems.socialmedia.application.domain.models.User;
 import dev.neubert.backendsystems.socialmedia.application.port.out.User.CreateUserOut;
@@ -20,7 +19,6 @@ import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @ApplicationScoped
 public class UserRepository
