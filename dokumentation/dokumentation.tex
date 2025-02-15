@@ -36,16 +36,16 @@
 
 %Summarize the domain and describe a few (but not all) use cases of your software.
 
-%Clear and concise summary of the domain. 
+%Clear and concise summary of the domain.
 %Description of use cases is relevant and demonstrates an understanding of the problem domain.
 
 
     \section{Description of the Software Architecture}\label{sec:description-of-the-software-architecture}
-%Explain your interpretation of the hexagonal architecture. 
-%What belongs to the domain? 
-%What is the business logic? 
+%Explain your interpretation of the hexagonal architecture.
+%What belongs to the domain?
+%What is the business logic?
 %What are the infrastructure components?
-%How did you implement ports and adapters? 
+%How did you implement ports and adapters?
 %What was the most difficult aspect to learn when implementing this architecture?
 
 %Correct and thorough explanation of the hexagonal architecture.
@@ -54,8 +54,31 @@
 %Reflection on challenges faced during implementation.
 
 
-    \section{Explanation of the API Technology}\label{sec:explanation-of-the-api-technology}
-%Why did you choose this technology? 
+\section{Explanation of the API Technology}\label{sec:explanation-of-the-api-technology}
+\subsection{Why did we choose this technology?}
+We opted for a **RESTful API architecture using Spring Boot** due to the following reasons:
+\begin{itemize}
+    \item \textbf{Industry Standard}: REST is widely adopted, making integration with other systems easier.
+    \item \textbf{Scalability}: Stateless communication supports large-scale applications.
+    \item \textbf{Flexibility}: Compatible with various front-end technologies and mobile applications.
+    \item \textbf{Ease of Implementation}: Spring Boot offers built-in support for REST controllers, authentication, and persistence.
+\end{itemize}
+
+\subsection{Advantages for this project}
+\begin{itemize}
+    \item \textbf{Simple and Lightweight}: REST uses JSON over HTTP, making it easy to implement and debug.
+    \item \textbf{Efficient Data Handling}: The stateless nature allows efficient resource utilization.
+    \item \textbf{Security Features}: Supports JWT authentication for secure API calls.
+    \item \textbf{Integration with Frameworks}: Works seamlessly with Spring Data JPA for database interactions.
+\end{itemize}
+
+\subsection{Limitations and Trade-offs}
+\begin{itemize}
+    \item \textbf{Lack of Real-time Communication}: Unlike WebSockets or GraphQL subscriptions, REST APIs do not support real-time updates out-of-the-box.
+    \item \textbf{Over-fetching/Under-fetching}: Clients might receive more or less data than needed, which can impact performance in large datasets.
+    \item \textbf{State Management}: As REST is stateless, handling complex transactions across multiple API calls can be challenging.
+\end{itemize}
+%Why did you choose this technology?
 %Do you see any advantages of this technology for this project?
 
 %Justification for choosing the specific API technology (gRPC, GraphQL, or REST).
@@ -65,12 +88,12 @@
 
     \section{Implementation Details}\label{sec:implementation-details}
 %For example, how did you implement authentication?
-%How did you implement the mapping in the adapters? 
-%Did you use any framework like REST Easy, Jersey, or Spring? 
+%How did you implement the mapping in the adapters?
+%Did you use any framework like REST Easy, Jersey, or Spring?
 %Why did you choose this framework?
 As a framework we choose Quarkus and therefore REST Easy. Already collecting experience with Quarkus is a benefit for the members of our project. Furthermore, from a future proofing perspective Quarkus is ready for the use as a base for micro services. Meaning the application being split into multiple small parts.\\
 To implement mapping we went with MapStruct. We choose it because it is a modern approach to mapping as well as being generated instead of manually written, this reduces error in implementation.
-For authentication we choose to implement a custom middleware that interacts with the THWS Authentication System and takes the Bearer token it generates. This decision relies on the ever more increasing popularity of using bigger providers like Google or GitHub as the sole authentication source. 
+For authentication we choose to implement a custom middleware that interacts with the THWS Authentication System and takes the Bearer token it generates. This decision relies on the ever more increasing popularity of using bigger providers like Google or GitHub as the sole authentication source.
 
 %Explanation of implementation choices (e.g., authentication, adapter mapping).
 %Justification of framework choice (e.g., REST Easy, Jersey, Spring).
@@ -88,7 +111,7 @@ For authentication we choose to implement a custom middleware that interacts wit
     \section{Learning Outcomes and Reflection}\label{sec:learning-outcomes-and-reflection}
     Laurin's notes: next time, more time planning before we start coding (esp. when the API-technology is not yet picked); smaller goals that can be achieved quicker so we can support earlier in the process if someone needs help; utilising Git to it's full potential (namely creating milestones and issues;)
 
-%What did you learn from this project? 
+%What did you learn from this project?
 %What worked well, and what would you do diﬀerently in the future?
 %Reflect on team collaboration and the use of hexagonal architecture.
 
