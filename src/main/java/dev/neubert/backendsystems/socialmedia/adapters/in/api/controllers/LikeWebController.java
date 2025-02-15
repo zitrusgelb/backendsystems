@@ -53,15 +53,17 @@ public class LikeWebController {
             @PathParam("id")
             long postId
     ) {
-        if (readPostIn.getPostById(postId) == null) {
+        var post = readPostIn.getPostById(postId);
+        if (post == null) {
             return Response.status(HttpResponseStatus.NOT_FOUND.code()).build();
         }
 
-        if (readUserByIdIn.getUserById(userId) == null) {
+        var user = readUserByIdIn.getUserById(userId);
+        if (user == null) {
             return Response.status(HttpResponseStatus.BAD_REQUEST.code()).build();
         }
-        LikeDto returnValue =
-                likeMapper.likeToLikeDto(createLikeIn.create(getLike(postId, userId)));
+        LikeDto returnValue = likeMapper.likeToLikeDto(
+                createLikeIn.create(new Like(post, user, LocalDateTime.now())));
 
         if (returnValue == null) {
             return Response.status(HttpResponseStatus.INTERNAL_SERVER_ERROR.code()).build();

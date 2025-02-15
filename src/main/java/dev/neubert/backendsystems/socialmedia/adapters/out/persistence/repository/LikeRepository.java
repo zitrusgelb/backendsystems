@@ -36,15 +36,17 @@ public class LikeRepository
     @Override
     public Like createLike(Like like) {
         try {
-            final var entity = this.mapper.likeToLikeEntity(like);
-            this.entityManager.merge(entity);
-
             PostEntity postEntity = entityManager.find(PostEntity.class, like.getPost().getId());
             UserEntity userEntity = entityManager.find(UserEntity.class, like.getUser().getId());
-            LikeEntityId likeEntityId = new LikeEntityId(postEntity, userEntity);
-            LikeEntity persistedEntity = this.entityManager.find(LikeEntity.class, likeEntityId);
 
-            return mapper.likeEntityToLike(persistedEntity);
+            var newEntity = new LikeEntity();
+            newEntity.setPost(postEntity);
+            newEntity.setUser(userEntity);
+            newEntity.setTimestamp(like.getTimestamp());
+
+            newEntity = entityManager.merge(newEntity);
+
+            return mapper.likeEntityToLike(newEntity);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
