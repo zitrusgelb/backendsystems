@@ -85,15 +85,15 @@ For authentication, we chose to implement a custom middleware that interacts wit
 
     \section{Testing Strategy}\label{sec:testing-strategy}
 %How did you implement unit and integration tests?
-This testing strategy describes the approach to ensuring software quality for the Quarkus project. It includes different testing levels to ensure the functionality, security, and scalability of the application. The tests are divided into four main categories: unit tests, integration tests, database tests, and CI/CD tests.
+This testing strategy describes the approach to ensuring software quality for the Quarkus project. It includes different testing levels to ensure the functionality, security, and scalability of the application. The tests are divided into four main categories: unit tests, integration tests, database tests.
 
 Unit tests ensure that individual modules, particularly services and repositories, function correctly in isolation. JUnit 5 is used for this purpose. These tests run in an in-memory environment without a real server to provide quick feedback on code changes.
 
-Integration tests verify the interaction of multiple modules, particularly REST APIs and services, using RestAssured and Quarkus-Test. These tests run in a Quarkus test instance with an in-memory database.
+Integration tests verify the interaction of multiple modules, particularly ervices, using Quarkus-Test. These tests run in a Quarkus test instance with an in-memory database.
 
 Database tests ensure the correct functionality of CRUD operations. An H2 database is used to simulate a realistic environment.
 
-The implementation of the tests covers all key components of the application. Unit tests validate individual methods, while integration tests check API endpoints and their interactions. Database tests secure CRUD operations, and CI/CD tests ensure continuous quality assurance.
+The implementation of the tests covers all key components of the application. Unit tests validate individual methods, while integration tests check API endpoints and their interactions. Database tests secure CRUD operations.
 
 Overall, this strategy guarantees a stable, high-performance, and error-free application. By combining different testing methods, it ensures that both individual modules and the entire system function reliably.
 %Explanation of the testing strategy, including unit and integration tests.
