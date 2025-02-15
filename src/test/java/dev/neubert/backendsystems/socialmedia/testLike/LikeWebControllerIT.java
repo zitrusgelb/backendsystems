@@ -204,40 +204,20 @@ public class LikeWebControllerIT {
     }
 
     private int createPost() {
-        /*
-        String locationHeader = given().contentType(ContentType.JSON)
-                                       .header("X-Integration-Test", "true")
-                                       .header("X-User-Id", 1)
-                                       .body("""
-                                             {
-                                                     "content": "I am your father",
-                                                     "tag": null,
-                                                     "replyTo": null
-                                                 }
-                                             """)
-                                       .when()
-                                       .post("/posts")
-                                       .then()
-                                       .statusCode(201)
-                                       .header("Cache-Control", "no-transform, max-age=300")
-                                       .headers()
-                                       .toString();
-
-        locationHeader = locationHeader.substring(locationHeader.length() - 1);
-        return Integer.parseInt(locationHeader);
-
-         */
-
         String postResponseHeaders =
-                given().contentType(ContentType.JSON).header("X-Integration-Test", "true")
-                       //.header("X-User-Id", 1)
+                given().contentType(ContentType.JSON)
+                       .header("X-Integration-Test", "true")
                        .body("""
                              {
                                      "content": "I am your father",
                                      "tagName": null,
                                      "replyTo": null
                                  }
-                             """).when().post("/posts").headers().toString();
+                             """)
+                       .when()
+                       .post("/posts")
+                       .headers()
+                       .toString();
         Matcher locationMatcher = fullLocationPattern.matcher(postResponseHeaders);
         String location = locationMatcher.find() ? locationMatcher.group(1) : null;
         return Integer.parseInt(location);
