@@ -54,30 +54,15 @@
 %Reflection on challenges faced during implementation.
 
 
-\section{Explanation of the API Technology}\label{sec:explanation-of-the-api-technology}
-\subsection{Why did we choose this technology?}
-We opted for a **RESTful API architecture using Spring Boot** due to the following reasons:
-\begin{itemize}
-    \item \textbf{Industry Standard}: REST is widely adopted, making integration with other systems easier.
-    \item \textbf{Scalability}: Stateless communication supports large-scale applications.
-    \item \textbf{Flexibility}: Compatible with various front-end technologies and mobile applications.
-    \item \textbf{Ease of Implementation}: Spring Boot offers built-in support for REST controllers, authentication, and persistence.
-\end{itemize}
+\section{Erklärung der API-Technologie} \label{sec:erklaerung-der-api-technologie}
 
-\subsection{Advantages for this project}
-\begin{itemize}
-    \item \textbf{Simple and Lightweight}: REST uses JSON over HTTP, making it easy to implement and debug.
-    \item \textbf{Efficient Data Handling}: The stateless nature allows efficient resource utilization.
-    \item \textbf{Security Features}: Supports JWT authentication for secure API calls.
-    \item \textbf{Integration with Frameworks}: Works seamlessly with Spring Data JPA for database interactions.
-\end{itemize}
+Für dieses Projekt haben wir uns für eine \textbf{RESTful API-Architektur mit Spring Boot} entschieden. Diese Wahl basiert auf mehreren Faktoren. REST ist ein weit verbreiteter Industriestandard, der die Integration mit anderen Systemen erheblich erleichtert. Zudem ermöglicht die \textit{stateless} Kommunikation eine hohe Skalierbarkeit, was insbesondere für groß angelegte Anwendungen von Vorteil ist. Darüber hinaus bietet REST eine hohe Flexibilität, da es mit verschiedenen Frontend-Technologien und mobilen Anwendungen kompatibel ist. Ein weiterer entscheidender Punkt ist die einfache Implementierung: Spring Boot stellt eine umfassende Unterstützung für REST-Controller, Authentifizierung und Persistenz bereit, was die Entwicklung effizienter macht.
 
-\subsection{Limitations and Trade-offs}
-\begin{itemize}
-    \item \textbf{Lack of Real-time Communication}: Unlike WebSockets or GraphQL subscriptions, REST APIs do not support real-time updates out-of-the-box.
-    \item \textbf{Over-fetching/Under-fetching}: Clients might receive more or less data than needed, which can impact performance in large datasets.
-    \item \textbf{State Management}: As REST is stateless, handling complex transactions across multiple API calls can be challenging.
-\end{itemize}
+Diese Technologie bringt für unser Projekt eine Reihe von Vorteilen mit sich. REST ist \textbf{einfach und leichtgewichtig}, da es auf JSON über HTTP basiert. Dies erleichtert sowohl die Implementierung als auch das Debugging. Dank der \textit{stateless} Architektur wird zudem eine effiziente Nutzung von Ressourcen ermöglicht. Ein weiterer wichtiger Aspekt ist die \textbf{Sicherheit}: Unsere API nutzt JWT-Authentifizierung, um API-Aufrufe abzusichern. Zudem lässt sich REST hervorragend mit Spring Data JPA kombinieren, wodurch eine nahtlose Integration mit der Datenbank gewährleistet ist.
+
+Trotz dieser Vorteile gibt es einige Einschränkungen und Kompromisse, die berücksichtigt werden müssen. Eine der größten Herausforderungen ist der \textbf{Mangel an Echtzeitkommunikation}. Im Gegensatz zu WebSockets oder GraphQL-Subscriptions bietet REST keine integrierte Unterstützung für Echtzeit-Updates. Außerdem besteht die Möglichkeit des \textbf{Over-Fetching oder Under-Fetching}, da Clients unter Umständen mehr oder weniger Daten als erforderlich erhalten, was die Performance beeinträchtigen kann – insbesondere bei großen Datenmengen. Ein weiteres Problem ist das \textbf{State-Management}: Da REST \textit{stateless} ist, kann die Abwicklung komplexer Transaktionen über mehrere API-Aufrufe hinweg herausfordernd sein.
+
+Trotz dieser Limitationen überwiegen in unserem Anwendungsfall die Vorteile der RESTful API mit Spring Boot, wodurch eine robuste, flexible und gut skalierbare Lösung für unser Projekt gewährleistet wird.
 %Why did you choose this technology?
 %Do you see any advantages of this technology for this project?
 
