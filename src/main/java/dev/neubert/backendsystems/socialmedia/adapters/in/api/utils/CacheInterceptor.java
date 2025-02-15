@@ -1,5 +1,6 @@
 package dev.neubert.backendsystems.socialmedia.adapters.in.api.utils;
 
+import jakarta.annotation.Priority;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
 import jakarta.interceptor.InvocationContext;
@@ -7,6 +8,7 @@ import jakarta.ws.rs.core.CacheControl;
 import jakarta.ws.rs.core.Response;
 
 @Interceptor
+@Priority(0)
 @Cached
 public class CacheInterceptor {
 
