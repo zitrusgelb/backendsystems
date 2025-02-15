@@ -4,12 +4,16 @@ This project is the 5th portfolio task for the course "Backend Systems" by Prof.
 
 # Participants:
 
-| GitHub Username                                | 
-|------------------------------------------------|
-| [@zitrusgelb](https://github.com/zitrusgelb)   |
-| [@timknt](https://github.com/timknt)           |
-| [@Jakob-H-DEV](https://github.com/Jakob-H-DEV) |
-| [@CyanideLion](https://github.com/CyanideLion) |
+| GitHub Username                                | Matriculation Number |
+|------------------------------------------------|----------------------|
+| [@zitrusgelb](https://github.com/zitrusgelb)   | 5123031              |
+| [@timknt](https://github.com/timknt)           | 5123101              |
+| [@Jakob-H-DEV](https://github.com/Jakob-H-DEV) | 5123113              |
+| [@CyanideLion](https://github.com/CyanideLion) | 6824016              |
+
+
+# Design Document
+The design document can be found within the `dokumentation` folder.
 
 # Starting Integration Tests
 
